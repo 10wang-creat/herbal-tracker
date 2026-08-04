@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes"> 
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#6B8E5A">
-<title>本草養成 · 減脂習慣</title>
+<title>本草養成 · 日常習慣</title>
 <style>
   :root{
     --bg:#FBF7EF; --card:#FFFFFF; --ink:#4A423A; --sub:#9A9187;
@@ -134,10 +134,12 @@
   .plan-row:last-child{border-bottom:none;}
   .plan-row .k{color:var(--sub); width:56px; flex:none; font-size:12px; padding-top:1px;}
   .plan-row .v{flex:1;}
+  .tellhim{margin-top:6px; font-size:12px; line-height:1.7; background:var(--goji-l); border-radius:12px; padding:8px 11px;}
+  .tellhim b{color:var(--goji);}
 
   /* body fat */
   .bf-inputs{display:flex; gap:8px; margin-bottom:10px;}
-  .bf-inputs input{flex:1; width:100%; border:1.5px solid var(--line); border-radius:12px; padding:9px; font-size:14px; text-align:center; font-family:inherit;}
+  .bf-inputs input{flex:1; width:100%; min-width:0; border:1.5px solid var(--line); border-radius:12px; padding:9px 4px; font-size:13.5px; text-align:center; font-family:inherit;}
   .bf-inputs input:focus{outline:none; border-color:var(--green);}
   .btn{background:var(--green); color:#fff; border:none; border-radius:12px; padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer;}
   .btn.ghost{background:transparent; color:var(--sub); border:1px solid var(--line);}
@@ -148,10 +150,10 @@
   .bf-tabs button.on{background:var(--green-l); border-color:var(--green); color:var(--green-d); font-weight:600;}
   .bf-latest{flex-wrap:wrap;}
   .bf-legend{font-size:11px; color:var(--sub); text-align:center; margin-top:4px;}
-  .bf-latest{display:flex; gap:10px; margin-bottom:6px;}
-  .bf-latest .p{flex:1; text-align:center; background:var(--green-l); border-radius:12px; padding:8px;}
-  .bf-latest .p .n{font-size:18px; font-weight:700; color:var(--green-d);}
-  .bf-latest .p .l{font-size:11px; color:var(--sub);}
+  .bf-latest{display:flex; gap:8px; margin-bottom:6px;}
+  .bf-latest .p{flex:1; min-width:76px; text-align:center; background:var(--green-l); border-radius:12px; padding:8px 4px;}
+  .bf-latest .p .n{font-size:17px; font-weight:700; color:var(--green-d);}
+  .bf-latest .p .l{font-size:10.5px; color:var(--sub);}
 
   /* calendar */
   .cal-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
@@ -174,7 +176,7 @@
 <body>
 <header class="top">
   <h1>🌿 本草養成</h1>
-  <div class="sub">減脂習慣 · 慢慢來，比較快</div>
+  <div class="sub">日常習慣 · 慢慢來，比較快</div>
 </header>
 
 <div class="wrap">
@@ -220,27 +222,28 @@
     <div id="nutBars"></div>
     <div id="nutList"></div>
     <div style="display:flex; gap:8px; margin:10px 0 4px;">
-      <button class="btn ghost" id="fillPlan" style="flex:1;">＋ 帶入今日計畫</button>
+      <button class="btn ghost" id="fillPlan" style="flex:1;">＋ 帶入今日參考</button>
       <button class="btn ghost" id="clearFoods">清空</button>
     </div>
     <div id="nutPicker"></div>
-    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。你的目標：蛋白質 ≥ 90g；熱量理想區間 1200–1450 kcal（下限 1200，別長期低於基礎代謝約 1250）。</div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。目標：蛋白質 ≥ 90g；熱量落在 1350–1600 kcal 最理想。你的基礎代謝約 1,277，長期低於這條線身體會拿肌肉當燃料，所以熱量太低反而卡住。</div>
   </div>
 
-  <!-- 今日計畫 -->
+  <!-- 今日參考 -->
   <div class="card">
-    <h2>今日計畫對照 <span class="tag" id="phaseTag"></span></h2>
+    <h2>今日參考 <span class="tag" id="phaseTag"></span></h2>
     <div class="plan-badge" id="planBadge"></div>
     <div id="planBody"></div>
   </div>
 
   <!-- 身體數據追蹤 -->
   <div class="card">
-    <h2>身體數據追蹤 <span class="tag">圍度比體重誠實 · 每 1–2 週量</span></h2>
+    <h2>身體數據追蹤 <span class="tag">看骨骼肌和圍度，別只看體重</span></h2>
     <div class="bf-latest" id="bfLatest"></div>
     <div class="bf-inputs">
       <input id="bfWeight" type="number" step="0.1" inputmode="decimal" placeholder="體重 kg">
       <input id="bfFat" type="number" step="0.1" inputmode="decimal" placeholder="體脂 %">
+      <input id="bfMuscle" type="number" step="0.1" inputmode="decimal" placeholder="骨骼肌 %">
     </div>
     <div class="bf-inputs">
       <input id="bfWaist" type="number" step="0.1" inputmode="decimal" placeholder="腰圍 cm">
@@ -282,7 +285,7 @@ const START_DEFAULT="2026-07-20"; // 運動重啟日
 // ---------- state ----------
 let S = load();
 function load(){
-  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; return r; } }catch(e){}
+  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; return r; } }catch(e){}
   return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[] };
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("儲存失敗，可能是隱私模式"); } }
@@ -299,10 +302,11 @@ let calMonth = (function(){const d=new Date();return {y:d.getFullYear(),m:d.getM
 
 // ---------- check items ----------
 const ITEMS=[
-  {k:"exercise", t:"運動", h:"依今日計畫（見下方）", pt:3, key:true},
-  {k:"breakfast",t:"早餐", h:"起床喝一杯", pt:1, meal:true, def:"蛋白飲 1 杯（蛋白質 20g＋）"},
-  {k:"lunch",    t:"午餐", h:"帶去公司免加熱", pt:1, meal:true, def:"茶葉蛋 2 顆＋毛豆 1 碗"},
-  {k:"dinner",   t:"晚餐", h:"水煮青菜一大盤＋蛋白質", pt:1, meal:true, def:null},
+  {k:"exercise", t:"運動", h:"依今日參考（見下方）", pt:3, key:true},
+  {k:"breakfast",t:"早餐", h:"起床喝一杯，加點堅果更好", pt:1, meal:true, def:"蛋白飲 1 杯＋堅果一小把"},
+  {k:"lunch",    t:"午餐", h:"帶去公司免加熱：蛋白質＋毛豆＋菜＋油脂", pt:1, meal:true, def:"茶葉蛋 2 顆＋毛豆 1 碗＋小番茄＋堅果"},
+  {k:"dinner",   t:"晚餐", h:"外食也算，點對就好（下方有點法）", pt:1, meal:true, def:null},
+  {k:"veg",      t:"蔬菜 2 份", h:"外食最容易缺的一項，多夾一樣青菜就算", pt:1},
   {k:"water",    t:"喝水 1500ml＋", h:"不含含糖飲料", pt:1},
   {k:"snack",    t:"點心", h:"嘴饞時，選無糖", pt:0.5, meal:true, def:"100% 黑巧克力 1–2 片 / 希臘優格"},
   {k:"sleep",    t:"12 點前上床", h:"睡好才瘦得動，代謝和食慾都靠它", pt:1},
@@ -312,7 +316,9 @@ function escAttr(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&q
 // ---------- 食材資料庫（每份概估：蛋白質 g / 熱量 kcal）----------
 const FOODS=[
   // 蛋白質
-  {n:"乳清蛋白飲",u:"1 杯",p:25,k:120,c:"蛋白質",a:["蛋白飲","乳清","高蛋白"]},
+  {n:"乳清蛋白飲",u:"1 杯(水)",p:25,k:120,c:"蛋白質",a:["蛋白飲","乳清","高蛋白"]},
+  {n:"乳清蛋白飲(牛奶泡)",u:"1 杯",p:33,k:250,c:"蛋白質",a:["蛋白飲牛奶","牛奶蛋白飲"]},
+  {n:"全脂牛奶",u:"1 杯 240ml",p:8,k:150,c:"蛋白質",a:["牛奶","鮮奶"]},
   {n:"雞蛋 / 茶葉蛋",u:"1 顆",p:7,k:70,c:"蛋白質",a:["水煮蛋","茶葉蛋","滷蛋","荷包蛋","煎蛋","雞蛋"]},
   {n:"蒸蛋",u:"1 碗",p:14,k:150,c:"蛋白質",a:["蒸蛋"]},
   {n:"嫩豆腐",u:"1 盒 300g",p:15,k:140,c:"蛋白質",a:["嫩豆腐","涼拌豆腐","豆腐"]},
@@ -320,12 +326,19 @@ const FOODS=[
   {n:"滷豆干",u:"1 片",p:3.5,k:40,c:"蛋白質",a:["豆干","豆乾"]},
   {n:"豆皮",u:"1 片",p:5,k:60,c:"蛋白質",a:["豆皮","腐皮"]},
   {n:"希臘優格(無糖)",u:"1 杯 100g",p:10,k:60,c:"蛋白質",a:["優格","希臘優格"]},
+  {n:"起司片",u:"1 片",p:6,k:70,c:"蛋白質",a:["起司","乳酪","芝士"]},
   {n:"雞胸肉",u:"100g",p:23,k:110,c:"蛋白質",a:["雞胸","雞肉","雞排"]},
+  {n:"滷雞腿",u:"1 隻",p:26,k:280,c:"蛋白質",a:["滷雞腿","雞腿"]},
   {n:"牛肉(瘦)",u:"100g",p:20,k:160,c:"蛋白質",a:["牛肉","牛"]},
   {n:"豬瘦肉",u:"100g",p:20,k:140,c:"蛋白質",a:["豬肉","豬","里肌"]},
-  {n:"鮭魚 / 魚",u:"100g",p:20,k:180,c:"蛋白質",a:["鮭魚","魚肉","魚","鯛魚"]},
+  {n:"羊肉",u:"100g",p:19,k:200,c:"蛋白質",a:["羊肉","羊"]},
+  {n:"鮭魚 / 魚",u:"100g",p:20,k:180,c:"蛋白質",a:["鮭魚","魚肉","魚","鯛魚","鱸魚"]},
+  {n:"蝦仁",u:"100g",p:19,k:100,c:"蛋白質",a:["蝦仁","蝦"]},
   {n:"烤鴨",u:"100g(含皮)",p:19,k:340,c:"蛋白質",a:["烤鴨","鴨肉","櫻桃鴨","鴨"]},
   // 蔬菜菇類（每份約 100g）
+  {n:"燙青菜(外食)",u:"1 份",p:2,k:45,c:"蔬菜菇類",a:["燙青菜","青菜","燙地瓜葉","水煮青菜"]},
+  {n:"生菜沙拉盒",u:"1 盒(不含醬)",p:2,k:60,c:"蔬菜菇類",a:["生菜","沙拉","生菜沙拉"]},
+  {n:"小番茄",u:"1 盒約 150g",p:1.5,k:40,c:"蔬菜菇類",a:["小番茄","聖女番茄","小蕃茄"]},
   {n:"花椰菜",u:"1 份",p:2.8,k:30,c:"蔬菜菇類",a:["花椰菜","青花菜","白花菜"]},
   {n:"菠菜",u:"1 份",p:2.2,k:20,c:"蔬菜菇類",a:["菠菜"]},
   {n:"高麗菜",u:"1 份",p:1.3,k:25,c:"蔬菜菇類",a:["高麗菜"]},
@@ -340,15 +353,28 @@ const FOODS=[
   {n:"木耳",u:"1 份",p:1,k:25,c:"蔬菜菇類",a:["木耳"]},
   {n:"玉米筍",u:"1 份",p:2,k:30,c:"蔬菜菇類",a:["玉米筍"]},
   {n:"炒青菜(加油)",u:"1 份",p:2,k:80,c:"蔬菜菇類",a:["炒高麗菜","炒青菜","炒空心菜","炒菠菜","炒青江菜","炒A菜","炒地瓜葉"]},
+  // 油脂（體積小、熱量夠，食量小的人靠這個補）
+  {n:"綜合堅果",u:"一小把 20g",p:4,k:120,c:"油脂",a:["堅果","腰果","杏仁","核桃"]},
+  {n:"芝麻醬 / 花生醬",u:"1 大匙",p:3,k:90,c:"油脂",a:["芝麻醬","胡麻醬","花生醬"]},
+  {n:"麻油 / 橄欖油",u:"1 茶匙",p:0,k:45,c:"油脂",a:["麻油","橄欖油","香油","淋油"]},
+  {n:"酪梨",u:"半顆",p:1.5,k:120,c:"油脂",a:["酪梨"]},
   // 點心/主食/外食
   {n:"100% 黑巧克力",u:"1 片 10g",p:1,k:55,c:"點心 / 主食 / 外食",a:["黑巧克力","黑巧","巧克力"]},
   {n:"地瓜",u:"1 條約 100g",p:1.3,k:120,c:"點心 / 主食 / 外食",a:["地瓜","蕃薯","番薯","甘藷","烤地瓜","蒸地瓜"]},
   {n:"白飯",u:"1 碗",p:4,k:280,c:"點心 / 主食 / 外食",a:["白飯","飯"]},
+  {n:"白飯(半碗)",u:"半碗",p:2,k:140,c:"點心 / 主食 / 外食",a:["半碗飯","飯半碗"]},
+  {n:"粥",u:"1 碗",p:5,k:250,c:"點心 / 主食 / 外食",a:["粥","稀飯"]},
   {n:"刀削麵 / 麵",u:"1 碗",p:9,k:300,c:"點心 / 主食 / 外食",a:["刀削麵","拉麵","陽春麵","麵條","湯麵","麵"]},
+  {n:"炒麵(含肉)",u:"1 盤",p:18,k:620,c:"點心 / 主食 / 外食",a:["炒麵","炒烏龍麵","羊肉炒麵","牛肉炒麵","乾麵"]},
+  {n:"鐵板麵(加蛋加肉)",u:"1 份",p:22,k:650,c:"點心 / 主食 / 外食",a:["鐵板麵"]},
+  {n:"炒飯",u:"1 盤",p:12,k:600,c:"點心 / 主食 / 外食",a:["炒飯","蝦仁炒飯","蛋炒飯"]},
   {n:"米粉",u:"1 份",p:4,k:180,c:"點心 / 主食 / 外食",a:["米粉","炒米粉"]},
   {n:"冬粉",u:"1 份",p:0.5,k:120,c:"點心 / 主食 / 外食",a:["冬粉"]},
   {n:"水餃",u:"10 顆",p:14,k:420,c:"點心 / 主食 / 外食",a:["水餃","餃子","鍋貼"]},
+  {n:"饅頭",u:"1 個",p:6,k:280,c:"點心 / 主食 / 外食",a:["饅頭","芋頭饅頭","饅頭夾蛋"]},
   {n:"便當",u:"1 個",p:22,k:650,c:"點心 / 主食 / 外食",a:["便當"]},
+  {n:"自助餐(飯半碗)",u:"1 份",p:22,k:550,c:"點心 / 主食 / 外食",a:["自助餐"]},
+  {n:"滷味(豆製品為主)",u:"1 份",p:22,k:350,c:"點心 / 主食 / 外食",a:["滷味"]},
   {n:"豬肉三明治",u:"1 份",p:14,k:320,c:"點心 / 主食 / 外食",a:["豬肉三明治","豬排三明治","肉排三明治","豬肉吐司"]},
   {n:"豬肉漢堡",u:"1 個",p:17,k:420,c:"點心 / 主食 / 外食",a:["豬肉漢堡","豬排堡","豬肉堡","漢堡"]},
   {n:"小火鍋",u:"1 份(不喝湯)",p:20,k:400,c:"點心 / 主食 / 外食",a:["小火鍋","火鍋"]},
@@ -363,14 +389,15 @@ const FOODS=[
   {n:"蘿蔔糕",u:"2 塊約 150g",p:3,k:200,c:"點心 / 主食 / 外食",a:["蘿蔔糕","菜頭粿","蘿蔔粿"]},
 ];
 const FOOD_BY_NAME={}; FOODS.forEach(f=>FOOD_BY_NAME[f.n]=f);
-const PROTEIN_TARGET=90, KCAL_FLOOR=1000, KCAL_LOW=1200, KCAL_HIGH=1450;
+// 熱量區間：下限貼著基礎代謝（約 1277），理想 1350–1600
+const PROTEIN_TARGET=90, KCAL_FLOOR=1250, KCAL_LOW=1350, KCAL_HIGH=1600;
 const MEAL_KEYS=["breakfast","lunch","dinner","snack"];
 const MEAL_NAME={breakfast:"早餐",lunch:"午餐",dinner:"晚餐",snack:"點心"};
-// 每餐典型計畫（帶入今日計畫用）
+// 每餐典型參考（帶入今日參考用）
 function planMealItems(meal){
-  if(meal==="breakfast") return {"乳清蛋白飲":1};
-  if(meal==="lunch")     return {"雞蛋 / 茶葉蛋":2,"毛豆":1};
-  if(meal==="dinner")    return {"嫩豆腐":1,"蒸蛋":1,"花椰菜":1,"菠菜":1};
+  if(meal==="breakfast") return {"乳清蛋白飲":1,"綜合堅果":1};
+  if(meal==="lunch")     return {"雞蛋 / 茶葉蛋":2,"毛豆":1,"小番茄":1,"綜合堅果":1};
+  if(meal==="dinner")    return {"小火鍋":1,"燙青菜(外食)":1,"嫩豆腐":1};
   if(meal==="snack")     return {"100% 黑巧克力":1};
   return {};
 }
@@ -402,6 +429,7 @@ const MICRO=[
   {k:"posture",   n:"挺背收下巴", e:"🧍", how:"坐正、肩胛往後下、收下巴 10 秒。改善圓肩駝背。"},
   {k:"breath",    n:"腹式深呼吸", e:"🌬️", how:"吸氣鼓肚、吐氣縮肚，做 5 次。放鬆又練核心。"},
   {k:"shoulder",  n:"聳肩繞肩",   e:"💆", how:"肩膀往上聳再往後繞 10 圈。舒緩肩頸緊繃。"},
+  {k:"sitstand",  n:"起立坐下 10 下", e:"🪑", how:"用椅子做，慢慢坐下、用大腿控制不要跌坐。這是最方便的下肢肌力，骨骼肌偏低時特別有用。"},
   {k:"stand",     n:"起身走 2 分鐘", e:"🚶", how:"每坐約 1 小時就站起來走走、倒杯水。久坐族最重要的一件事。"},
   {k:"deadhang",  n:"單槓死懸吊",   e:"🧗", how:"抓住單槓、放鬆吊 20–30 秒，肩膀放鬆、深呼吸。練握力、開肩、放鬆脊椎，對富貴包很好。經過單槓就吊一下。"},
 ];
@@ -493,46 +521,55 @@ function lastActiveGapDays(){
   return Math.round((t-last)/86400000);
 }
 
-// ---------- 12週計畫 ----------
+// ---------- 12週節奏（強度會變，飲食方式不變）----------
 function weekInfo(){
   const start=parse(S.start), t=parse(todayStr());
   const days=Math.floor((t-start)/86400000);
   const week=Math.max(1,Math.floor(days/7)+1);
   let phase, phaseName;
-  if(week<=4){phase=1;phaseName="第一階段 · 穩定飲食＋入門";}
-  else if(week<=8){phase=2;phaseName="第二階段 · 提升強度";}
-  else if(week<=12){phase=3;phaseName="第三階段 · 全面提升";}
-  else {phase=3;phaseName="長期維持 · 新生活方式";}
+  if(week<=4){phase=1;phaseName="第一階段 · 把節奏養出來";}
+  else if(week<=8){phase=2;phaseName="第二階段 · 稍微加一點";}
+  else if(week<=12){phase=3;phaseName="第三階段 · 已成日常";}
+  else {phase=3;phaseName="長期維持 · 這就是你的生活";}
   return {days, week, phase, phaseName};
 }
-// 各階段 週一~週日 的 運動 / 晚餐
+// 各階段 週一~週日：運動 / 晚餐外食點法（晚餐三階段一樣，習慣不用越改越嚴）
+const EATOUT=[
+  "小火鍋｜不要飯，加一份青菜、一份豆腐、一顆蛋",
+  "滷味｜豆腐、豆干、蛋各一，青菜兩樣，不要麵不要飯",
+  "自助餐｜飯半碗，青菜兩樣，再加蒸蛋或豆腐",
+  "便當｜主菜不要炸的，飯半碗，另外加一份燙青菜",
+  "麵店｜湯麵不要炒麵，加一顆蛋、加一份燙青菜",
+  "小火鍋 或 滷味｜這兩個是最好的選擇，放心吃",
+  "自由吃｜想吃什麼就吃，明天照常就好",
+];
 const PLAN={
  1:[
-  {ex:"呼拉圈 20 分＋橢圓機 20 分", dn:"水煮青菜一大盤＋涼拌豆腐 1 盒"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"水煮青菜＋蒸蛋 1 碗"},
-  {ex:"呼拉圈 20 分＋橢圓機 25 分", dn:"水煮青菜＋嫩豆腐 1 盒＋蛋 1 顆"},
-  {ex:"呼拉圈 20 分＋橢圓機 30 分", dn:"水煮青菜＋蒸蛋 1 碗"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"水煮青菜＋涼拌豆腐 1 盒＋蛋 1 顆"},
-  {ex:"呼拉圈 20 分（輕鬆做）", dn:"外食：小火鍋 或 滷味最佳"},
-  {ex:"休息 或 散步", dn:"自由吃（恢復日）"},
+  {ex:"橢圓機 25 分（邊看劇）", dn:EATOUT[0]},
+  {ex:"居家肌力 12 分＋呼拉圈 20 分", dn:EATOUT[1]},
+  {ex:"橢圓機 25 分", dn:EATOUT[2]},
+  {ex:"橢圓機 25 分＋呼拉圈 20 分", dn:EATOUT[3]},
+  {ex:"居家肌力 12 分＋橢圓機 20 分", dn:EATOUT[4]},
+  {ex:"橢圓機 25 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
  2:[
-  {ex:"呼拉圈 20 分＋橢圓機 30 分", dn:"花椰菜＋木耳、涼拌豆腐＋蛋"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"菠菜＋金針菇、蒸蛋＋豆干"},
-  {ex:"呼拉圈 20 分＋橢圓機 30 分（間歇）", dn:"高麗菜＋香菇、嫩豆腐＋毛豆"},
-  {ex:"呼拉圈 25 分＋橢圓機 30 分", dn:"空心菜＋玉米筍、蒸蛋＋豆腐"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"四季豆＋杏鮑菇、嫩豆腐＋蛋"},
-  {ex:"呼拉圈 25 分（輕鬆做）", dn:"外食：小火鍋 或 滷味"},
-  {ex:"休息 或 散步", dn:"自由吃（恢復日）"},
+  {ex:"橢圓機 30 分（阻力調高一點）", dn:EATOUT[0]},
+  {ex:"居家肌力 15 分＋呼拉圈 20 分", dn:EATOUT[1]},
+  {ex:"橢圓機 30 分（間歇：快 2 分＋慢 1 分）", dn:EATOUT[2]},
+  {ex:"橢圓機 30 分＋呼拉圈 20 分", dn:EATOUT[3]},
+  {ex:"居家肌力 15 分＋橢圓機 20 分", dn:EATOUT[4]},
+  {ex:"橢圓機 30 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
  3:[
-  {ex:"呼拉圈 20 分＋橢圓機 35 分（間歇）", dn:"花椰菜＋木耳、涼拌豆腐＋蛋"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"菠菜＋金針菇、蒸蛋＋豆干"},
-  {ex:"呼拉圈 20 分＋橢圓機 35 分（間歇）", dn:"高麗菜＋香菇、嫩豆腐＋毛豆"},
-  {ex:"呼拉圈 25 分＋橢圓機 35 分（間歇）", dn:"空心菜＋玉米筍、蒸蛋＋涼拌豆腐"},
-  {ex:"居家負重＋單槓（五動作 2 輪＋單槓練背）約 12 分", dn:"四季豆＋杏鮑菇、嫩豆腐＋蛋"},
-  {ex:"呼拉圈 30 分（輕鬆做）", dn:"外食：小火鍋＞滷味＞便當"},
-  {ex:"休息 或 散步", dn:"自由吃（恢復日）"},
+  {ex:"橢圓機 35 分（間歇）", dn:EATOUT[0]},
+  {ex:"居家肌力 18 分＋呼拉圈 20 分", dn:EATOUT[1]},
+  {ex:"橢圓機 35 分（間歇）", dn:EATOUT[2]},
+  {ex:"橢圓機 35 分＋呼拉圈 20 分", dn:EATOUT[3]},
+  {ex:"居家肌力 18 分＋橢圓機 25 分", dn:EATOUT[4]},
+  {ex:"橢圓機 35 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
 };
 function planFor(dateStr){
@@ -676,7 +713,7 @@ function renderCheck(){
       let title=it.t, hint=it.h;
       if(it.k==="exercise"){
         title=`運動 · 主打 ${S.focus} 🎬`;
-        hint=`踩上去 20 分鐘就達標　｜　今日計畫：${pl.ex}`;
+        hint=`踩上去 20 分鐘就達標　｜　今日參考：${pl.ex}`;
       }
       el.innerHTML=`<div class="box">${on?"✓":""}</div><div class="txt"><div class="t">${title}</div><div class="h">${hint}</div></div><div class="pt">+${it.pt}</div>`;
       el.onclick=()=>{ toggle(it.k); };
@@ -726,10 +763,10 @@ function renderNutrition(){
               : '<span class="nut-note warn">蛋白質偏低，記得每餐問：蛋白質在哪裡？</span>';
   let kNote;
   if(k===0) kNote='<span class="nut-note">還沒加食材，點下面加加看</span>';
-  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">太少了！低於基礎代謝，會頭暈掉肌肉，一定要加量</span>';
-  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">稍低，再補一點到 1200 以上更好瘦不累</span>';
-  else if(k<=KCAL_HIGH) kNote='<span class="nut-note ok">熱量在理想減脂區間（1200–1450），很剛好</span>';
-  else kNote='<span class="nut-note warn">今天熱量偏高，明天正常吃就好</span>';
+  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">低於基礎代謝（約 1277），身體會拿肌肉當燃料，加一把堅果或一片起司就補上了</span>';
+  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">稍低，再補一點油脂到 1350 以上，瘦得比較穩</span>';
+  else if(k<=KCAL_HIGH) kNote='<span class="nut-note ok">在理想區間（1350–1600），這樣剛好</span>';
+  else kNote='<span class="nut-note warn">今天偏高，明天照常吃就好，不用補償</span>';
   document.getElementById("nutBars").innerHTML=
     `<div class="nbar p"><div class="lab"><span>蛋白質</span><span><b>${p}</b> / ${PROTEIN_TARGET} g</span></div><div class="track"><i style="width:${Math.max(2,pPct)}%"></i></div>${pNote}</div>`+
     `<div class="nbar k"><div class="lab"><span>熱量</span><span><b>${k}</b> kcal</span></div><div class="track"><i style="width:${Math.max(2,kPct)}%"></i></div>${kNote}</div>`;
@@ -737,7 +774,7 @@ function renderNutrition(){
   const list=document.getElementById("nutList");
   const anyItem = MEAL_KEYS.some(m=>Object.keys(getMealItems(viewDate,m)).length>0);
   if(!anyItem){
-    list.innerHTML='<div class="nempty">在上面「今日打卡」的每一餐點「＋ 加食材」或「🔍 從文字偵測」，這裡就會自動算出蛋白質和熱量。或按下面「帶入今日計畫」。</div>';
+    list.innerHTML='<div class="nempty">在上面「今日打卡」的每一餐點「＋ 加食材」或「🔍 從文字偵測」，這裡就會自動算出蛋白質和熱量。或按下面「帶入今日參考」。</div>';
   } else {
     list.innerHTML=MEAL_KEYS.map(m=>{
       const items=getMealItems(viewDate,m); const ns=Object.keys(items);
@@ -756,32 +793,36 @@ function toggleMeal(k, def){
   if(now){ if(!S.logs[viewDate][k+"_txt"]) S.logs[viewDate][k+"_txt"]=def||""; }
   save();
   renderCheck(); renderPet(); renderCal();
-  if(now) toast("記錄好了，照計畫吃 🍱 小杞也在長大");
+  if(now) toast("記錄好了 🍱 小杞也在長大");
 }
 
-const WEIGHT_ROUTINE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
-  '<b>核心五動作</b>（第 1–2 週做 2 輪，順了再加到 3 輪）<br>'+
-  '① 高腳杯深蹲（啞鈴抱胸）×10 — 大腿、臀<br>'+
-  '② 羅馬尼亞硬舉（啞鈴）×10 — 大腿後側、臀、下背<br>'+
-  '③ 彈力帶划船 ×12 — 上背、改善圓肩<br>'+
-  '④ 臀橋（可放啞鈴）×15 — 臀<br>'+
-  '⑤ 蚌式開合（彈力帶繞膝）每邊 ×12 — 大腿內側<br>'+
-  '<span style="color:var(--sub);">重量抓法：最後 2–3 下有點吃力但姿勢維持得住；10 下還很輕鬆就該加重。前幾次寧可空手練姿勢。</span>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>🧗 單槓練背</b>（放最後，練不動就先只做死懸吊）<br>'+
-  '⑥ 離心引體向上 ×3–5 — 跳/踩到最高，再用背的力量慢慢放下 3–5 秒<br>'+
-  '⑦ 懸吊抬腿（屈膝也可）×8–10 — 練核心、下腹<br>'+
-  '<span style="color:var(--sub);">拉不上去很正常，先從死懸吊＋離心開始，背和握力會慢慢變強。有彈力帶可掛上去做輔助引體。</span></div></div>';
+const HOME_ROUTINE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
+  '<b>下肢（骨骼肌偏低，這塊最有效）</b><br>'+
+  '① 椅子起立坐下 ×10，2 組 — 慢慢坐下，用大腿控制不要跌坐<br>'+
+  '② 橋式 ×15，2 組 — 膝間夾枕頭，臀部夾緊再抬<br>'+
+  '③ 側躺抬腿 每邊 ×12，2 組 — 動作慢，練大腿內外側<br>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>核心與姿勢（在家補上這塊）</b><br>'+
+  '④ 死蟲式 每邊 ×8 — 躺著、腰貼地，對側手腳慢慢伸出去再收回<br>'+
+  '⑤ 收下巴 ×10（各停 5 秒）— 練深層頸屈肌，富貴包要靠這個<br>'+
+  '⑥ W 收肩 ×12 — 手肘彎成 W，肩胛往後下夾，改善圓肩<br>'+
+  '<span style="color:var(--sub);">④⑤⑥ 顧的是核心穩定、胸椎活動、肩胛控制，在地板或椅子上都能做，不需要器材也不需要教練。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>🧗 有單槓就加</b>：死懸吊 20–30 秒 ×2 — 開肩、放鬆脊椎，對富貴包很好。<br>'+
+  '<b>有啞鈴／彈力帶再加</b>：高腳杯深蹲 ×10、彈力帶划船 ×12、蚌式開合每邊 ×12。<br>'+
+  '<span style="color:var(--sub);">重量抓法：最後 2–3 下有點吃力但姿勢維持得住。沒器材完全不影響，空手版本一樣有效。</span></div></div>';
 function renderPlan(){
   const pl=planFor(viewDate);
   document.getElementById("phaseTag").textContent="第 "+pl.wi.week+" 週";
   document.getElementById("planBadge").textContent=pl.wi.phaseName;
+  const isEatOut = pl.dn.indexOf("｜")>=0 && pl.dn.indexOf("自由吃")<0;
   document.getElementById("planBody").innerHTML=
     `<div class="plan-row"><div class="k">🎯 主打</div><div class="v"><b>${S.focus}</b> <a id="editFocus" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改</a><br><span style="font-size:11.5px;color:var(--sub);">先養成「每天踩上去」的習慣，時間長短其次</span></div></div>`+
-    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("居家負重")>=0?WEIGHT_ROUTINE_HTML:""}</div></div>`+
-    `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯（蛋白質 20g＋）</div></div>`+
-    `<div class="plan-row"><div class="k">午餐</div><div class="v">茶葉蛋 2＋毛豆 1 碗，或 嫩豆腐＋滷豆干</div></div>`+
-    `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}</div></div>`+
-    `<div class="plan-row"><div class="k">提醒</div><div class="v">每餐問自己：蛋白質在哪裡？青菜盡量吃，水 1500ml＋</div></div>`;
+    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("居家肌力")>=0?HOME_ROUTINE_HTML:""}</div></div>`+
+    `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯＋堅果一小把<br><span style="font-size:11.5px;color:var(--sub);">用牛奶泡更好，蛋白質多 8g、熱量多約 100</span></div></div>`+
+    `<div class="plan-row"><div class="k">午餐</div><div class="v">蛋白質＋毛豆＋蔬菜＋一份油脂<br><span style="font-size:11.5px;color:var(--sub);">A 茶葉蛋 2＋毛豆＋小番茄＋堅果　｜　B 滷豆干 4＋毛豆＋生菜盒＋起司　｜　C 希臘優格＋茶葉蛋 2＋剩菜青菜＋堅果</span></div></div>`+
+    `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}`+
+      (isEatOut?`<div class="tellhim">📱 <b>傳給老公就好：</b>「${pl.dn.split("｜")[1]}」</div>`:"")+
+    `</div></div>`+
+    `<div class="plan-row"><div class="k">提醒</div><div class="v">不用完美。晚餐點對、白天有蛋白質和青菜、水喝夠，就已經在走了。</div></div>`;
   const ef=document.getElementById("editFocus");
   if(ef) ef.onclick=()=>{ const n=prompt("主打習慣（想先養成的那一項運動）：",S.focus); if(n&&n.trim()){ S.focus=n.trim().slice(0,14); save(); renderCheck(); renderPlan(); } };
 }
@@ -789,6 +830,7 @@ function renderPlan(){
 // ---------- 身體數據追蹤 ----------
 const METRICS=[
   {k:"fat",   label:"體脂",   unit:"%",  targets:[[32,"#E0A04A"],[30,"#C6533F"]]},
+  {k:"muscle",label:"骨骼肌", unit:"%",  targets:[[26,"#6B8E5A"]]},
   {k:"waist", label:"腰圍",   unit:"cm", targets:[]},
   {k:"thigh", label:"大腿圍", unit:"cm", targets:[]},
   {k:"weight",label:"體重",   unit:"kg", targets:[]},
@@ -808,7 +850,7 @@ function renderBF(){
     }).join("");
     el.innerHTML = cells || `<div class="p" style="background:#F4F1E9"><div class="l">已記錄，換個指標看看趨勢</div></div>`;
   } else {
-    el.innerHTML=`<div class="p" style="background:#F4F1E9"><div class="l">還沒有紀錄，先量一次當起點吧（體重、體脂、腰圍、大腿圍，能量幾項算幾項）</div></div>`;
+    el.innerHTML=`<div class="p" style="background:#F4F1E9"><div class="l">還沒有紀錄，先量一次當起點吧（體重、體脂、骨骼肌、腰圍、大腿圍，能量幾項算幾項）</div></div>`;
   }
   // tabs：只顯示有資料的指標（沒資料也顯示體脂供起始）
   const tabs=document.getElementById("bfTabs");
@@ -818,9 +860,11 @@ function renderBF(){
   }).join("");
   tabs.querySelectorAll("button").forEach(b=>b.onclick=()=>{ chartMetric=b.getAttribute("data-metric"); renderBF(); });
   const mt=METRICS.find(m=>m.k===chartMetric);
-  document.getElementById("bfLegend").innerHTML = chartMetric==="fat"
-    ? "綠線＝體脂% ｜ 虛線＝目標（3個月 32%、6個月 30%）"
-    : `綠線＝${mt.label}（${mt.unit}）｜ 圍度往下掉，就是褲子變鬆的證據`;
+  let legend;
+  if(chartMetric==="fat") legend="綠線＝體脂% ｜ 虛線＝目標（3 個月 32%、6 個月 30%）";
+  else if(chartMetric==="muscle") legend="綠線＝骨骼肌% ｜ 虛線＝26%（脫離「低」的區間）｜ 這條往上，代謝就會回來";
+  else legend=`綠線＝${mt.label}（${mt.unit}）｜ 圍度往下掉，就是褲子變鬆的證據`;
+  document.getElementById("bfLegend").innerHTML=legend;
   drawBF(arr.filter(a=>a[chartMetric]!=null && !isNaN(a[chartMetric])), mt);
 }
 function drawBF(arr, mt){
@@ -862,7 +906,7 @@ function renderCal(){
   for(let d=1;d<=days;d++){
     const ds=y+"-"+pad(m+1)+"-"+pad(d);
     const pts=dayPoints(S.logs[ds]);
-    let lv=""; if(pts>=6)lv="lv4"; else if(pts>=4)lv="lv3"; else if(pts>=2)lv="lv2"; else if(pts>0)lv="lv1";
+    let lv=""; if(pts>=7)lv="lv4"; else if(pts>=5)lv="lv3"; else if(pts>=2)lv="lv2"; else if(pts>0)lv="lv1";
     const e=document.createElement("div");
     e.className="cal-cell "+lv+(ds===todayStr()?" today":"");
     e.textContent=d;
@@ -877,7 +921,7 @@ document.getElementById("nextDay").onclick=()=>{ const d=parse(viewDate);d.setDa
 document.getElementById("fillPlan").onclick=()=>{
   if(!S.logs[viewDate])S.logs[viewDate]={};
   MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]=Object.assign({},planMealItems(m)); S.logs[viewDate][m]=true; });
-  save(); renderCheck(); renderNutrition(); renderPet(); renderCal(); toast("已帶入今日計畫的三餐，可再自行加減 🍱");
+  save(); renderCheck(); renderNutrition(); renderPet(); renderCal(); toast("已帶入今日參考，實際吃什麼再自己加減 🍱");
 };
 document.getElementById("clearFoods").onclick=()=>{
   if(S.logs[viewDate]) MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]={}; });
@@ -888,18 +932,20 @@ document.getElementById("renameBtn").onclick=()=>{ const n=prompt("幫你的枸�
 document.getElementById("bfAdd").onclick=()=>{
   const w=parseFloat(document.getElementById("bfWeight").value),
         f=parseFloat(document.getElementById("bfFat").value),
+        mu=parseFloat(document.getElementById("bfMuscle").value),
         wa=parseFloat(document.getElementById("bfWaist").value),
         th=parseFloat(document.getElementById("bfThigh").value);
-  if(isNaN(w)&&isNaN(f)&&isNaN(wa)&&isNaN(th)){toast("請至少填一個數字");return;}
+  if(isNaN(w)&&isNaN(f)&&isNaN(mu)&&isNaN(wa)&&isNaN(th)){toast("請至少填一個數字");return;}
   // 同日合併：沿用當天既有紀錄，只更新有填的欄位
   let rec=S.bodyFat.find(r=>r.date===todayStr());
-  if(!rec){ rec={date:todayStr(),weight:null,fat:null,waist:null,thigh:null}; S.bodyFat.push(rec); }
+  if(!rec){ rec={date:todayStr(),weight:null,fat:null,muscle:null,waist:null,thigh:null}; S.bodyFat.push(rec); }
   if(!isNaN(w)) rec.weight=w;
   if(!isNaN(f)) rec.fat=f;
+  if(!isNaN(mu)) rec.muscle=mu;
   if(!isNaN(wa)) rec.waist=wa;
   if(!isNaN(th)) rec.thigh=th;
   save();
-  ["bfWeight","bfFat","bfWaist","bfThigh"].forEach(id=>document.getElementById(id).value="");
+  ["bfWeight","bfFat","bfMuscle","bfWaist","bfThigh"].forEach(id=>document.getElementById(id).value="");
   renderBF(); toast("身體數據已記錄 📈");
 };
 document.getElementById("calPrev").onclick=()=>{ calMonth.m--; if(calMonth.m<0){calMonth.m=11;calMonth.y--;} renderCal(); };
@@ -917,7 +963,7 @@ document.getElementById("importFile").onchange=(e)=>{
       const d=JSON.parse(r.result);
       if(!d||!d.logs){ toast("這不是本草養成的備份檔"); return; }
       if(!confirm("要用備份覆蓋目前資料嗎？（建議先匯出目前的以防萬一）")) return;
-      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）";
+      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）"; if(!S.bodyFat)S.bodyFat=[];
       save(); viewDate=todayStr(); renderAll(); toast("備份已還原 🌿");
     }catch(err){ toast("讀取失敗，檔案可能損壞"); }
   };
