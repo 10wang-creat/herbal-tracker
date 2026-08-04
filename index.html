@@ -169,6 +169,45 @@
 
   .foot{text-align:center; font-size:11px; color:var(--sub); padding:10px 20px 0; line-height:1.7;}
   .foot a{color:var(--green-d); cursor:pointer; text-decoration:underline;}
+  /* games */
+  .omen{background:linear-gradient(160deg,#FFF8EC,#FFFFFF); border:1px solid var(--line); border-radius:16px; padding:13px 15px; text-align:center;}
+  .omen .oh{font-size:12px; color:var(--sub);}
+  .omen .on2{font-size:19px; font-weight:700; color:var(--goji); margin:2px 0 4px; letter-spacing:1px;}
+  .omen .ow{font-size:13px; line-height:1.7;}
+  .wk-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px;}
+  .wk-cell{background:var(--green-l); border-radius:12px; padding:9px 4px; text-align:center;}
+  .wk-cell .n{font-size:19px; font-weight:700; color:var(--green-d); line-height:1.15;}
+  .wk-cell .l{font-size:10.5px; color:var(--sub);}
+  .wk-titles{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
+  .wk-title{font-size:11.5px; background:var(--goji-l); color:var(--goji); border-radius:20px; padding:3px 10px; font-weight:600;}
+  .wk-note{font-size:12px; color:var(--sub); line-height:1.6; margin-top:8px;}
+  .term-mission{background:var(--goji-l); border-radius:14px; padding:11px 13px;}
+  .term-mission .tm{font-size:13.5px; font-weight:600; color:var(--goji);}
+  .term-mission .td{font-size:11.5px; color:var(--sub); margin:2px 0 7px;}
+  .term-mission .track{height:11px; background:#fff; border-radius:10px; overflow:hidden;}
+  .term-mission .track > i{display:block; height:100%; border-radius:10px; background:linear-gradient(90deg,#E0A04A,#C6533F); transition:width .5s;}
+  .term-mission .tp{font-size:11px; color:var(--sub); margin-top:3px;}
+  .badge{font-size:11.5px; border:1.5px solid var(--amber); color:var(--amber); background:#fff; border-radius:20px; padding:3px 10px;}
+  .plot{display:flex; gap:10px; align-items:center; border-bottom:1px dashed var(--line); padding:9px 0;}
+  .plot:last-child{border-bottom:none;}
+  .plot .ps{width:64px; height:64px; flex:none;}
+  .plot .pi{flex:1; min-width:0;}
+  .plot .pn{font-size:13.5px; font-weight:600;}
+  .plot .pa{font-size:11px; color:var(--sub);}
+  .plot .track{height:8px; background:var(--green-l); border-radius:8px; overflow:hidden; margin-top:5px;}
+  .plot .track > i{display:block; height:100%; border-radius:8px; background:linear-gradient(90deg,var(--green),var(--green-d));}
+  .plot .px{border:none; background:transparent; color:#cfc7b6; font-size:15px; cursor:pointer; flex:none;}
+  .sowrow{display:flex; gap:6px; margin-top:10px;}
+  .sowrow select{flex:1; min-width:0; border:1.5px solid var(--line); border-radius:12px; padding:8px 6px; font-size:12.5px; font-family:inherit; background:#fff; color:var(--ink);}
+  .hgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px;}
+  .hcard{border:1.5px solid var(--line); border-radius:14px; padding:10px; background:#fff;}
+  .hcard.lock{background:#F6F3EA; border-style:dashed;}
+  .hcard .hn{font-size:14px; font-weight:700; display:flex; align-items:center; gap:5px;}
+  .hcard .hp{font-size:10.5px; color:var(--sub); margin:1px 0 4px;}
+  .hcard .hf{font-size:11.5px; line-height:1.6;}
+  .hcard .hcond{font-size:11px; color:var(--sub); line-height:1.5;}
+  .hcard .htrack{height:6px; background:#E9E3D6; border-radius:6px; overflow:hidden; margin-top:5px;}
+  .hcard .htrack > i{display:block; height:100%; border-radius:6px; background:var(--amber);}
   .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); background:var(--green-d); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; transition:.3s; z-index:50; pointer-events:none; box-shadow:var(--shadow); max-width:90%;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 </style>
@@ -206,6 +245,12 @@
     </div>
     <div id="checkList"></div>
     <textarea class="note" id="noteBox" rows="2" placeholder="今天的小記錄（心情、體感、想吃的東西…）"></textarea>
+  </div>
+
+  <!-- 今日藥籤 -->
+  <div class="card">
+    <h2>今日藥籤 <span class="tag">每天一張</span></h2>
+    <div id="omenBody"></div>
   </div>
 
   <!-- 隨手微運動 -->
@@ -255,6 +300,37 @@
     <div class="bf-legend" id="bfLegend"></div>
   </div>
 
+  <!-- 週結算 -->
+  <div class="card">
+    <div class="cal-head">
+      <button class="btn ghost" id="wkPrev">‹</button>
+      <h2 style="margin:0" id="wkTitle">本週結算</h2>
+      <button class="btn ghost" id="wkNext">›</button>
+    </div>
+    <div id="wkBody"></div>
+  </div>
+
+  <!-- 節氣任務 -->
+  <div class="card">
+    <h2>節氣任務 <span class="tag" id="termTag"></span></h2>
+    <div id="termBody"></div>
+    <div class="chips" id="termBadges" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- 藥圃 -->
+  <div class="card">
+    <h2>藥圃 <span class="tag" id="gardenTag"></span></h2>
+    <div id="gardenBody"></div>
+    <div id="gardenAdd"></div>
+  </div>
+
+  <!-- 藥櫃圖鑑 -->
+  <div class="card">
+    <h2>藥櫃圖鑑 <span class="tag" id="herbTag"></span></h2>
+    <div id="herbBody"></div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">性味功效為傳統中醫典籍記載，僅供認識藥材，不構成醫療建議。實際用藥請諮詢中醫師。</div>
+  </div>
+
   <!-- 月曆熱力 -->
   <div class="card">
     <div class="cal-head">
@@ -285,8 +361,8 @@ const START_DEFAULT="2026-07-20"; // 運動重啟日
 // ---------- state ----------
 let S = load();
 function load(){
-  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; return r; } }catch(e){}
-  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[] };
+  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; if(!r.plants)r.plants=[]; if(!r.omen)r.omen=null; return r; } }catch(e){}
+  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[], plants:[], omen:null };
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("儲存失敗，可能是隱私模式"); } }
 
@@ -442,7 +518,7 @@ function tapMicro(k){
   if(!S.logs[viewDate].micro) S.logs[viewDate].micro={};
   const m=S.logs[viewDate].micro;
   m[k]=(m[k]||0)+1;
-  save(); renderMicro(); renderPet(); renderCal();
+  save(); renderMicro(); renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs();
   toast(MICRO_BY[k].e+" "+MICRO_BY[k].n+" +1，小杞也謝謝你動一動");
 }
 function microTotal(dateStr){ const m=getMicro(dateStr); let t=0; for(const k in m) t+=m[k]; return t; }
@@ -581,7 +657,8 @@ function planFor(dateStr){
 }
 
 // ---------- pet SVG ----------
-function petSVG(stage){
+function petSVG(stage, berryCol, flowerCol){
+  berryCol=berryCol||"#C6533F"; flowerCol=flowerCol||"#C9A6D9";
   // 花盆 + 依階段長高的枸杞
   const pot='<path d="M58 150 L122 150 L114 178 Q90 184 66 178 Z" fill="#C97B4A"/>'+
             '<rect x="54" y="140" width="72" height="14" rx="5" fill="#D98C5A"/>'+
@@ -589,8 +666,8 @@ function petSVG(stage){
   let plant="";
   const leaf=(x,y,r,s)=>`<ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${5.5*s}" fill="#6B8E5A" transform="rotate(${r} ${x} ${y})"/>`;
   const leafD=(x,y,r,s)=>`<ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${5.5*s}" fill="#4F6B45" transform="rotate(${r} ${x} ${y})"/>`;
-  const berry=(x,y)=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="7" fill="#C6533F"/><ellipse cx="${x-1.5}" cy="${y-2}" rx="1.6" ry="2.2" fill="#E88" opacity=".7"/>`;
-  const flower=(x,y)=>{let s="";for(let i=0;i<5;i++){const a=i*72*Math.PI/180;s+=`<ellipse cx="${x+Math.cos(a)*6}" cy="${y+Math.sin(a)*6}" rx="4.5" ry="3" fill="#C9A6D9" transform="rotate(${i*72} ${x+Math.cos(a)*6} ${y+Math.sin(a)*6})"/>`;}return s+`<circle cx="${x}" cy="${y}" r="3" fill="#E0A04A"/>`;};
+  const berry=(x,y)=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="7" fill="${berryCol}"/><ellipse cx="${x-1.5}" cy="${y-2}" rx="1.6" ry="2.2" fill="#E88" opacity=".7"/>`;
+  const flower=(x,y)=>{let s="";for(let i=0;i<5;i++){const a=i*72*Math.PI/180;s+=`<ellipse cx="${x+Math.cos(a)*6}" cy="${y+Math.sin(a)*6}" rx="4.5" ry="3" fill="${flowerCol}" transform="rotate(${i*72} ${x+Math.cos(a)*6} ${y+Math.sin(a)*6})"/>`;}return s+`<circle cx="${x}" cy="${y}" r="3" fill="#E0A04A"/>`;};
   if(stage===0){
     plant='<ellipse cx="90" cy="146" rx="8" ry="5.5" fill="#8B5A2B"/><path d="M86 145 Q90 141 94 145" stroke="#C9A66B" stroke-width="1.5" fill="none"/>';
   } else if(stage===1){
@@ -729,7 +806,7 @@ function toggle(k){
   S.logs[viewDate][k]=!S.logs[viewDate][k];
   const wasKey = (k==="exercise" && S.logs[viewDate][k]);
   save();
-  renderCheck(); renderPet(); renderCal();
+  renderCheck(); renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs();
   if(wasKey) toast("運動打卡成功！小杞喝到水了 💧");
 }
 
@@ -792,7 +869,7 @@ function toggleMeal(k, def){
   S.logs[viewDate][k]=now;
   if(now){ if(!S.logs[viewDate][k+"_txt"]) S.logs[viewDate][k+"_txt"]=def||""; }
   save();
-  renderCheck(); renderPet(); renderCal();
+  renderCheck(); renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs();
   if(now) toast("記錄好了 🍱 小杞也在長大");
 }
 
@@ -844,8 +921,8 @@ function renderBF(){
       const withVal=arr.filter(a=>a[mt.k]!=null && !isNaN(a[mt.k]));
       if(!withVal.length) return "";
       const latest=withVal[withVal.length-1], first=withVal[0];
-      const d=(latest[mt.k]-first[mt.k]);
-      const ds=(d>=0?"+":"")+d.toFixed(1);
+      let ds="起點";
+      if(withVal.length>1){ const dv=(latest[mt.k]-first[mt.k]); ds=(dv>=0?"+":"")+dv.toFixed(1); }
       return `<div class="p"><div class="n">${latest[mt.k]}${mt.unit==="%"?"%":""}</div><div class="l">${mt.label}${mt.unit==="%"?"":" "+mt.unit}（${ds}）</div></div>`;
     }).join("");
     el.innerHTML = cells || `<div class="p" style="background:#F4F1E9"><div class="l">已記錄，換個指標看看趨勢</div></div>`;
@@ -979,7 +1056,359 @@ window.addEventListener("resize",()=>renderBF());
   catch(e){ const w=document.getElementById("storeWarn"); if(w) w.style.display="block"; }
 })();
 
-function renderAll(){ renderPet(); renderCheck(); renderPlan(); renderMicro(); renderNutrition(); renderBF(); renderCal(); }
+
+// ============ 藥材資料 ============
+const HERBS=[
+ {n:"枸杞", col:"#C6533F", flo:"#E8A0A0", nature:"甘、平；歸肝、腎經",
+  fx:"滋補肝腎、益精明目。傳統用於視力疲勞、腰膝痠軟。",
+  cond:{t:"grow", need:100, label:"成長值達 100（小杞結果）"}},
+ {n:"山藥", col:"#EFE6D2", flo:"#F0E4CF", nature:"甘、平；歸脾、肺、腎經",
+  fx:"補脾養胃、生津益肺。性質平和，是少數可長期當食材的藥材。",
+  cond:{t:"meals3", need:30, label:"三餐都有記錄累計 30 天"}},
+ {n:"百合", col:"#EBD3E4", flo:"#F2E2EE", nature:"甘、微苦，微寒；歸心、肺經",
+  fx:"養陰潤肺、清心安神。傳統用於燥咳、心煩不寐。",
+  cond:{t:"item", key:"sleep", need:30, label:"12 點前上床累計 30 天"}},
+ {n:"芡實", col:"#CBBB8C", flo:"#DED3AE",  nature:"甘、澀，平；歸脾、腎經",
+  fx:"益腎固精、補脾止瀉。四神湯的成員之一。",
+  cond:{t:"item", key:"veg", need:20, label:"蔬菜 2 份累計 20 天"}},
+ {n:"薏苡仁", col:"#DED5BB", flo:"#EAE3CD", nature:"甘、淡，涼；歸脾、胃、肺經",
+  fx:"利水滲濕、健脾。孕婦不宜多用。",
+  cond:{t:"item", key:"water", need:30, label:"喝水達標累計 30 天"}},
+ {n:"黃耆", col:"#D9B25A", flo:"#E8CE92", nature:"甘、微溫；歸脾、肺經",
+  fx:"補氣升陽、固表止汗。感冒發熱期間不宜服用。",
+  cond:{t:"item", key:"exercise", need:60, label:"運動累計 60 天"}},
+ {n:"杜仲", col:"#8B6B4A", flo:"#C3A583", nature:"甘、溫；歸肝、腎經",
+  fx:"補肝腎、強筋骨。傳統用於腰膝痠軟無力。",
+  cond:{t:"streakmax", need:14, label:"曾經連續運動 14 天"}},
+ {n:"蓮子", col:"#C7D6A8", flo:"#E4EDD2", nature:"甘、澀，平；歸脾、腎、心經",
+  fx:"補脾止瀉、養心安神。心煩失眠時的常見配伍。",
+  cond:{t:"micro", need:200, label:"隨手微運動累計 200 次"}},
+ {n:"麥冬", col:"#A8C6B0", flo:"#CFE2D5", nature:"甘、微苦，微寒；歸心、肺、胃經",
+  fx:"養陰生津、潤肺清心。傳統用於口乾、乾咳。",
+  cond:{t:"grow", need:200, label:"成長值達 200"}},
+ {n:"陳皮", col:"#E08A3C", flo:"#F0BC85", nature:"辛、苦，溫；歸脾、肺經",
+  fx:"理氣健脾、燥濕化痰。放得越久越受重視的一味。",
+  cond:{t:"totaldays", need:90, label:"總打卡天數達 90 天"}},
+ {n:"茯苓", col:"#E3DDD0", flo:"#EFEBE1", nature:"甘、淡，平；歸心、脾、腎經",
+  fx:"利水滲濕、健脾寧心。性平和，常與其他藥材同用。",
+  cond:{t:"bigday", need:30, label:"單日 7 點以上達成 30 次"}},
+ {n:"當歸", col:"#B07A5A", flo:"#D6AE96", nature:"甘、辛，溫；歸肝、心、脾經",
+  fx:"補血活血、調經止痛。傳統婦科要藥。",
+  cond:{t:"grow", need:350, label:"成長值達 350"}},
+];
+const HERB_BY={}; HERBS.forEach(h=>HERB_BY[h.n]=h);
+
+// ============ 統計小工具 ============
+function allDates(){ return Object.keys(S.logs).sort(); }
+function countItem(key){ let c=0; for(const d in S.logs){ if(S.logs[d][key]) c++; } return c; }
+function countMeals3(){ let c=0; for(const d in S.logs){ const l=S.logs[d]; if(l.breakfast&&l.lunch&&l.dinner) c++; } return c; }
+function countMicroAll(){ let c=0; for(const d in S.logs){ const m=S.logs[d].micro||{}; for(const k in m) c+=m[k]; } return c; }
+function countBigDay(n){ let c=0; for(const d in S.logs){ if(dayPoints(S.logs[d])>=n) c++; } return c; }
+function maxExerciseStreak(){
+  const ds=allDates().filter(d=>S.logs[d].exercise);
+  if(!ds.length) return 0;
+  let best=1, cur=1;
+  for(let i=1;i<ds.length;i++){
+    const prev=parse(ds[i-1]), now=parse(ds[i]);
+    if(Math.round((now-prev)/86400000)===1){ cur++; if(cur>best) best=cur; } else cur=1;
+  }
+  return best;
+}
+function herbProgress(h){
+  const c=h.cond;
+  if(c.t==="grow")      return {cur:Math.floor(totalPoints()), need:c.need};
+  if(c.t==="item")      return {cur:countItem(c.key), need:c.need};
+  if(c.t==="meals3")    return {cur:countMeals3(), need:c.need};
+  if(c.t==="micro")     return {cur:countMicroAll(), need:c.need};
+  if(c.t==="totaldays") return {cur:allDates().filter(d=>dayPoints(S.logs[d])>0).length, need:c.need};
+  if(c.t==="bigday")    return {cur:countBigDay(7), need:c.need};
+  if(c.t==="streakmax") return {cur:maxExerciseStreak(), need:c.need};
+  return {cur:0, need:c.need};
+}
+function unlockedHerbs(){ return HERBS.filter(h=>{ const pr=herbProgress(h); return pr.cur>=pr.need; }); }
+
+// ============ 藥櫃圖鑑 ============
+function renderHerbs(){
+  const un=unlockedHerbs().map(h=>h.n);
+  document.getElementById("herbTag").textContent="已收錄 "+un.length+" / "+HERBS.length;
+  document.getElementById("herbBody").innerHTML='<div class="hgrid">'+HERBS.map(h=>{
+    const pr=herbProgress(h);
+    const ok=pr.cur>=pr.need;
+    if(ok){
+      return `<div class="hcard"><div class="hn"><span style="width:11px;height:11px;border-radius:50%;background:${h.col};display:inline-block;border:1px solid #ddd;"></span>${h.n}</div>`+
+             `<div class="hp">${h.nature}</div><div class="hf">${h.fx}</div></div>`;
+    }
+    const pct=Math.min(100,Math.round(pr.cur/pr.need*100));
+    return `<div class="hcard lock"><div class="hn" style="color:var(--sub);">🔒 ？？？</div>`+
+           `<div class="hcond">${h.cond.label}<br>目前 ${pr.cur} / ${pr.need}</div>`+
+           `<div class="htrack"><i style="width:${Math.max(2,pct)}%"></i></div></div>`;
+  }).join("")+'</div>';
+}
+
+// ============ 藥圃（第二株起）============
+const AXES=[
+  {k:"exercise", label:"運動",     val:l=>l.exercise?3:0},
+  {k:"meals3",   label:"三餐記錄", val:l=>(l.breakfast&&l.lunch&&l.dinner)?1.5:0},
+  {k:"veg",      label:"蔬菜",     val:l=>l.veg?1:0},
+  {k:"water",    label:"喝水",     val:l=>l.water?1:0},
+  {k:"sleep",    label:"早睡",     val:l=>l.sleep?1:0},
+  {k:"micro",    label:"微運動",   val:l=>{const m=l.micro||{};let t=0;for(const x in m)t+=m[x];return Math.min(t*0.2,1);}},
+];
+const AXIS_BY={}; AXES.forEach(a=>AXIS_BY[a.k]=a);
+const STAGES2=[{name:"種子",min:0},{name:"發芽",min:2},{name:"幼苗",min:8},{name:"成株",min:20},{name:"開花",min:38},{name:"結果",min:60}];
+function plantGrow(pl){
+  const ax=AXIS_BY[pl.axis]; if(!ax) return 0;
+  let t=0;
+  for(const d in S.logs){ if(d>=pl.planted) t+=ax.val(S.logs[d]); }
+  return Math.round(t*10)/10;
+}
+function stage2(v){ let i=0; for(let j=0;j<STAGES2.length;j++){ if(v>=STAGES2[j].min) i=j; } return i; }
+function renderGarden(){
+  const un=unlockedHerbs();
+  const used=S.plants.map(p=>p.herb);
+  document.getElementById("gardenTag").textContent="小杞 ＋ "+S.plants.length+" 株";
+  const body=document.getElementById("gardenBody");
+  if(!S.plants.length){
+    body.innerHTML='<div class="nempty">還沒有第二株。每一株綁一個習慣，只吃那一項的成長值——某項鬆掉就會看出來。</div>';
+  } else {
+    body.innerHTML=S.plants.map((pl,i)=>{
+      const h=HERB_BY[pl.herb]||HERBS[0];
+      const v=plantGrow(pl), si=stage2(v);
+      let pct=100, meta="已結果，這個習慣穩了 🍒";
+      if(si<STAGES2.length-1){
+        const cur=STAGES2[si].min, nxt=STAGES2[si+1].min;
+        pct=Math.round((v-cur)/(nxt-cur)*100);
+        meta=`${STAGES2[si].name}　${v} / ${nxt}`;
+      }
+      const nm=pl.name||h.n;
+      return `<div class="plot"><div class="ps">${petSVG(si,h.col,h.flo).replace('width="180" height="180"','width="64" height="64"')}</div>`+
+        `<div class="pi"><div class="pn">${nm}${nm!==h.n?`<span style="font-size:11px;color:var(--sub);font-weight:400;">（${h.n}）</span>`:""}</div>`+
+        `<div class="pa">主軸：${AXIS_BY[pl.axis].label}　自 ${pl.planted.slice(5)} 起</div>`+
+        `<div class="track"><i style="width:${Math.max(3,Math.min(100,pct))}%"></i></div>`+
+        `<div class="pa">${meta}</div></div>`+
+        `<button class="px" data-pdel="${i}">✕</button></div>`;
+    }).join("");
+    body.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{
+      const i=+b.getAttribute("data-pdel");
+      if(confirm("要移除這一株嗎？（成長值是即時算出來的，重新種下會再長回來）")){ S.plants.splice(i,1); save(); renderGarden(); }
+    });
+  }
+  const avail=un.filter(h=>used.indexOf(h.n)<0 && h.n!=="枸杞");
+  const add=document.getElementById("gardenAdd");
+  if(!un.length){
+    add.innerHTML='<div class="nempty" style="color:var(--goji);">先在下面的藥櫃圖鑑解鎖藥材，才有種子可以種。</div>';
+  } else if(!avail.length){
+    add.innerHTML='<div class="nempty">目前只有枸杞（就是小杞本人）。再解鎖一味新藥材，就能種下第二株——最接近的通常是「曾經連續運動 14 天」的杜仲。</div>';
+  } else {
+    add.innerHTML='<div class="sowrow">'+
+      '<select id="sowHerb">'+avail.map(h=>`<option value="${h.n}">${h.n}</option>`).join("")+'</select>'+
+      '<select id="sowAxis">'+AXES.map(a=>`<option value="${a.k}">${a.label}</option>`).join("")+'</select>'+
+      '<button class="btn" id="sowBtn">種下</button></div>';
+    document.getElementById("sowBtn").onclick=()=>{
+      const herb=document.getElementById("sowHerb").value, axis=document.getElementById("sowAxis").value;
+      if(!HERB_BY[herb] || !AXIS_BY[axis]){ toast("請先選好藥材和主軸"); return; }
+      S.plants.push({herb, axis, name:herb, planted:todayStr()});
+      save(); renderGarden(); toast("種下"+herb+"了，從今天開始長 🌱");
+    };
+  }
+}
+
+// ============ 節氣任務 ============
+const TERMS=[
+ ["大暑","2026-07-23"],["立秋","2026-08-07"],["處暑","2026-08-23"],["白露","2026-09-07"],
+ ["秋分","2026-09-23"],["寒露","2026-10-08"],["霜降","2026-10-23"],["立冬","2026-11-07"],
+ ["小雪","2026-11-22"],["大雪","2026-12-07"],["冬至","2026-12-21"],["小寒","2027-01-05"],
+ ["大寒","2027-01-20"],["立春","2027-02-04"],["雨水","2027-02-18"],["驚蟄","2027-03-05"],
+ ["春分","2027-03-20"],["清明","2027-04-05"],["穀雨","2027-04-20"],["立夏","2027-05-05"],
+ ["小滿","2027-05-21"],["芒種","2027-06-06"],["夏至","2027-06-21"],["小暑","2027-07-07"],
+ ["大暑","2027-07-23"],
+];
+// 任務型別：依節氣的養生重點指定一個習慣
+const TERM_MISSION={
+ "大暑":{key:"water", need:8, title:"暑天補水", desc:"最熱的時節，出汗多、水分流失快。"},
+ "立秋":{key:"water", need:10, title:"秋燥潤補", desc:"轉秋後空氣變乾，喝水這件事最容易鬆掉。"},
+ "處暑":{key:"veg",   need:10, title:"清熱多菜", desc:"暑氣未退，蔬菜是最好的清爽來源。"},
+ "白露":{key:"sleep", need:10, title:"早睡養陰", desc:"晝夜溫差變大，睡眠品質直接影響代謝。"},
+ "秋分":{key:"exercise", need:12, title:"秋分動起來", desc:"天氣最舒服的一段，運動最不痛苦。"},
+ "寒露":{key:"meals3", need:10, title:"三餐不缺", desc:"天涼容易食慾大開，反而要顧結構而非份量。"},
+ "霜降":{key:"exercise", need:12, title:"霜降不停", desc:"開始冷了，最容易找理由不動。"},
+ "立冬":{key:"sleep", need:12, title:"冬藏早睡", desc:"冬天養藏，睡眠是本季重點。"},
+ "小雪":{key:"veg",   need:10, title:"冬日蔬食", desc:"火鍋季來了，多涮菜比多涮肉重要。"},
+ "大雪":{key:"water", need:10, title:"暖房補水", desc:"室內乾燥、口渴感下降，更容易喝不夠。"},
+ "冬至":{key:"exercise", need:10, title:"冬至微光", desc:"最短的一天，動一動比什麼都有用。"},
+ "小寒":{key:"sleep", need:12, title:"小寒藏養", desc:"最冷的前段，早睡就是最好的補。"},
+ "大寒":{key:"exercise", need:10, title:"大寒不僵", desc:"冷到不想動的時候，橢圓機是最低門檻。"},
+ "立春":{key:"exercise", need:12, title:"立春舒展", desc:"陽氣升發，身體開始想動了。"},
+ "雨水":{key:"veg",   need:10, title:"雨水健脾", desc:"濕氣重的時節，清淡蔬食讓身體輕一點。"},
+ "驚蟄":{key:"micro", need:60, title:"驚蟄甦動", desc:"用零碎的小動作把身體叫醒。", micro:true},
+ "春分":{key:"meals3", need:12, title:"春分平衡", desc:"晝夜平分，三餐也顧齊。"},
+ "清明":{key:"veg",   need:12, title:"清明清爽", desc:"當季蔬菜最多的時候。"},
+ "穀雨":{key:"water", need:12, title:"穀雨潤養", desc:"轉暖轉濕，水要跟上。"},
+ "立夏":{key:"exercise", need:12, title:"立夏發汗", desc:"天熱代謝快，運動效率高。"},
+ "小滿":{key:"meals3", need:12, title:"小滿不過", desc:"食慾旺的時節，重點在結構不在少吃。"},
+ "芒種":{key:"micro", need:80, title:"芒種勤動", desc:"忙的時節，靠零碎動作累積。", micro:true},
+ "夏至":{key:"water", need:12, title:"夏至大補水", desc:"一年最長的白天，也是最耗水的一段。"},
+ "小暑":{key:"veg",   need:12, title:"小暑清心", desc:"熱起來了，蔬菜比什麼都舒服。"},
+};
+function currentTermIdx(dateStr){
+  let idx=0;
+  for(let i=0;i<TERMS.length;i++){ if(dateStr>=TERMS[i][1]) idx=i; }
+  return idx;
+}
+function termRange(i){
+  const start=TERMS[i][1];
+  const end = i+1<TERMS.length ? TERMS[i+1][1] : "2027-08-07";
+  return {start, end};
+}
+function termProgress(i){
+  const {start,end}=termRange(i);
+  const m=TERM_MISSION[TERMS[i][0]];
+  if(!m) return null;
+  let cur=0;
+  for(const d in S.logs){
+    if(d<start||d>=end) continue;
+    const l=S.logs[d];
+    if(m.micro){ const mm=l.micro||{}; for(const k in mm) cur+=mm[k]; }
+    else if(m.key==="meals3"){ if(l.breakfast&&l.lunch&&l.dinner) cur++; }
+    else if(l[m.key]) cur++;
+  }
+  return {m, cur, need:m.need, start, end};
+}
+function renderTerm(){
+  const i=currentTermIdx(todayStr());
+  const name=TERMS[i][0];
+  const pr=termProgress(i);
+  const {start,end}=termRange(i);
+  const endD=parse(end); endD.setDate(endD.getDate()-1);
+  const left=Math.max(0,Math.round((parse(end)-parse(todayStr()))/86400000));
+  document.getElementById("termTag").textContent=name+"　"+start.slice(5)+"–"+fmt(endD).slice(5)+"　剩 "+left+" 天";
+  const body=document.getElementById("termBody");
+  if(!pr){ body.innerHTML='<div class="nempty">這個節氣沒有任務，休息一下。</div>'; }
+  else{
+    const pct=Math.min(100,Math.round(pr.cur/pr.need*100));
+    const done=pr.cur>=pr.need;
+    const unitTxt=pr.m.micro?"次":"天";
+    body.innerHTML=`<div class="term-mission"><div class="tm">${done?"✅ ":"🎯 "}${name}・${pr.m.title}</div>`+
+      `<div class="td">${pr.m.desc}　目標：期間內 ${pr.need} ${unitTxt}</div>`+
+      `<div class="track"><i style="width:${Math.max(2,pct)}%"></i></div>`+
+      `<div class="tp">${pr.cur} / ${pr.need} ${unitTxt}${done?"　任務完成，徽章已入袋":""}</div></div>`;
+  }
+  // 已完成徽章（只看已過去與當前節氣）
+  const badges=[];
+  for(let j=0;j<=i;j++){
+    const p2=termProgress(j);
+    if(p2 && p2.cur>=p2.need) badges.push(`<span class="badge">🏅 ${TERMS[j][0]}・${p2.m.title}</span>`);
+  }
+  document.getElementById("termBadges").innerHTML = badges.length?badges.join(""):'<span class="nempty">還沒有徽章，完成節氣任務就會出現在這裡。</span>';
+}
+
+// ============ 週結算 ============
+function weekStart(dateStr){ const d=parse(dateStr); const wd=d.getDay(); d.setDate(d.getDate()-(wd===0?6:wd-1)); return fmt(d); }
+let wkView=weekStart(todayStr());
+function renderWeek(){
+  const days=[]; const d=parse(wkView);
+  for(let i=0;i<7;i++){ days.push(fmt(d)); d.setDate(d.getDate()+1); }
+  const last=days[6];
+  document.getElementById("wkTitle").textContent = (wkView===weekStart(todayStr())?"本週":"") + wkView.slice(5)+" – "+last.slice(5);
+  document.getElementById("wkNext").disabled = wkView>=weekStart(todayStr());
+  document.getElementById("wkPrev").disabled = last<=S.start;
+  let ex=0,veg=0,water=0,sleep=0,meals=0,mic=0,pts=0,kcalDays=0,kcalSum=0;
+  days.forEach(ds=>{
+    const l=S.logs[ds]; if(!l) return;
+    if(l.exercise) ex++;
+    if(l.veg) veg++;
+    if(l.water) water++;
+    if(l.sleep) sleep++;
+    if(l.breakfast&&l.lunch&&l.dinner) meals++;
+    const m=l.micro||{}; for(const k in m) mic+=m[k];
+    pts+=dayPoints(l);
+    const n=computeNut(ds); if(n.k>0){ kcalDays++; kcalSum+=n.k; }
+  });
+  const avgK = kcalDays?Math.round(kcalSum/kcalDays):0;
+  const inProgress = (wkView===weekStart(todayStr()));
+  const elapsed = inProgress ? days.filter(x=>x<=todayStr()).length : 7;
+  document.getElementById("wkBody").innerHTML=
+    `<div class="wk-grid">`+
+    `<div class="wk-cell"><div class="n">${ex}</div><div class="l">運動天數</div></div>`+
+    `<div class="wk-cell"><div class="n">${meals}</div><div class="l">三餐齊</div></div>`+
+    `<div class="wk-cell"><div class="n">${veg}</div><div class="l">蔬菜達標</div></div>`+
+    `<div class="wk-cell"><div class="n">${water}</div><div class="l">喝水達標</div></div>`+
+    `<div class="wk-cell"><div class="n">${sleep}</div><div class="l">早睡天數</div></div>`+
+    `<div class="wk-cell"><div class="n">${mic}</div><div class="l">微運動次數</div></div>`+
+    `</div>`+
+    `<div class="wk-titles">${weekTitles({ex,veg,water,sleep,meals,mic,pts}).map(t=>`<span class="wk-title">${t}</span>`).join("")||'<span class="nempty">這週還在進行中</span>'}</div>`+
+    `<div class="wk-note">本週成長值 ${pts.toFixed(1)} 點${avgK?`　｜　有記錄的日子平均 ${avgK} kcal`:""}<br>${inProgress?`本週還在進行中（已過 ${elapsed} 天），週日會給完整結算。`:weekComment({ex,veg,water,sleep,meals,mic})}</div>`;
+}
+function weekTitles(w){
+  const t=[];
+  if(w.ex>=6) t.push("🔥 一週幾乎全勤");
+  else if(w.ex>=4) t.push("💪 動得夠");
+  if(w.meals>=6) t.push("🍱 三餐記錄王");
+  if(w.veg>=5) t.push("🥬 青菜大戶");
+  if(w.water>=5) t.push("💧 水壺不離身");
+  if(w.sleep>=5) t.push("🌙 早睡仙人");
+  if(w.mic>=30) t.push("🪑 隨手就動");
+  if(w.pts>=35) t.push("🌿 小杞長很快");
+  return t;
+}
+function weekComment(w){
+  const weak=[];
+  if(w.water<4) weak.push("喝水");
+  if(w.veg<4) weak.push("蔬菜");
+  if(w.sleep<4) weak.push("早睡");
+  if(w.meals<4) weak.push("三餐記錄");
+  if(w.ex<4) weak.push("運動");
+  if(!weak.length) return "六項都穩，這週不用調整任何東西。";
+  return "這週比較鬆的是「"+weak.join("、")+"」。挑一項下週補起來就好，不用全部一起改。";
+}
+
+// ============ 今日藥籤 ============
+const OMENS=[
+ ["枸杞","甘平不燥，是少數能天天吃的補藥。泡水、燉湯、直接吃都行。"],
+ ["山藥","黏液質怕高溫久煮，起鍋前再下比較不流失。"],
+ ["紅棗","去核再煮比較不燥，這是老做法的小細節。"],
+ ["黃耆","補氣的代表，但感冒發燒時要先停，這點很多人忽略。"],
+ ["當歸","味道重，一小片就夠。煮太久反而苦。"],
+ ["茯苓","甘淡平，性質最溫和的一味，四神湯裡的和事佬。"],
+ ["薏苡仁","分生薏仁和炒薏仁，一個偏利濕、一個偏健脾。"],
+ ["芡實","顆粒硬，記得先泡再煮，不然咬不動。"],
+ ["蓮子","去掉中間的綠芯就不苦，但那個芯自己也是一味藥。"],
+ ["百合","乾百合泡開後幾乎不用煮，燙一下就軟。"],
+ ["麥冬","甘中帶苦，養陰生津，口乾舌燥的季節常出現。"],
+ ["陳皮","橘皮陳放三年以上才叫陳皮，越陳氣味越圓。"],
+ ["生薑","皮和肉的性質不同，去皮和不去皮是兩種用法。"],
+ ["肉桂","少量就很有力，撒一點在飲品裡就夠。"],
+ ["菊花","疏散風熱，泡的水溫不要太高，香氣留得住。"],
+ ["決明子","炒過才好泡，生的幾乎泡不出味道。"],
+ ["杜仲","炒過的杜仲會斷出白絲，那是它的特徵。"],
+ ["玉竹","甜潤好入口，燉湯不搶味，是新手友善的一味。"],
+ ["蓮藕","生用和熟用方向相反，生偏清、熟偏補。"],
+ ["白木耳","泡開後體積大很多，抓量時記得留餘裕。"],
+ ["桂圓","甜度高，養血也補熱量，別當零食無限吃。"],
+ ["甘草","調和諸藥用，但不宜長期大量，會影響水分代謝。"],
+ ["黑豆","入腎，煮前乾鍋炒香再煮，味道差很多。"],
+ ["山楂","消食化積，但空腹吃容易胃不舒服。"],
+];
+function renderOmen(){
+  const body=document.getElementById("omenBody");
+  const today=todayStr();
+  if(S.omen && S.omen.d===today){
+    const o=OMENS[S.omen.i%OMENS.length];
+    body.innerHTML=`<div class="omen"><div class="oh">今日藥籤</div><div class="on2">${o[0]}</div><div class="ow">${o[1]}</div></div>`;
+  } else {
+    body.innerHTML=`<div class="omen"><div class="oh">還沒抽</div><div class="ow" style="margin:6px 0 9px;">每天一張，抽到什麼算什麼 🎴</div><button class="btn goji" id="omenDraw">抽一張</button></div>`;
+    document.getElementById("omenDraw").onclick=()=>{
+      S.omen={d:today, i:Math.floor(Math.random()*OMENS.length)};
+      save(); renderOmen(); toast("抽到「"+OMENS[S.omen.i][0]+"」");
+    };
+  }
+}
+
+// ============ 週結算按鈕 ============
+document.getElementById("wkPrev").onclick=()=>{ const d=parse(wkView); d.setDate(d.getDate()-7); wkView=fmt(d); renderWeek(); };
+document.getElementById("wkNext").onclick=()=>{ const d=parse(wkView); d.setDate(d.getDate()+7); if(fmt(d)<=weekStart(todayStr())){ wkView=fmt(d); renderWeek(); } };
+
+function renderAll(){ renderPet(); renderCheck(); renderPlan(); renderMicro(); renderNutrition(); renderBF(); renderOmen(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); renderCal(); }
 renderAll();
 })();
 </script>
