@@ -36,11 +36,14 @@
   .card h2 .tag{font-size:11px; font-weight:400; color:var(--sub); margin-left:auto;}
 
   /* pet */
-  .pet-card{background:linear-gradient(170deg,#F4F8EF 0%,#FFFFFF 60%); text-align:center; position:relative; overflow:hidden;}
+  .pet-card{background:linear-gradient(180deg,#EAF3E2 0%,#FFFFFF 58%); text-align:center; position:relative; overflow:hidden; padding-top:40px;}
+  .g-lv{position:absolute; left:14px; top:12px; font-size:11px; font-weight:600; color:var(--green-d); background:#fff; border:1px solid var(--line); border-radius:20px; padding:2px 9px;}
+  .g-tools{position:absolute; right:14px; top:12px; display:flex; gap:6px;}
+  .g-tools button{border:1px solid var(--line); background:#fff; color:var(--sub); border-radius:20px; padding:2px 9px; font-size:11px; cursor:pointer; font-family:inherit;}
   .pet-stage-name{font-size:13px; color:var(--green-d); font-weight:600; letter-spacing:1px;}
   #petSvg{width:180px; height:180px; margin:4px auto 2px; display:block;}
   .pet-name{font-size:15px; font-weight:600; margin-top:2px;}
-  .pet-name small{color:var(--sub); font-weight:400; font-size:12px; margin-left:4px; cursor:pointer; text-decoration:underline dotted;}
+  .pet-name small{color:var(--sub); font-weight:400; font-size:12px; margin-left:6px;}
   .growbar{height:9px; background:var(--green-l); border-radius:9px; overflow:hidden; margin:10px 4px 4px;}
   .growbar > i{display:block; height:100%; background:linear-gradient(90deg,var(--green),var(--green-d)); border-radius:9px; transition:width .6s cubic-bezier(.2,.8,.2,1);}
   .grow-meta{font-size:11.5px; color:var(--sub); margin-top:2px;}
@@ -50,7 +53,7 @@
   .stat{flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:10px 6px; text-align:center;}
   .stat .n{font-size:22px; font-weight:700; color:var(--goji); line-height:1.1;}
   .stat .n.g{color:var(--green-d);}
-  .stat .l{font-size:11px; color:var(--sub); margin-top:2px;}
+  .stat .l{font-size:10.5px; color:var(--sub); margin-top:2px; white-space:nowrap;}
   .flame{font-size:20px;}
 
   /* date nav */
@@ -188,15 +191,6 @@
   .term-mission .track > i{display:block; height:100%; border-radius:10px; background:linear-gradient(90deg,#E0A04A,#C6533F); transition:width .5s;}
   .term-mission .tp{font-size:11px; color:var(--sub); margin-top:3px;}
   .badge{font-size:11.5px; border:1.5px solid var(--amber); color:var(--amber); background:#fff; border-radius:20px; padding:3px 10px;}
-  .plot{display:flex; gap:10px; align-items:center; border-bottom:1px dashed var(--line); padding:9px 0;}
-  .plot:last-child{border-bottom:none;}
-  .plot .ps{width:64px; height:64px; flex:none;}
-  .plot .pi{flex:1; min-width:0;}
-  .plot .pn{font-size:13.5px; font-weight:600;}
-  .plot .pa{font-size:11px; color:var(--sub);}
-  .plot .track{height:8px; background:var(--green-l); border-radius:8px; overflow:hidden; margin-top:5px;}
-  .plot .track > i{display:block; height:100%; border-radius:8px; background:linear-gradient(90deg,var(--green),var(--green-d));}
-  .plot .px{border:none; background:transparent; color:#cfc7b6; font-size:15px; cursor:pointer; flex:none;}
   .sowrow{display:flex; gap:6px; margin-top:10px;}
   .sowrow select{flex:1; min-width:0; border:1.5px solid var(--line); border-radius:12px; padding:8px 6px; font-size:12.5px; font-family:inherit; background:#fff; color:var(--ink);}
   .hgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px;}
@@ -208,6 +202,32 @@
   .hcard .hcond{font-size:11px; color:var(--sub); line-height:1.5;}
   .hcard .htrack{height:6px; background:#E9E3D6; border-radius:6px; overflow:hidden; margin-top:5px;}
   .hcard .htrack > i{display:block; height:100%; border-radius:6px; background:var(--amber);}
+  /* 花架 */
+  .shelf{display:flex; overflow-x:auto; margin-top:12px; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+  .shelf::-webkit-scrollbar{display:none;}
+  .shelf-in{display:flex; gap:8px; margin:0 auto; padding:12px 8px 4px;}
+  .pot{flex:none; width:76px; border-radius:16px; border:1.5px solid var(--line); background:#fff; padding:6px 4px 6px; cursor:pointer; transition:.15s; position:relative; text-align:center;}
+  .pot.on{border-color:var(--green); background:var(--green-l); box-shadow:0 5px 14px rgba(107,142,90,.22); transform:translateY(-4px);}
+  .pot svg{width:54px; height:54px; display:block; margin:0 auto;}
+  .pot .pl{font-size:11.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 2px;}
+  .pot .ps2{font-size:9.5px; color:var(--sub);}
+  .pot .pbar{height:4px; background:#E9E3D6; border-radius:4px; overflow:hidden; margin:4px 8px 0;}
+  .pot .pbar>i{display:block; height:100%; background:var(--green); border-radius:4px;}
+  .pot .ripe{position:absolute; top:-7px; right:-5px; font-size:15px;}
+  .pot.add{border-style:dashed; background:#FBF9F3; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--sub); font-size:11px; min-height:100px;}
+  .pot.add .plus{font-size:26px; line-height:1; color:var(--green);}
+  .shelf-wood{height:9px; background:linear-gradient(#DDB088,#B9824F); border-radius:6px; margin:-3px 4px 0; box-shadow:0 3px 6px rgba(120,80,40,.15);}
+  .sowbox{background:#FBF9F3; border:1.5px dashed var(--line); border-radius:14px; padding:10px 12px; margin-top:12px; text-align:left;}
+  .sowbox .st{font-size:12.5px; font-weight:600; color:var(--green-d);}
+  .sowbox .sh{font-size:11.5px; color:var(--sub); margin-top:2px;}
+  .sowrow{margin-top:8px;}
+  /* 分頁 */
+  .page{display:none;} .page.on{display:block;}
+  .nav{position:fixed; bottom:0; left:0; right:0; margin:0 auto; max-width:520px; background:rgba(255,255,255,.96); backdrop-filter:blur(8px); border-top:1px solid var(--line); display:flex; gap:6px; z-index:40; padding:6px 10px calc(8px + env(safe-area-inset-bottom));}
+  .nav button{flex:1; border:none; background:transparent; font-family:inherit; color:var(--sub); font-size:11px; padding:4px 0 3px; border-radius:14px; cursor:pointer; position:relative; line-height:1.3;}
+  .nav button .ic{display:block; font-size:22px; line-height:1.15;}
+  .nav button.on{color:var(--green-d); background:var(--green-l); font-weight:600;}
+  .nav button .dot{position:absolute; top:5px; left:calc(50% + 10px); width:8px; height:8px; border-radius:50%; background:var(--goji); border:1.5px solid #fff;}
   .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); background:var(--green-d); color:#fff; padding:10px 18px; border-radius:30px; font-size:13px; opacity:0; transition:.3s; z-index:50; pointer-events:none; box-shadow:var(--shadow); max-width:90%;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 </style>
@@ -220,21 +240,50 @@
 
 <div class="wrap">
 
-  <!-- 養成 -->
+<!-- ===== 藥圃 ===== -->
+<section class="page" id="page-garden">
   <div class="card pet-card">
+    <span class="g-lv" id="gardenTag"></span>
+    <div class="g-tools"><button id="renameBtn">改名</button><button id="removePlantBtn" style="display:none;">移除</button></div>
     <div class="pet-stage-name" id="stageName">種子</div>
     <div id="petSvg"></div>
-    <div class="pet-name"><span id="petName">小杞</span><small id="renameBtn">改名</small></div>
+    <div class="pet-name"><span id="petName">小杞</span><small id="petSubName"></small></div>
     <div class="growbar"><i id="growFill" style="width:0%"></i></div>
     <div class="grow-meta" id="growMeta"></div>
     <div><span class="pet-msg" id="petMsg"></span></div>
+    <div class="shelf"><div class="shelf-in" id="gardenBody"></div></div>
+    <div class="shelf-wood"></div>
+    <div id="gardenAdd"></div>
     <div class="stat-row">
-      <div class="stat"><div class="n"><span class="flame">🔥</span> <span id="streakN">0</span></div><div class="l">習慣火苗（連續）</div></div>
+      <div class="stat"><div class="n"><span class="flame">🔥</span> <span id="streakN">0</span></div><div class="l">連續火苗</div></div>
       <div class="stat"><div class="n g" id="dayN">1</div><div class="l">重新出發第 N 天</div></div>
       <div class="stat"><div class="n g" id="totalN">0</div><div class="l">總打卡天數</div></div>
     </div>
   </div>
 
+  <!-- 節氣任務 -->
+  <div class="card">
+    <h2>節氣任務 <span class="tag" id="termTag"></span></h2>
+    <div id="termBody"></div>
+    <div class="chips" id="termBadges" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- 今日藥籤 -->
+  <div class="card">
+    <h2>今日藥籤 <span class="tag">每天一張</span></h2>
+    <div id="omenBody"></div>
+  </div>
+
+  <!-- 藥櫃圖鑑 -->
+  <div class="card">
+    <h2>藥櫃圖鑑 <span class="tag" id="herbTag"></span></h2>
+    <div id="herbBody"></div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">性味功效為傳統中醫典籍記載，僅供認識藥材，不構成醫療建議。實際用藥請諮詢中醫師。解鎖的藥材可以種到花架上，當第二株、第三株。</div>
+  </div>
+</section>
+
+<!-- ===== 今日 ===== -->
+<section class="page" id="page-today">
   <!-- 今日打卡 -->
   <div class="card">
     <h2>今日打卡 <span class="tag" id="dayPts"></span></h2>
@@ -245,12 +294,6 @@
     </div>
     <div id="checkList"></div>
     <textarea class="note" id="noteBox" rows="2" placeholder="今天的小記錄（心情、體感、想吃的東西…）"></textarea>
-  </div>
-
-  <!-- 今日藥籤 -->
-  <div class="card">
-    <h2>今日藥籤 <span class="tag">每天一張</span></h2>
-    <div id="omenBody"></div>
   </div>
 
   <!-- 隨手微運動 -->
@@ -280,7 +323,10 @@
     <div class="plan-badge" id="planBadge"></div>
     <div id="planBody"></div>
   </div>
+</section>
 
+<!-- ===== 數據 ===== -->
+<section class="page" id="page-data">
   <!-- 身體數據追蹤 -->
   <div class="card">
     <h2>身體數據追蹤 <span class="tag">看骨骼肌和圍度，別只看體重</span></h2>
@@ -310,27 +356,6 @@
     <div id="wkBody"></div>
   </div>
 
-  <!-- 節氣任務 -->
-  <div class="card">
-    <h2>節氣任務 <span class="tag" id="termTag"></span></h2>
-    <div id="termBody"></div>
-    <div class="chips" id="termBadges" style="margin-top:10px;"></div>
-  </div>
-
-  <!-- 藥圃 -->
-  <div class="card">
-    <h2>藥圃 <span class="tag" id="gardenTag"></span></h2>
-    <div id="gardenBody"></div>
-    <div id="gardenAdd"></div>
-  </div>
-
-  <!-- 藥櫃圖鑑 -->
-  <div class="card">
-    <h2>藥櫃圖鑑 <span class="tag" id="herbTag"></span></h2>
-    <div id="herbBody"></div>
-    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">性味功效為傳統中醫典籍記載，僅供認識藥材，不構成醫療建議。實際用藥請諮詢中醫師。</div>
-  </div>
-
   <!-- 月曆熱力 -->
   <div class="card">
     <div class="cal-head">
@@ -339,16 +364,25 @@
       <button class="btn ghost" id="calNext">›</button>
     </div>
     <div class="cal-grid" id="calGrid"></div>
+    <div class="bf-legend" style="margin-top:8px;">點任一天可以回去補打卡</div>
   </div>
 
-  <div id="storeWarn" style="display:none; background:var(--goji-l); color:var(--goji); border-radius:14px; padding:12px 14px; margin:14px 16px; font-size:12.5px; line-height:1.6;">⚠️ 這個開啟方式無法長期保存資料（每次重開可能歸零）。建議用「固定網址版本」，或每次記完按下方<b>匯出備份</b>存檔。</div>
   <div class="foot">
     資料存在這台裝置的這個檔案裡，不會上網。<br>
     每次換新版檔案＝新的儲存空間，舊資料要靠<b>匯出／匯入備份</b>搬過去。<br>
     <a id="exportBtn">匯出備份</a> ｜ <a id="importBtn">匯入備份</a> ｜ <a id="resetBtn">重設全部</a>
     <input type="file" id="importFile" accept="application/json,.json" style="display:none;">
   </div>
+</section>
+
+  <div id="storeWarn" style="display:none; background:var(--goji-l); color:var(--goji); border-radius:14px; padding:12px 14px; margin:14px 0; font-size:12.5px; line-height:1.6;">⚠️ 這個開啟方式無法長期保存資料（每次重開可能歸零）。建議用「固定網址版本」，或每次記完到「數據」頁按<b>匯出備份</b>存檔。</div>
 </div>
+
+<nav class="nav">
+  <button data-tab="garden"><span class="ic">🪴</span>藥圃</button>
+  <button data-tab="today"><span class="ic">✅</span>今日<span class="dot" id="todayDot" style="display:none;"></span></button>
+  <button data-tab="data"><span class="ic">📈</span>數據</button>
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -517,6 +551,8 @@ const MICRO=[
 const MICRO_BY={}; MICRO.forEach(m=>MICRO_BY[m.k]=m);
 let sugIdx=0;
 let openMeals={}; // 展開食材選單的餐別
+let selPlant=-1;   // 花架上選中的株：-1=小杞，其餘為 S.plants 索引
+let sowOpen=false;
 function getMicro(dateStr){ const l=S.logs[dateStr]; return (l&&l.micro)||{}; }
 function tapMicro(k){
   if(!S.logs[viewDate]) S.logs[viewDate]={};
@@ -714,27 +750,56 @@ function petMessage(stageI, streak, gap){
   return "澆水成功，小杞正在長大 🌱";
 }
 
+function plantMessage(pl, v, si){
+  const ax=AXIS_BY[pl.axis];
+  if(si>=STAGES2.length-1) return "已結果，這個習慣種穩了 🍒";
+  const t=S.logs[todayStr()];
+  if(t && ax.val(t)>0) return "今天有餵到「"+ax.label+"」，繼續長 🌱";
+  return "這株只吃「"+ax.label+"」的成長值，今天還在等你";
+}
 function renderPet(){
-  const p=totalPoints();
-  const si=stageIndex(p);
-  document.getElementById("petSvg").innerHTML=petSVG(si);
-  document.getElementById("stageName").textContent=STAGES[si].name;
-  document.getElementById("petName").textContent=S.petName;
-  // progress to next
-  let fill=100, meta="已長成，持續收成枸杞 🍒";
-  if(si<STAGES.length-1){
-    const cur=STAGES[si].min, nxt=STAGES[si+1].min;
-    fill=Math.round((p-cur)/(nxt-cur)*100);
-    meta=`成長值 ${p.toFixed(1)} ／ 下一階段 ${nxt}（還差 ${(nxt-p).toFixed(1)}）`;
-  }
-  document.getElementById("growFill").style.width=Math.max(4,Math.min(100,fill))+"%";
-  document.getElementById("growMeta").textContent=meta;
   const streak=computeStreak(), gap=lastActiveGapDays();
   document.getElementById("streakN").textContent=streak;
-  document.getElementById("petMsg").textContent=petMessage(si,streak,gap);
   const wi=weekInfo();
   document.getElementById("dayN").textContent=wi.days+1;
   document.getElementById("totalN").textContent=Object.keys(S.logs).filter(k=>dayPoints(S.logs[k])>0).length;
+  const tl=S.logs[todayStr()];
+  document.getElementById("todayDot").style.display=(tl&&tl.exercise)?"none":"";
+  if(selPlant>=S.plants.length) selPlant=-1;
+  const rm=document.getElementById("removePlantBtn");
+  let fill=100, meta;
+  if(selPlant<0){
+    const p=totalPoints(), si=stageIndex(p);
+    document.getElementById("petSvg").innerHTML=petSVG(si);
+    document.getElementById("stageName").textContent=STAGES[si].name+(si>=STAGES.length-1?" 🍒":"");
+    document.getElementById("petName").textContent=S.petName;
+    document.getElementById("petSubName").textContent="枸杞 · 主株，吃全部習慣的成長值";
+    meta="已長成，持續收成枸杞 🍒　成長值 "+p.toFixed(1);
+    if(si<STAGES.length-1){
+      const cur=STAGES[si].min, nxt=STAGES[si+1].min;
+      fill=Math.round((p-cur)/(nxt-cur)*100);
+      meta=`成長值 ${p.toFixed(1)} ／ 下一階段 ${nxt}（還差 ${(nxt-p).toFixed(1)}）`;
+    }
+    document.getElementById("petMsg").textContent=petMessage(si,streak,gap);
+    rm.style.display="none";
+  } else {
+    const pl=S.plants[selPlant], h=HERB_BY[pl.herb]||HERBS[0];
+    const v=plantGrow(pl), si=stage2(v);
+    document.getElementById("petSvg").innerHTML=petSVG(si,h.col,h.flo);
+    document.getElementById("stageName").textContent=STAGES2[si].name+(si>=STAGES2.length-1?" 🍒":"");
+    document.getElementById("petName").textContent=pl.name||h.n;
+    document.getElementById("petSubName").textContent=h.n+" · 主軸："+AXIS_BY[pl.axis].label+"，自 "+pl.planted.slice(5)+" 起";
+    meta="已結果　成長值 "+v;
+    if(si<STAGES2.length-1){
+      const cur=STAGES2[si].min, nxt=STAGES2[si+1].min;
+      fill=Math.round((v-cur)/(nxt-cur)*100);
+      meta=`成長值 ${v} ／ 下一階段 ${nxt}（還差 ${(nxt-v).toFixed(1)}）`;
+    }
+    document.getElementById("petMsg").textContent=plantMessage(pl,v,si);
+    rm.style.display="";
+  }
+  document.getElementById("growFill").style.width=Math.max(4,Math.min(100,fill))+"%";
+  document.getElementById("growMeta").textContent=meta;
 }
 
 function renderCheck(){
@@ -992,7 +1057,7 @@ function renderCal(){
     const e=document.createElement("div");
     e.className="cal-cell "+lv+(ds===todayStr()?" today":"");
     e.textContent=d;
-    e.onclick=()=>{ if(ds<=todayStr() && ds>=S.start){ viewDate=ds; renderCheck(); renderPlan(); renderMicro(); renderNutrition(); window.scrollTo({top:0,behavior:"smooth"});} };
+    e.onclick=()=>{ if(ds<=todayStr() && ds>=S.start){ viewDate=ds; renderCheck(); renderPlan(); renderMicro(); renderNutrition(); showTab("today");} };
     grid.appendChild(e);
   }
 }
@@ -1010,7 +1075,14 @@ document.getElementById("clearFoods").onclick=()=>{
   save(); renderCheck(); renderNutrition(); renderPet(); renderCal();
 };
 document.getElementById("noteBox").addEventListener("input",e=>{ if(!S.logs[viewDate])S.logs[viewDate]={}; S.logs[viewDate].note=e.target.value; save(); });
-document.getElementById("renameBtn").onclick=()=>{ const n=prompt("幫你的枸杞取個名字：",S.petName); if(n&&n.trim()){S.petName=n.trim().slice(0,8);save();renderPet();} };
+document.getElementById("renameBtn").onclick=()=>{
+  if(selPlant<0){ const n=prompt("幫你的枸杞取個名字：",S.petName); if(n&&n.trim()){S.petName=n.trim().slice(0,8);save();renderPet();renderGarden();} }
+  else { const pl=S.plants[selPlant]; const n=prompt("幫這一株取個名字：",pl.name||pl.herb); if(n&&n.trim()){pl.name=n.trim().slice(0,8);save();renderPet();renderGarden();} }
+};
+document.getElementById("removePlantBtn").onclick=()=>{
+  if(selPlant<0) return;
+  if(confirm("要移除這一株嗎？（成長值是即時算出來的，重新種下會再長回來）")){ S.plants.splice(selPlant,1); selPlant=-1; save(); renderPet(); renderGarden(); }
+};
 document.getElementById("bfAdd").onclick=()=>{
   const w=parseFloat(document.getElementById("bfWeight").value),
         f=parseFloat(document.getElementById("bfFat").value),
@@ -1171,50 +1243,53 @@ function stage2(v){ let i=0; for(let j=0;j<STAGES2.length;j++){ if(v>=STAGES2[j]
 function renderGarden(){
   const un=unlockedHerbs();
   const used=S.plants.map(p=>p.herb);
-  document.getElementById("gardenTag").textContent="小杞 ＋ "+S.plants.length+" 株";
+  document.getElementById("gardenTag").textContent="🪴 花架 "+(S.plants.length+1)+" 株";
+  if(selPlant>=S.plants.length) selPlant=-1;
   const body=document.getElementById("gardenBody");
-  if(!S.plants.length){
-    body.innerHTML='<div class="nempty">還沒有第二株。每一株綁一個習慣，只吃那一項的成長值——某項鬆掉就會看出來。</div>';
-  } else {
-    body.innerHTML=S.plants.map((pl,i)=>{
-      const h=HERB_BY[pl.herb]||HERBS[0];
-      const v=plantGrow(pl), si=stage2(v);
-      let pct=100, meta="已結果，這個習慣穩了 🍒";
-      if(si<STAGES2.length-1){
-        const cur=STAGES2[si].min, nxt=STAGES2[si+1].min;
-        pct=Math.round((v-cur)/(nxt-cur)*100);
-        meta=`${STAGES2[si].name}　${v} / ${nxt}`;
-      }
-      const nm=pl.name||h.n;
-      return `<div class="plot"><div class="ps">${petSVG(si,h.col,h.flo).replace('width="180" height="180"','width="64" height="64"')}</div>`+
-        `<div class="pi"><div class="pn">${nm}${nm!==h.n?`<span style="font-size:11px;color:var(--sub);font-weight:400;">（${h.n}）</span>`:""}</div>`+
-        `<div class="pa">主軸：${AXIS_BY[pl.axis].label}　自 ${pl.planted.slice(5)} 起</div>`+
-        `<div class="track"><i style="width:${Math.max(3,Math.min(100,pct))}%"></i></div>`+
-        `<div class="pa">${meta}</div></div>`+
-        `<button class="px" data-pdel="${i}">✕</button></div>`;
-    }).join("");
-    body.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{
-      const i=+b.getAttribute("data-pdel");
-      if(confirm("要移除這一株嗎？（成長值是即時算出來的，重新種下會再長回來）")){ S.plants.splice(i,1); save(); renderGarden(); }
-    });
-  }
+  const mini=(svg)=>svg.replace('width="180" height="180"','width="54" height="54"');
+  // 小杞
+  const p0=totalPoints(), s0=stageIndex(p0);
+  let html=`<div class="pot${selPlant<0?" on":""}" data-sel="-1">${s0>=STAGES.length-1?'<span class="ripe">🍒</span>':""}${mini(petSVG(s0))}`+
+    `<div class="pl">${S.petName}</div><div class="ps2">${STAGES[s0].name}</div>`+
+    `<div class="pbar"><i style="width:${s0>=STAGES.length-1?100:Math.round((p0-STAGES[s0].min)/(STAGES[s0+1].min-STAGES[s0].min)*100)}%"></i></div></div>`;
+  // 其他株
+  html+=S.plants.map((pl,i)=>{
+    const h=HERB_BY[pl.herb]||HERBS[0];
+    const v=plantGrow(pl), si=stage2(v);
+    const pct = si>=STAGES2.length-1 ? 100 : Math.round((v-STAGES2[si].min)/(STAGES2[si+1].min-STAGES2[si].min)*100);
+    return `<div class="pot${selPlant===i?" on":""}" data-sel="${i}">${si>=STAGES2.length-1?'<span class="ripe">🍒</span>':""}${mini(petSVG(si,h.col,h.flo))}`+
+      `<div class="pl">${pl.name||h.n}</div><div class="ps2">${AXIS_BY[pl.axis].label}・${STAGES2[si].name}</div>`+
+      `<div class="pbar"><i style="width:${Math.max(3,pct)}%"></i></div></div>`;
+  }).join("");
   const avail=un.filter(h=>used.indexOf(h.n)<0 && h.n!=="枸杞");
+  html+=`<div class="pot add" id="sowToggle"><span class="plus">＋</span>${avail.length?"種一株":"空盆"}</div>`;
+  body.innerHTML=html;
+  body.querySelectorAll("[data-sel]").forEach(el=>el.onclick=()=>{
+    selPlant=+el.getAttribute("data-sel"); sowOpen=false; renderPet(); renderGarden();
+  });
+  document.getElementById("sowToggle").onclick=()=>{
+    if(!avail.length){
+      toast(un.length?"再解鎖一味新藥材，就能種下一株。最接近的通常是「曾經連續運動 14 天」的杜仲":"先在下面的藥櫃圖鑑解鎖藥材，才有種子可以種");
+      return;
+    }
+    sowOpen=!sowOpen; renderGarden();
+  };
   const add=document.getElementById("gardenAdd");
-  if(!un.length){
-    add.innerHTML='<div class="nempty" style="color:var(--goji);">先在下面的藥櫃圖鑑解鎖藥材，才有種子可以種。</div>';
-  } else if(!avail.length){
-    add.innerHTML='<div class="nempty">目前只有枸杞（就是小杞本人）。再解鎖一味新藥材，就能種下第二株——最接近的通常是「曾經連續運動 14 天」的杜仲。</div>';
-  } else {
-    add.innerHTML='<div class="sowrow">'+
+  if(sowOpen && avail.length){
+    add.innerHTML='<div class="sowbox"><div class="st">🌱 種下新的一株</div><div class="sh">每一株綁一個習慣，只吃那一項的成長值——某項鬆掉，從盆子就看得出來。</div>'+
+      '<div class="sowrow">'+
       '<select id="sowHerb">'+avail.map(h=>`<option value="${h.n}">${h.n}</option>`).join("")+'</select>'+
       '<select id="sowAxis">'+AXES.map(a=>`<option value="${a.k}">${a.label}</option>`).join("")+'</select>'+
-      '<button class="btn" id="sowBtn">種下</button></div>';
+      '<button class="btn" id="sowBtn">種下</button></div></div>';
     document.getElementById("sowBtn").onclick=()=>{
       const herb=document.getElementById("sowHerb").value, axis=document.getElementById("sowAxis").value;
       if(!HERB_BY[herb] || !AXIS_BY[axis]){ toast("請先選好藥材和主軸"); return; }
       S.plants.push({herb, axis, name:herb, planted:todayStr()});
-      save(); renderGarden(); toast("種下"+herb+"了，從今天開始長 🌱");
+      selPlant=S.plants.length-1; sowOpen=false;
+      save(); renderPet(); renderGarden(); toast("種下"+herb+"了，從今天開始長 🌱");
     };
+  } else {
+    add.innerHTML="";
   }
 }
 
@@ -1412,6 +1487,17 @@ function renderOmen(){
 // ============ 週結算按鈕 ============
 document.getElementById("wkPrev").onclick=()=>{ const d=parse(wkView); d.setDate(d.getDate()-7); wkView=fmt(d); renderWeek(); };
 document.getElementById("wkNext").onclick=()=>{ const d=parse(wkView); d.setDate(d.getDate()+7); if(fmt(d)<=weekStart(todayStr())){ wkView=fmt(d); renderWeek(); } };
+
+// ============ 分頁 ============
+function showTab(t){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.id==="page-"+t));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-tab")===t));
+  try{ localStorage.setItem(KEY+"_tab",t); }catch(e){}
+  window.scrollTo(0,0);
+  if(t==="data") renderBF(); // canvas 要在顯示後才量得到寬度
+}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showTab(b.getAttribute("data-tab")));
+(function(){ let t="garden"; try{ t=localStorage.getItem(KEY+"_tab")||"garden"; }catch(e){} if(!document.getElementById("page-"+t)) t="garden"; showTab(t); })();
 
 function renderAll(){ renderPet(); renderCheck(); renderPlan(); renderMicro(); renderNutrition(); renderBF(); renderOmen(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); renderCal(); }
 renderAll();
