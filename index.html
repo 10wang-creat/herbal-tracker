@@ -686,8 +686,8 @@ function weekInfo(){
   const week=Math.max(1,Math.floor(days/7)+1);
   let phase, phaseName;
   if(week<=4){phase=1;phaseName="第一階段 · 把節奏養出來";}
-  else if(week<=8){phase=2;phaseName="第二階段 · 稍微加一點";}
-  else if(week<=12){phase=3;phaseName="第三階段 · 已成日常";}
+  else if(week<=8){phase=2;phaseName="第二階段 · 同樣時間，動作變難";}
+  else if(week<=12){phase=3;phaseName="第三階段 · 再往上一階";}
   else {phase=3;phaseName="長期維持 · 這就是你的生活";}
   return {days, week, phase, phaseName};
 }
@@ -703,30 +703,30 @@ const EATOUT=[
 ];
 const PLAN={
  1:[
-  {ex:"橢圓機 25 分（邊看劇）", dn:EATOUT[0]},
-  {ex:"居家肌力 12 分＋呼拉圈 20 分", dn:EATOUT[1]},
-  {ex:"橢圓機 25 分", dn:EATOUT[2]},
-  {ex:"橢圓機 25 分＋呼拉圈 20 分", dn:EATOUT[3]},
-  {ex:"居家肌力 12 分＋橢圓機 20 分", dn:EATOUT[4]},
-  {ex:"橢圓機 25 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
+  {ex:"橢圓機 20 分（邊看劇）", dn:EATOUT[1]},
+  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
+  {ex:"橢圓機 20 分", dn:EATOUT[3]},
+  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
+  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
   {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
  2:[
-  {ex:"橢圓機 30 分（阻力調高一點）", dn:EATOUT[0]},
-  {ex:"居家肌力 15 分＋呼拉圈 20 分", dn:EATOUT[1]},
-  {ex:"橢圓機 30 分（間歇：快 2 分＋慢 1 分）", dn:EATOUT[2]},
-  {ex:"橢圓機 30 分＋呼拉圈 20 分", dn:EATOUT[3]},
-  {ex:"居家肌力 15 分＋橢圓機 20 分", dn:EATOUT[4]},
-  {ex:"橢圓機 30 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"Nuli 徒手 10 分（下放數 3 秒）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
+  {ex:"橢圓機 20 分（阻力調高一格）", dn:EATOUT[1]},
+  {ex:"Nuli 徒手 10 分（每下加停頓 2 秒）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
+  {ex:"橢圓機 20 分", dn:EATOUT[3]},
+  {ex:"Nuli 徒手 10 分（能跳級就跳級）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
+  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
   {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
  3:[
-  {ex:"橢圓機 35 分（間歇）", dn:EATOUT[0]},
-  {ex:"居家肌力 18 分＋呼拉圈 20 分", dn:EATOUT[1]},
-  {ex:"橢圓機 35 分（間歇）", dn:EATOUT[2]},
-  {ex:"橢圓機 35 分＋呼拉圈 20 分", dn:EATOUT[3]},
-  {ex:"居家肌力 18 分＋橢圓機 25 分", dn:EATOUT[4]},
-  {ex:"橢圓機 35 分（輕鬆做）", dn:EATOUT[5]},
+  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
+  {ex:"橢圓機 20 分（間歇：快 2 分＋慢 1 分）", dn:EATOUT[1]},
+  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
+  {ex:"橢圓機 20 分（間歇）", dn:EATOUT[3]},
+  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
+  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
   {ex:"休息 或 散步", dn:EATOUT[6]},
  ],
 };
@@ -990,7 +990,7 @@ function renderMicro(){
     b.onclick=()=>tapMicro(b.getAttribute("data-mic"));
     b.onmouseenter=()=>{ document.getElementById("microHow").textContent=MICRO_BY[b.getAttribute("data-mic")].how; };
   });
-  document.getElementById("microHow").textContent = tot?("累積小動作可以再幫小杞加成長值（每天最多 +1）。"):("點一下記錄一次，椅子上、追劇時都能做。");
+  document.getElementById("microHow").textContent = tot?("累積小動作可以再幫小杞加成長值（每天最多 +1）。挺背收下巴、聳肩繞肩這幾項顧的是身軀和肩頸——那是你目前骨骼肌最弱的一段。"):("點一下記錄一次，椅子上、追劇時都能做。優先挑挺背收下巴、聳肩繞肩、縮小腹這類顧軀幹的。");
 }
 
 const HAND_GUIDE=
@@ -1125,18 +1125,22 @@ function toggleMeal(k, def){
 }
 
 const HOME_ROUTINE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
-  '<b>下肢（骨骼肌偏低，這塊最有效）</b><br>'+
-  '① 椅子起立坐下 ×10，2 組 — 慢慢坐下，用大腿控制不要跌坐<br>'+
-  '② 橋式 ×15，2 組 — 膝間夾枕頭，臀部夾緊再抬<br>'+
-  '③ 側躺抬腿 每邊 ×12，2 組 — 動作慢，練大腿內外側<br>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>核心與姿勢（在家補上這塊）</b><br>'+
-  '④ 死蟲式 每邊 ×8 — 躺著、腰貼地，對側手腳慢慢伸出去再收回<br>'+
-  '⑤ 收下巴 ×10（各停 5 秒）— 練深層頸屈肌，富貴包要靠這個<br>'+
-  '⑥ W 收肩 ×12 — 手肘彎成 W，肩胛往後下夾，改善圓肩<br>'+
-  '<span style="color:var(--sub);">④⑤⑥ 顧的是核心穩定、胸椎活動、肩胛控制，在地板或椅子上都能做，不需要器材也不需要教練。</span></div>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>🧗 有單槓就加</b>：死懸吊 20–30 秒 ×2 — 開肩、放鬆脊椎，對富貴包很好。<br>'+
-  '<b>有啞鈴／彈力帶再加</b>：高腳杯深蹲 ×10、彈力帶划船 ×12、蚌式開合每邊 ×12。<br>'+
-  '<span style="color:var(--sub);">重量抓法：最後 2–3 下有點吃力但姿勢維持得住。沒器材完全不影響，空手版本一樣有效。</span></div></div>';
+  '<b>順序：先肌力，再有氧。</b>Nuli 做完再踩橢圓機，肌力那 10 分鐘的品質才不會被有氧吃掉。<br>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>進階不是加時間，是讓同樣 10 分鐘變難</b><br>'+
+  '① Nuli 有分級就往上跳一級<br>'+
+  '② 下放的過程數 3 秒（離心放慢，最有效的一招）<br>'+
+  '③ 最低點停 2 秒再起來<br>'+
+  '④ 同樣動作改單邊做<br>'+
+  '<span style="color:var(--sub);">抓法：最後 2–3 下有點吃力、但姿勢還維持得住。輕鬆做完 = 該進階了。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>選動作的優先順序（8/14 分段數據）</b><br>'+
+  '身軀骨骼肌 18.0% 最弱、雙臂 24.3%，雙腳 36.1% 反而是最強的一段。<br>'+
+  '<b>優先練背、肩、核心和手臂；下肢維持就好，不用再加</b>——橢圓機每天已經在練腿了。<br>'+
+  '<span style="color:var(--sub);">身軀弱正是久坐八小時的結果，也是富貴包和圓肩的來源。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>沒開 Nuli 的備案（空手 10 分鐘）</b><br>'+
+  '① 死蟲式 每邊 ×8　② W 收肩 ×12　③ 收下巴 ×10（各停 5 秒）<br>'+
+  '④ 撐體（跪姿也行）30 秒 ×2　⑤ 橋式 ×15　⑥ 椅子起立坐下 ×10<br>'+
+  '<span style="color:var(--sub);">①～④ 顧核心、肩胛和頸椎，是現在最該補的；⑤⑥ 維持下肢就好。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>🧗 單槓</b>：死懸吊 20–30 秒，一天 2–3 次，經過就吊。開肩、放鬆脊椎。</div></div>';
 function renderPlan(){
   const pl=planFor(viewDate);
   document.getElementById("phaseTag").textContent="第 "+pl.wi.week+" 週";
@@ -1144,13 +1148,13 @@ function renderPlan(){
   const isEatOut = pl.dn.indexOf("｜")>=0 && pl.dn.indexOf("自由吃")<0;
   document.getElementById("planBody").innerHTML=
     `<div class="plan-row"><div class="k">🎯 主打</div><div class="v"><b>${S.focus}</b> <a id="editFocus" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改</a><br><span style="font-size:11.5px;color:var(--sub);">先養成「每天踩上去」的習慣，時間長短其次</span></div></div>`+
-    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("居家肌力")>=0?HOME_ROUTINE_HTML:""}</div></div>`+
+    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HOME_ROUTINE_HTML:""}</div></div>`+
     `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯＋堅果一小把<br><span style="font-size:11.5px;color:var(--sub);">用牛奶泡更好，蛋白質多 8g、熱量多約 100</span></div></div>`+
     `<div class="plan-row"><div class="k">午餐</div><div class="v">蛋白質＋毛豆＋蔬菜＋一份油脂<br><span style="font-size:11.5px;color:var(--sub);">A 茶葉蛋 2＋毛豆＋小番茄＋堅果　｜　B 滷豆干 4＋毛豆＋生菜盒＋起司　｜　C 希臘優格＋茶葉蛋 2＋剩菜青菜＋堅果</span></div></div>`+
     `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}`+
       (isEatOut?`<div class="tellhim">📱 <b>傳給老公就好：</b>「${pl.dn.split("｜")[1]}」</div>`:"")+
     `</div></div>`+
-    `<div class="plan-row"><div class="k">提醒</div><div class="v">不用完美。晚餐點對、白天有蛋白質和青菜、水喝夠，就已經在走了。</div></div>`;
+    `<div class="plan-row"><div class="k">久坐</div><div class="v">上班每小時起身走 2 分鐘。<br><span style="font-size:11.5px;color:var(--sub);">這件事不是為了燒熱量（其實不多），是為了餐後血糖和胰島素敏感度——這塊不會因為有運動就被抵消掉。順便也是圓肩和富貴包的解方。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">有氧的量已經夠了，不用再加時間。要進步靠的是肌力那 10 分鐘變難，還有蛋白質吃夠。</div></div>`;
   const ef=document.getElementById("editFocus");
   if(ef) ef.onclick=()=>{ const n=prompt("主打習慣（想先養成的那一項運動）：",S.focus); if(n&&n.trim()){ S.focus=n.trim().slice(0,14); save(); renderCheck(); renderPlan(); } };
 }
@@ -1190,7 +1194,7 @@ function renderBF(){
   const mt=METRICS.find(m=>m.k===chartMetric);
   let legend;
   if(chartMetric==="fat") legend="綠線＝體脂% ｜ 虛線＝目標（3 個月 32%、6 個月 30%）";
-  else if(chartMetric==="muscle") legend="綠線＝骨骼肌% ｜ 虛線＝26%（脫離「低」的區間）｜ 這條往上，代謝就會回來";
+  else if(chartMetric==="muscle") legend="綠線＝骨骼肌% ｜ 虛線＝26%（脫離「低」的區間）｜ 這條主要靠減脂就會上去：肌肉量不變、體重到 55.6kg 就是 26%";
   else legend=`綠線＝${mt.label}（${mt.unit}）｜ 圍度往下掉，就是褲子變鬆的證據`;
   document.getElementById("bfLegend").innerHTML=legend;
   drawBF(arr.filter(a=>a[chartMetric]!=null && !isNaN(a[chartMetric])), mt);
