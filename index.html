@@ -92,6 +92,30 @@
   .mpick{display:flex; flex-wrap:wrap; gap:6px; margin:9px 0 2px 36px;}
   .chip.mfood{font-size:11.5px; padding:4px 9px;}
   .chip.mfood.has{background:var(--green-l); border-color:var(--green); color:var(--green-d); font-weight:600;}
+  .chip.mfood.cust{border-style:dashed; border-color:#dcc59e;}
+  .chip.mfood.cust.has{border-style:solid;}
+  .msearch{display:flex; gap:6px; margin:9px 0 0 36px;}
+  .msearch input{flex:1; min-width:0; border:1.5px solid var(--line); border-radius:12px; padding:6px 10px; font-size:12.5px; font-family:inherit; color:var(--ink); background:#fff;}
+  .msearch input:focus{outline:none; border-color:var(--green);}
+  .cfbox{margin:9px 0 0 36px; background:#FBF9F3; border:1.5px dashed #dcc59e; border-radius:14px; padding:10px 11px;}
+  .cfbox .cft{font-size:12.5px; font-weight:600; color:var(--goji); margin-bottom:6px;}
+  .cfbox .cfr{display:flex; gap:6px; margin-bottom:6px;}
+  .cfbox input{flex:1; min-width:0; width:100%; border:1.5px solid var(--line); border-radius:11px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); background:#fff;}
+  .cfbox input:focus{outline:none; border-color:var(--green);}
+  .cfbox .cfh{font-size:11px; color:var(--sub); line-height:1.5; margin-top:2px;}
+  .cfhelp{display:flex; gap:6px; margin:2px 0 6px;}
+  .cfhelp button{flex:1; border:1.5px solid var(--line); background:#fff; color:var(--green-d); border-radius:11px; padding:6px 4px; font-size:11.5px; font-family:inherit; cursor:pointer;}
+  .cfhelp button.on{background:var(--green-l); border-color:var(--green); font-weight:600;}
+  .cfpanel{background:#fff; border:1.5px solid var(--line); border-radius:12px; padding:9px 10px; margin-bottom:7px;}
+  .cfpanel .cq{width:100%; border:1.5px solid var(--line); border-radius:11px; padding:6px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); margin-bottom:7px;}
+  .cfpanel .cq:focus{outline:none; border-color:var(--green);}
+  .cfpanel .cfscroll{max-height:132px; overflow-y:auto; display:flex; flex-wrap:wrap; gap:5px;}
+  .cfsel{display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; padding-top:7px; border-top:1px dashed var(--line);}
+  .cfsel .st{font-size:11.5px; background:var(--green-l); border:1px solid var(--green); color:var(--green-d); border-radius:14px; padding:2px 9px; cursor:pointer; font-weight:600;}
+  .cftot{font-size:12.5px; font-weight:600; color:var(--goji); margin-top:7px;}
+  .cftot small{color:var(--sub); font-weight:400; font-size:11px; display:block; margin-top:1px;}
+  .cfhand{font-size:11.5px; line-height:1.85; color:var(--ink);}
+  .cfhand b{color:var(--green-d);}
   .item .mealtxt{width:100%; border:none; border-bottom:1.5px dashed #d9d0bf; background:transparent; font-size:12.5px; font-family:inherit; color:var(--ink); padding:3px 0; margin-top:3px;}
   .item .mealtxt::placeholder{color:#bcb3a2;}
   .item .mealtxt:focus{outline:none; border-bottom-color:var(--green);}
@@ -313,6 +337,7 @@
       <button class="btn ghost" id="fillPlan" style="flex:1;">＋ 帶入今日參考</button>
       <button class="btn ghost" id="clearFoods">清空</button>
     </div>
+    <div id="myFoods"></div>
     <div id="nutPicker"></div>
     <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。目標：蛋白質 ≥ 90g；熱量落在 1350–1600 kcal 最理想。你的基礎代謝約 1,277，長期低於這條線身體會拿肌肉當燃料，所以熱量太低反而卡住。</div>
   </div>
@@ -395,8 +420,8 @@ const START_DEFAULT="2026-07-20"; // 運動重啟日
 // ---------- state ----------
 let S = load();
 function load(){
-  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; if(!r.plants)r.plants=[]; if(!r.omen)r.omen=null; return r; } }catch(e){}
-  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[], plants:[], omen:null };
+  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; if(!r.plants)r.plants=[]; if(!r.omen)r.omen=null; if(!r.customFoods)r.customFoods=[]; return r; } }catch(e){}
+  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[], plants:[], omen:null, customFoods:[] };
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("儲存失敗，可能是隱私模式"); } }
 
@@ -503,7 +528,8 @@ const FOODS=[
   {n:"炸豆干",u:"1 份約 100g",p:14,k:190,c:"點心 / 主食 / 外食",a:["炸豆干","炸豆乾"]},
   {n:"蘿蔔糕",u:"2 塊約 150g",p:3,k:200,c:"點心 / 主食 / 外食",a:["蘿蔔糕","菜頭粿","蘿蔔粿"]},
 ];
-const FOOD_BY_NAME={}; FOODS.forEach(f=>FOOD_BY_NAME[f.n]=f);
+let FOOD_BY_NAME={};
+function allFoods(){ return (S.customFoods||[]).concat(FOODS); }
 // 熱量區間：下限貼著基礎代謝（約 1277），理想 1350–1600
 const PROTEIN_TARGET=90, KCAL_FLOOR=1250, KCAL_LOW=1350, KCAL_HIGH=1600;
 const MEAL_KEYS=["breakfast","lunch","dinner","snack"];
@@ -517,12 +543,16 @@ function planMealItems(meal){
   return {};
 }
 // 別名比對用：長別名優先
-const ALIAS_LIST=(function(){
+let ALIAS_LIST=[];
+function rebuildFoodIndex(){
+  FOOD_BY_NAME={};
+  allFoods().forEach(f=>{ FOOD_BY_NAME[f.n]=f; });
   const arr=[];
-  FOODS.forEach(f=>{ (f.a||[f.n]).forEach(al=>arr.push({al,n:f.n})); });
+  allFoods().forEach(f=>{ (f.a||[f.n]).forEach(al=>arr.push({al,n:f.n})); });
   arr.sort((x,y)=>y.al.length-x.al.length);
-  return arr;
-})();
+  ALIAS_LIST=arr;
+}
+rebuildFoodIndex();
 // 從自由文字偵測食材（每項算 1 份）
 function detectFoods(text){
   if(!text) return [];
@@ -552,6 +582,17 @@ const MICRO_BY={}; MICRO.forEach(m=>MICRO_BY[m.k]=m);
 let sugIdx=0;
 let openMeals={}; // 展開食材選單的餐別
 let selPlant=-1;   // 花架上選中的株：-1=小杞，其餘為 S.plants 索引
+let mealSearch={};  // 每餐的食材搜尋字串
+let cfOpen="";      // 正在開著「新增自訂食材」表單的餐別
+let cfDraft={n:"",p:"",k:"",u:""};  // 表單草稿（存 state 才不會被重繪清掉）
+let cfBuild={};     // 組合器已選的食材 名稱→份數
+let cfPanel="";     // "" | "build" | "hand"
+function cfReset(){ cfDraft={n:"",p:"",k:"",u:""}; cfBuild={}; cfPanel=""; }
+function cfBuildTotal(){
+  let p=0,k=0;
+  for(const n in cfBuild){ const d=FOOD_BY_NAME[n]; if(d){ p+=d.p*cfBuild[n]; k+=d.k*cfBuild[n]; } }
+  return {p:Math.round(p*10)/10, k:Math.round(k)};
+}
 let sowOpen=false;
 function getMicro(dateStr){ const l=S.logs[dateStr]; return (l&&l.micro)||{}; }
 function tapMicro(k){
@@ -828,10 +869,14 @@ function renderCheck(){
       const isOpen = !!openMeals[it.k];
       let picker="";
       if(isOpen){
-        picker=`<div class="mpick">`+FOODS.map(x=>{
-          const has=items[x.n]?" has":"";
-          return `<button class="chip mfood${has}" data-madd="${escAttr(it.k)}|${escAttr(x.n)}">${x.n}${items[x.n]?" ·"+items[x.n]:""}</button>`;
-        }).join("")+`</div>`;
+        picker=`<div class="msearch"><input class="mq" placeholder="搜尋食材…" value="${escAttr(mealSearch[it.k]||"")}">`+
+          `<button class="mbtn" data-cfopen="${escAttr(it.k)}">${cfOpen===it.k?"收起":"＋ 自訂"}</button></div>`+
+          (cfOpen===it.k?cfForm(it.k):"")+
+          `<div class="mpick">`+allFoods().map(x=>{
+            const has=items[x.n]?" has":"";
+            const cu=x.c==="自訂"?" cust":"";
+            return `<button class="chip mfood${has}${cu}" data-madd="${escAttr(it.k)}|${escAttr(x.n)}" data-fn="${escAttr(x.n)}" data-fa="${escAttr((x.a||[]).join(" "))}">${x.n}${items[x.n]?" ·"+items[x.n]:""}</button>`;
+          }).join("")+`</div>`;
       }
       el.innerHTML=`<div class="mhead"><div class="box">${on?"✓":""}</div>`+
         `<div class="txt"><div class="t">${it.t} ${nutBadge}</div>`+
@@ -852,7 +897,54 @@ function renderCheck(){
         if(e.target.value.trim() && !S.logs[viewDate][it.k]){ S.logs[viewDate][it.k]=true; }
         save();
       };
-      el.querySelector("[data-mtoggle]").onclick=()=>{ openMeals[it.k]=!openMeals[it.k]; renderCheck(); };
+      el.querySelector("[data-mtoggle]").onclick=()=>{ openMeals[it.k]=!openMeals[it.k]; if(!openMeals[it.k]){ cfOpen=""; cfReset(); mealSearch[it.k]=""; } renderCheck(); };
+      const cfo=el.querySelector("[data-cfopen]");
+      if(cfo) cfo.onclick=()=>{ if(cfOpen===it.k){ cfOpen=""; cfReset(); } else { cfOpen=it.k; cfReset(); } renderCheck(); };
+      const cfs=el.querySelector("[data-cfsave]");
+      if(cfs) cfs.onclick=()=>saveCustomFood(el, it.k);
+      [["cfn","n"],["cfp","p"],["cfk","k"],["cfu","u"]].forEach(([cls,key])=>{
+        const f=el.querySelector("."+cls);
+        if(f){ f.onclick=e=>e.stopPropagation(); f.oninput=e=>{ cfDraft[key]=e.target.value; }; }
+      });
+      el.querySelectorAll("[data-cfpanel]").forEach(b=>b.onclick=()=>{
+        const v=b.getAttribute("data-cfpanel"); cfPanel = cfPanel===v ? "" : v; renderCheck();
+      });
+      el.querySelectorAll("[data-cbadd]").forEach(b=>b.onclick=()=>{
+        const n=b.getAttribute("data-cbadd");
+        cfBuild[n]=(cfBuild[n]||0)+1;
+        const t=cfBuildTotal(); cfDraft.p=t.p; cfDraft.k=t.k;
+        renderCheck();
+      });
+      el.querySelectorAll("[data-cbdel]").forEach(b=>b.onclick=()=>{
+        delete cfBuild[b.getAttribute("data-cbdel")];
+        const t=cfBuildTotal();
+        if(Object.keys(cfBuild).length){ cfDraft.p=t.p; cfDraft.k=t.k; } else { cfDraft.p=""; cfDraft.k=""; }
+        renderCheck();
+      });
+      const cbq=el.querySelector(".cbq");
+      if(cbq){
+        cbq.onclick=e=>e.stopPropagation();
+        cbq.oninput=()=>{
+          const v=(cbq.value||"").trim();
+          el.querySelectorAll(".cfscroll .chip").forEach(c=>{
+            const nm=c.getAttribute("data-fn")||"", al=c.getAttribute("data-fa")||"";
+            c.style.display=(!v || nm.indexOf(v)>=0 || al.indexOf(v)>=0)?"":"none";
+          });
+        };
+      }
+      const qi=el.querySelector(".mq");
+      if(qi){
+        const filt=()=>{
+          const v=(qi.value||"").trim(); mealSearch[it.k]=v;
+          el.querySelectorAll(".mpick .chip").forEach(c=>{
+            const nm=c.getAttribute("data-fn")||"", al=c.getAttribute("data-fa")||"";
+            c.style.display=(!v || nm.indexOf(v)>=0 || al.indexOf(v)>=0)?"":"none";
+          });
+        };
+        qi.onclick=e=>e.stopPropagation();
+        qi.oninput=filt;
+        filt();
+      }
       el.querySelector("[data-mdetect]").onclick=()=>detectIntoMeal(it.k);
       el.querySelectorAll("[data-madd]").forEach(b=>b.onclick=()=>{ const[mk,nm]=b.getAttribute("data-madd").split("|"); setMealFood(mk,nm,1); });
       el.querySelectorAll("[data-mdel]").forEach(b=>b.onclick=()=>{ const[mk,nm]=b.getAttribute("data-mdel").split("|"); setMealFood(mk,nm,-99); });
@@ -901,6 +993,94 @@ function renderMicro(){
   document.getElementById("microHow").textContent = tot?("累積小動作可以再幫小杞加成長值（每天最多 +1）。"):("點一下記錄一次，椅子上、追劇時都能做。");
 }
 
+const HAND_GUIDE=
+  '<b>掌心</b>大小、厚度像手掌的肉或魚 ≈ 100g ≈ 蛋白質 <b>20g</b>、150 kcal<br>'+
+  '<b>一顆蛋</b> ≈ 蛋白質 7g、70 kcal<br>'+
+  '<b>一拳頭</b>的飯 ≈ 1 碗 ≈ 蛋白質 4g、<b>280 kcal</b><br>'+
+  '<b>一個拇指節</b>的油 ≈ 1 茶匙 ≈ 45 kcal<br>'+
+  '<b>一把</b>堅果（約 20g）≈ 蛋白質 4g、120 kcal<br>'+
+  '<b>雙手捧一把</b>青菜 ≈ 1 份 ≈ 25 kcal（炒過的算 80）<br>'+
+  '<b>一片</b>豆干 ≈ 蛋白質 3.5g　｜　<b>一盒</b>嫩豆腐 ≈ 15g<br>'+
+  '<span style="color:var(--sub);">外食看不見的油最容易低估，油亮的菜多抓 1～2 匙比較接近。真的沒頭緒就寧可高估，總比長期算太低好。</span>';
+
+function cfForm(mealKey){
+  const tot=cfBuildTotal();
+  const sel=Object.keys(cfBuild);
+  let panel="";
+  if(cfPanel==="build"){
+    panel=`<div class="cfpanel">`+
+      `<input class="cbq" placeholder="搜尋要加進去的食材…">`+
+      `<div class="cfscroll">`+allFoods().map(x=>
+        `<button class="chip mfood${cfBuild[x.n]?" has":""}" data-cbadd="${escAttr(x.n)}" data-fn="${escAttr(x.n)}" data-fa="${escAttr((x.a||[]).join(" "))}">${x.n}${cfBuild[x.n]?" ·"+cfBuild[x.n]:""}</button>`
+      ).join("")+`</div>`+
+      (sel.length
+        ? `<div class="cfsel">`+sel.map(n=>`<span class="st" data-cbdel="${escAttr(n)}">${n} ×${cfBuild[n]} ✕</span>`).join("")+`</div>`+
+          `<div class="cftot">合計 ${tot.p}g 蛋白質 · ${tot.k} kcal<small>已自動帶到上面的欄位，可以再手動微調</small></div>`
+        : `<div class="cftot" style="color:var(--sub);font-weight:400;font-size:11.5px;">點上面的食材把這道菜拼出來，例如滷排骨 ＝ 豬瘦肉 ×1 ＋ 麻油 ×1。</div>`)+
+      `</div>`;
+  } else if(cfPanel==="hand"){
+    panel=`<div class="cfpanel"><div class="cfhand">${HAND_GUIDE}</div></div>`;
+  }
+  return `<div class="cfbox">`+
+    `<div class="cft">🍽 新增自訂食材</div>`+
+    `<div class="cfr"><input class="cfn" placeholder="名稱，例：媽媽滷的排骨" value="${escAttr(cfDraft.n)}"></div>`+
+    `<div class="cfr"><input class="cfp" type="number" step="0.1" inputmode="decimal" placeholder="蛋白質 g" value="${escAttr(cfDraft.p)}">`+
+    `<input class="cfk" type="number" step="1" inputmode="numeric" placeholder="熱量 kcal" value="${escAttr(cfDraft.k)}"></div>`+
+    `<div class="cfr"><input class="cfu" placeholder="份量說明，例：1 碗（可留白）" value="${escAttr(cfDraft.u)}"></div>`+
+    `<div class="cfh" style="margin:0 0 5px;">不知道數字？用下面兩個幫手：</div>`+
+    `<div class="cfhelp"><button data-cfpanel="build" class="${cfPanel==="build"?"on":""}">🧩 用現有食材組</button>`+
+    `<button data-cfpanel="hand" class="${cfPanel==="hand"?"on":""}">✋ 手掌估份量</button></div>`+
+    panel+
+    `<div class="cfr"><button class="btn" data-cfsave="${escAttr(mealKey)}" style="flex:1;">存起來並加入這一餐</button></div>`+
+    `<div class="cfh">存好之後這一項會永遠留在清單裡，下次直接點就有。</div></div>`;
+}
+function saveCustomFood(el, mealKey){
+  const n=(cfDraft.n||"").trim().slice(0,16);
+  const p=parseFloat(cfDraft.p);
+  const k=parseFloat(cfDraft.k);
+  const u=(cfDraft.u||"").trim().slice(0,12) || "1 份";
+  if(!n){ toast("先填名稱"); return; }
+  if(FOOD_BY_NAME[n]){ toast("「"+n+"」清單裡已經有了，直接點它就好"); return; }
+  if(isNaN(p)&&isNaN(k)){ toast("蛋白質和熱量至少要填一個"); return; }
+  S.customFoods.push({n, u, p:isNaN(p)?0:Math.round(p*10)/10, k:isNaN(k)?0:Math.round(k), c:"自訂", a:[n]});
+  rebuildFoodIndex();
+  cfOpen=""; cfReset();
+  save();
+  setMealFood(mealKey, n, 1);
+  toast("已存入「"+n+"」，之後清單裡都找得到 🍽");
+}
+function delCustomFood(i){
+  const f=S.customFoods[i]; if(!f) return;
+  let used=0;
+  for(const d in S.logs){ MEAL_KEYS.forEach(m=>{ const it=S.logs[d][m+"_items"]||{}; if(it[f.n]) used++; }); }
+  const msg = used ? "「"+f.n+"」有 "+used+" 餐用過。刪掉之後，那幾餐的熱量和蛋白質會少算這一項。確定刪除嗎？"
+                   : "確定刪除「"+f.n+"」嗎？";
+  if(!confirm(msg)) return;
+  S.customFoods.splice(i,1); rebuildFoodIndex(); save();
+  renderCheck(); renderNutrition();
+}
+function editCustomFood(i){
+  const f=S.customFoods[i]; if(!f) return;
+  const p=prompt("「"+f.n+"」每"+f.u+"的蛋白質（g）：", f.p); if(p===null) return;
+  const k=prompt("「"+f.n+"」每"+f.u+"的熱量（kcal）：", f.k); if(k===null) return;
+  if(!isNaN(parseFloat(p))) f.p=Math.round(parseFloat(p)*10)/10;
+  if(!isNaN(parseFloat(k))) f.k=Math.round(parseFloat(k));
+  rebuildFoodIndex(); save(); renderCheck(); renderNutrition();
+  toast("已更新「"+f.n+"」");
+}
+function renderMyFoods(){
+  const mf=document.getElementById("myFoods");
+  if(!S.customFoods.length){
+    mf.innerHTML='<div class="pick-cat">我的自訂食材</div><div class="nempty">清單裡沒有你吃的東西時，在上面任一餐點「＋ 加食材算營養」→「＋ 自訂」，建一次就永遠留著。不知道熱量和蛋白質也沒關係，表單裡有「🧩 用現有食材組」和「✋ 手掌估份量」兩個幫手。</div>';
+    return;
+  }
+  mf.innerHTML='<div class="pick-cat">我的自訂食材（✏️ 改數字　✕ 刪除）</div>'+S.customFoods.map((f,i)=>
+    `<div class="nrow"><div class="nm">${f.n} <small>${f.u} · ${f.p}g · ${f.k}kcal</small></div>`+
+    `<div class="stp"><button data-cfedit="${i}">✏️</button><button data-cfdel="${i}">✕</button></div></div>`).join("");
+  mf.querySelectorAll("[data-cfedit]").forEach(b=>b.onclick=()=>editCustomFood(+b.getAttribute("data-cfedit")));
+  mf.querySelectorAll("[data-cfdel]").forEach(b=>b.onclick=()=>delCustomFood(+b.getAttribute("data-cfdel")));
+}
+
 function renderNutrition(){
   const {p,k}=computeNut(viewDate);
   const pPct=Math.min(100,Math.round(p/PROTEIN_TARGET*100));
@@ -931,6 +1111,7 @@ function renderNutrition(){
       return `<div class="nrow"><div class="nm"><b>${MEAL_NAME[m]}</b> <small>${detail}</small></div><div class="stp"><span class="q" style="color:var(--green-d);">${mn.p}g</span><span class="q" style="color:var(--goji);">${mn.k}k</span></div></div>`;
     }).join("");
   }
+  renderMyFoods();
 }
 
 function toggleMeal(k, def){
@@ -1117,14 +1298,14 @@ document.getElementById("importFile").onchange=(e)=>{
       const d=JSON.parse(r.result);
       if(!d||!d.logs){ toast("這不是本草養成的備份檔"); return; }
       if(!confirm("要用備份覆蓋目前資料嗎？（建議先匯出目前的以防萬一）")) return;
-      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）"; if(!S.bodyFat)S.bodyFat=[];
+      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）"; if(!S.bodyFat)S.bodyFat=[]; if(!S.plants)S.plants=[]; if(!S.customFoods)S.customFoods=[]; rebuildFoodIndex();
       save(); viewDate=todayStr(); renderAll(); toast("備份已還原 🌿");
     }catch(err){ toast("讀取失敗，檔案可能損壞"); }
   };
   r.readAsText(f);
   e.target.value="";
 };
-document.getElementById("resetBtn").onclick=()=>{ if(confirm("確定要清空所有紀錄嗎？此動作無法復原。")){ localStorage.removeItem(KEY); S=load(); viewDate=todayStr(); renderAll(); toast("已重設"); } };
+document.getElementById("resetBtn").onclick=()=>{ if(confirm("確定要清空所有紀錄嗎？此動作無法復原。")){ localStorage.removeItem(KEY); S=load(); rebuildFoodIndex(); viewDate=todayStr(); renderAll(); toast("已重設"); } };
 window.addEventListener("resize",()=>renderBF());
 
 // 儲存健康檢查：若 localStorage 不可用（如 Android 本機檔），顯示警告
