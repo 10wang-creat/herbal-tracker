@@ -339,7 +339,7 @@
     </div>
     <div id="myFoods"></div>
     <div id="nutPicker"></div>
-    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。目標：蛋白質 ≥ 90g；熱量落在 1350–1600 kcal 最理想。你的基礎代謝約 1,277，長期低於這條線身體會拿肌肉當燃料，所以熱量太低反而卡住。</div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。目標：蛋白質 ≥ 90g；熱量 1350–1600 kcal。基礎代謝 1,284，長期低於這條線身體會拿肌肉當燃料——熱量太低反而卡住。<br><b>8/29 盤點前 40 天：</b>平均 1,226 kcal（其中 20 天低於 1,250）、蛋白質 69g。三個動作就能同時補齊：早餐蛋白飲改用牛奶泡（+8g、+130 kcal）、午餐固定加一份毛豆或起司（+13g）、晚餐一定要有豆腐或蛋。</div>
   </div>
 
   <!-- 今日參考 -->
@@ -354,7 +354,7 @@
 <section class="page" id="page-data">
   <!-- 身體數據追蹤 -->
   <div class="card">
-    <h2>身體數據追蹤 <span class="tag">看骨骼肌和圍度，別只看體重</span></h2>
+    <h2>身體數據追蹤 <span class="tag">每兩週一次 · 早上空腹</span></h2>
     <div class="bf-latest" id="bfLatest"></div>
     <div class="bf-inputs">
       <input id="bfWeight" type="number" step="0.1" inputmode="decimal" placeholder="體重 kg">
@@ -444,7 +444,8 @@ const ITEMS=[
   {k:"veg",      t:"蔬菜 2 份", h:"外食最容易缺的一項，多夾一樣青菜就算", pt:1},
   {k:"water",    t:"喝水 1500ml＋", h:"不含含糖飲料", pt:1},
   {k:"snack",    t:"點心", h:"嘴饞時，選無糖", pt:0.5, meal:true, def:"100% 黑巧克力 1–2 片 / 希臘優格"},
-  {k:"sleep",    t:"12 點前上床", h:"睡好才瘦得動，代謝和食慾都靠它", pt:1},
+  {k:"steps",    t:"步數 6,000＋", h:"手錶日均 3,825，這是目前最容易拿分的一項", pt:1},
+  {k:"sleep",    t:"睡滿 7 小時", h:"手錶顯示你平均 7 小時 21 分——重點是睡夠，不是幾點睡", pt:1},
 ];
 function escAttr(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
 
@@ -530,7 +531,9 @@ const FOODS=[
 ];
 let FOOD_BY_NAME={};
 function allFoods(){ return (S.customFoods||[]).concat(FOODS); }
-// 熱量區間：下限貼著基礎代謝（約 1277），理想 1350–1600
+// 熱量區間：下限貼著基礎代謝（8/29 量測 1,284），理想 1350–1600
+// 8/29 盤點 40 天：平均只有 1,226 kcal、其中 20 天低於 1,250，蛋白質平均 69g。
+// 現在的問題是吃太少、不是吃太多——所以下限比上限重要。
 const PROTEIN_TARGET=90, KCAL_FLOOR=1250, KCAL_LOW=1350, KCAL_HIGH=1600;
 const MEAL_KEYS=["breakfast","lunch","dinner","snack"];
 const MEAL_NAME={breakfast:"早餐",lunch:"午餐",dinner:"晚餐",snack:"點心"};
@@ -565,6 +568,7 @@ function detectFoods(text){
 }
 // ---------- 隨手微運動（椅子上就能做）----------
 const MICRO=[
+  {k:"stand",     n:"起身走 2 分鐘", e:"🚶", how:"約 200 步。上班日做 8 次就是 1,600 步，直接把日均 3,825 推到 5,400。久坐族最重要的一件事，也是現在最容易補上的一項。"},
   {k:"belly",     n:"縮小腹",     e:"🌀", how:"吐氣時把肚臍往內收，維持 10 秒，正常呼吸不憋氣。練深層核心。"},
   {k:"calf",      n:"墊腳尖",     e:"🦶", how:"腳跟抬到最高再慢慢放下，10–15 下。練小腿、促進下肢循環。"},
   {k:"glute",     n:"坐姿夾臀",   e:"🍑", how:"收緊臀部肌肉 5–10 秒再放鬆，重複 10 次。坐著也能練臀。"},
@@ -575,7 +579,6 @@ const MICRO=[
   {k:"breath",    n:"腹式深呼吸", e:"🌬️", how:"吸氣鼓肚、吐氣縮肚，做 5 次。放鬆又練核心。"},
   {k:"shoulder",  n:"聳肩繞肩",   e:"💆", how:"肩膀往上聳再往後繞 10 圈。舒緩肩頸緊繃。"},
   {k:"sitstand",  n:"起立坐下 10 下", e:"🪑", how:"用椅子做，慢慢坐下、用大腿控制不要跌坐。這是最方便的下肢肌力，骨骼肌偏低時特別有用。"},
-  {k:"stand",     n:"起身走 2 分鐘", e:"🚶", how:"每坐約 1 小時就站起來走走、倒杯水。久坐族最重要的一件事。"},
   {k:"deadhang",  n:"單槓死懸吊",   e:"🧗", how:"抓住單槓、放鬆吊 20–30 秒，肩膀放鬆、深呼吸。練握力、開肩、放鬆脊椎，對富貴包很好。經過單槓就吊一下。"},
 ];
 const MICRO_BY={}; MICRO.forEach(m=>MICRO_BY[m.k]=m);
@@ -686,7 +689,7 @@ function weekInfo(){
   const week=Math.max(1,Math.floor(days/7)+1);
   let phase, phaseName;
   if(week<=4){phase=1;phaseName="第一階段 · 把節奏養出來";}
-  else if(week<=8){phase=2;phaseName="第二階段 · 同樣時間，動作變難";}
+  else if(week<=8){phase=2;phaseName="第二階段 · 先穩住，別急著加難度";}
   else if(week<=12){phase=3;phaseName="第三階段 · 再往上一階";}
   else {phase=3;phaseName="長期維持 · 這就是你的生活";}
   return {days, week, phase, phaseName};
@@ -1087,13 +1090,13 @@ function renderNutrition(){
   const kPct=Math.min(100,Math.round(k/KCAL_HIGH*100));
   const pNote = p>=PROTEIN_TARGET ? '<span class="nut-note ok">達標！蛋白質很夠 💪</span>'
               : p>=74 ? '<span class="nut-note ok">接近目標，再一份就到 90g</span>'
-              : '<span class="nut-note warn">蛋白質偏低，記得每餐問：蛋白質在哪裡？</span>';
+              : '<span class="nut-note warn">蛋白質偏低——這是現在最大的缺口（40 天平均 69g，只有 5 天達 90）。骨骼肌長不上去就是卡在這裡</span>';
   let kNote;
   if(k===0) kNote='<span class="nut-note">還沒加食材，點下面加加看</span>';
-  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">低於基礎代謝（約 1277），身體會拿肌肉當燃料，加一把堅果或一片起司就補上了</span>';
-  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">稍低，再補一點油脂到 1350 以上，瘦得比較穩</span>';
+  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">低於基礎代謝 1,284——這是你最常踩到的一格（40 天裡有 20 天）。一把堅果、一片起司，或把蛋白飲改用牛奶泡，就補上了</span>';
+  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">稍低，再補一份油脂到 1350 以上，瘦得比較穩</span>';
   else if(k<=KCAL_HIGH) kNote='<span class="nut-note ok">在理想區間（1350–1600），這樣剛好</span>';
-  else kNote='<span class="nut-note warn">今天偏高，明天照常吃就好，不用補償</span>';
+  else kNote='<span class="nut-note ok">今天吃得比較多，沒關係。明天照常就好——不用補償、不用少吃回來</span>';
   document.getElementById("nutBars").innerHTML=
     `<div class="nbar p"><div class="lab"><span>蛋白質</span><span><b>${p}</b> / ${PROTEIN_TARGET} g</span></div><div class="track"><i style="width:${Math.max(2,pPct)}%"></i></div>${pNote}</div>`+
     `<div class="nbar k"><div class="lab"><span>熱量</span><span><b>${k}</b> kcal</span></div><div class="track"><i style="width:${Math.max(2,kPct)}%"></i></div>${kNote}</div>`;
@@ -1124,14 +1127,19 @@ function toggleMeal(k, def){
   if(now) toast("記錄好了 🍱 小杞也在長大");
 }
 
+const HEADACHE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.75;background:var(--goji-l);border-radius:12px;padding:9px 11px;">'+
+  '<b style="color:var(--goji);">⚠️ 頭痛還沒看過醫師之前，先這樣做</b><br>'+
+  '動作做到吃力時會頭痛，而且已確認不是憋氣造成的——這種情況要請醫師看過一次再繼續。<br>'+
+  '在那之前：肌力降到<b>完全不吃力</b>的程度，做完還很輕鬆就停，不追最後那幾下；橢圓機照常做沒問題。<br>'+
+  '<span style="color:var(--sub);">若出現突然的劇痛、想吐、視力改變、脖子僵硬、單側無力或講話不清楚，直接去急診。另外，一半日子吃不到 1,250 kcal 也會拉低頭痛的門檻，先把吃的補回來。</span></div>';
 const HOME_ROUTINE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
   '<b>順序：先肌力，再有氧。</b>Nuli 做完再踩橢圓機，肌力那 10 分鐘的品質才不會被有氧吃掉。<br>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>進階不是加時間，是讓同樣 10 分鐘變難</b><br>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>進階的方式（等頭痛確認沒問題再用）</b><br>'+
   '① Nuli 有分級就往上跳一級<br>'+
   '② 下放的過程數 3 秒（離心放慢，最有效的一招）<br>'+
   '③ 最低點停 2 秒再起來<br>'+
   '④ 同樣動作改單邊做<br>'+
-  '<span style="color:var(--sub);">抓法：最後 2–3 下有點吃力、但姿勢還維持得住。輕鬆做完 = 該進階了。</span></div>'+
+  '<span style="color:var(--sub);">原本的抓法是「最後 2–3 下有點吃力」，但那個吃力現在會引發頭痛，代表對現在的你太重。先退到「最後一下還能穩穩控制、也還能講話」，這不是退步。輕鬆做完 = 該進階了。</span></div>'+
   '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>選動作的優先順序（8/14 分段數據）</b><br>'+
   '身軀骨骼肌 18.0% 最弱、雙臂 24.3%，雙腳 36.1% 反而是最強的一段。<br>'+
   '<b>優先練背、肩、核心和手臂；下肢維持就好，不用再加</b>——橢圓機每天已經在練腿了。<br>'+
@@ -1148,13 +1156,13 @@ function renderPlan(){
   const isEatOut = pl.dn.indexOf("｜")>=0 && pl.dn.indexOf("自由吃")<0;
   document.getElementById("planBody").innerHTML=
     `<div class="plan-row"><div class="k">🎯 主打</div><div class="v"><b>${S.focus}</b> <a id="editFocus" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改</a><br><span style="font-size:11.5px;color:var(--sub);">先養成「每天踩上去」的習慣，時間長短其次</span></div></div>`+
-    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HOME_ROUTINE_HTML:""}</div></div>`+
+    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HEADACHE_HTML+HOME_ROUTINE_HTML:""}</div></div>`+
     `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯＋堅果一小把<br><span style="font-size:11.5px;color:var(--sub);">用牛奶泡更好，蛋白質多 8g、熱量多約 100</span></div></div>`+
     `<div class="plan-row"><div class="k">午餐</div><div class="v">蛋白質＋毛豆＋蔬菜＋一份油脂<br><span style="font-size:11.5px;color:var(--sub);">A 茶葉蛋 2＋毛豆＋小番茄＋堅果　｜　B 滷豆干 4＋毛豆＋生菜盒＋起司　｜　C 希臘優格＋茶葉蛋 2＋剩菜青菜＋堅果</span></div></div>`+
     `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}`+
       (isEatOut?`<div class="tellhim">📱 <b>傳給老公就好：</b>「${pl.dn.split("｜")[1]}」</div>`:"")+
     `</div></div>`+
-    `<div class="plan-row"><div class="k">久坐</div><div class="v">上班每小時起身走 2 分鐘。<br><span style="font-size:11.5px;color:var(--sub);">這件事不是為了燒熱量（其實不多），是為了餐後血糖和胰島素敏感度——這塊不會因為有運動就被抵消掉。順便也是圓肩和富貴包的解方。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">有氧的量已經夠了，不用再加時間。要進步靠的是肌力那 10 分鐘變難，還有蛋白質吃夠。</div></div>`;
+    `<div class="plan-row"><div class="k">步數</div><div class="v">目標 <b>6,000 步</b>——每小時起身走 2 分鐘，上班日 8 次就補上 1,600 步。<br><span style="font-size:11.5px;color:var(--sub);">手錶半年日均 3,825 步，低於 5,000 算久坐。這也是你每日總消耗比一般推算低一截的原因，赤字因此很小。舊目標 10,000 步半年只達成 5 天，已經改掉。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">現在的優先順序：① 頭痛看醫師、肌力先降強度　② 吃回 1,350、蛋白質拉到 90g　③ 白天多走<br><span style="font-size:11.5px;color:var(--sub);">有氧已經 92% 執行率，不用再加。還有：衣服變鬆、大腿圍 40 天少 3cm——這些都是真的，只是體重計看不到。</span></div></div>`;
   const ef=document.getElementById("editFocus");
   if(ef) ef.onclick=()=>{ const n=prompt("主打習慣（想先養成的那一項運動）：",S.focus); if(n&&n.trim()){ S.focus=n.trim().slice(0,14); save(); renderCheck(); renderPlan(); } };
 }
@@ -1195,7 +1203,8 @@ function renderBF(){
   let legend;
   if(chartMetric==="fat") legend="綠線＝體脂% ｜ 虛線＝目標（3 個月 32%、6 個月 30%）";
   else if(chartMetric==="muscle") legend="綠線＝骨骼肌% ｜ 虛線＝26%（脫離「低」的區間）｜ 這條主要靠減脂就會上去：肌肉量不變、體重到 55.6kg 就是 26%";
-  else legend=`綠線＝${mt.label}（${mt.unit}）｜ 圍度往下掉，就是褲子變鬆的證據`;
+  else if(chartMetric==="waist") legend="綠線＝腰圍（cm）。量法：早上空腹、站直，軟尺貼肚臍那圈水平繞一圈，正常吐氣後不吸氣讀數，貼皮膚但不勒緊。位置差 2–3cm 數字就差得出來——單次跳動先當量法誤差，看趨勢就好。";
+  else legend=`綠線＝${mt.label}（${mt.unit}）｜ 圍度往下掉，就是褲子變鬆的證據。大腿圍含肌肉，當參考不當目標。`;
   document.getElementById("bfLegend").innerHTML=legend;
   drawBF(arr.filter(a=>a[chartMetric]!=null && !isNaN(a[chartMetric])), mt);
 }
@@ -1329,7 +1338,7 @@ const HERBS=[
   cond:{t:"meals3", need:30, label:"三餐都有記錄累計 30 天"}},
  {n:"百合", col:"#EBD3E4", flo:"#F2E2EE", nature:"甘、微苦，微寒；歸心、肺經",
   fx:"養陰潤肺、清心安神。傳統用於燥咳、心煩不寐。",
-  cond:{t:"item", key:"sleep", need:30, label:"12 點前上床累計 30 天"}},
+  cond:{t:"item", key:"sleep", need:30, label:"睡滿 7 小時累計 30 天"}},
  {n:"芡實", col:"#CBBB8C", flo:"#DED3AE",  nature:"甘、澀，平；歸脾、腎經",
   fx:"益腎固精、補脾止瀉。四神湯的成員之一。",
   cond:{t:"item", key:"veg", need:20, label:"蔬菜 2 份累計 20 天"}},
@@ -1413,7 +1422,8 @@ const AXES=[
   {k:"meals3",   label:"三餐記錄", val:l=>(l.breakfast&&l.lunch&&l.dinner)?1.5:0},
   {k:"veg",      label:"蔬菜",     val:l=>l.veg?1:0},
   {k:"water",    label:"喝水",     val:l=>l.water?1:0},
-  {k:"sleep",    label:"早睡",     val:l=>l.sleep?1:0},
+  {k:"sleep",    label:"睡眠",     val:l=>l.sleep?1:0},
+  {k:"steps",    label:"步數",     val:l=>l.steps?1:0},
   {k:"micro",    label:"微運動",   val:l=>{const m=l.micro||{};let t=0;for(const x in m)t+=m[x];return Math.min(t*0.2,1);}},
 ];
 const AXIS_BY={}; AXES.forEach(a=>AXIS_BY[a.k]=a);
@@ -1577,19 +1587,23 @@ function renderWeek(){
   document.getElementById("wkTitle").textContent = (wkView===weekStart(todayStr())?"本週":"") + wkView.slice(5)+" – "+last.slice(5);
   document.getElementById("wkNext").disabled = wkView>=weekStart(todayStr());
   document.getElementById("wkPrev").disabled = last<=S.start;
-  let ex=0,veg=0,water=0,sleep=0,meals=0,mic=0,pts=0,kcalDays=0,kcalSum=0;
+  let ex=0,veg=0,water=0,sleep=0,steps=0,meals=0,mic=0,pts=0,kcalDays=0,kcalSum=0,pSum=0,pDays=0,lowK=0,p90=0;
   days.forEach(ds=>{
     const l=S.logs[ds]; if(!l) return;
     if(l.exercise) ex++;
     if(l.veg) veg++;
     if(l.water) water++;
     if(l.sleep) sleep++;
+    if(l.steps) steps++;
     if(l.breakfast&&l.lunch&&l.dinner) meals++;
     const m=l.micro||{}; for(const k in m) mic+=m[k];
     pts+=dayPoints(l);
-    const n=computeNut(ds); if(n.k>0){ kcalDays++; kcalSum+=n.k; }
+    const n=computeNut(ds);
+    if(n.k>0){ kcalDays++; kcalSum+=n.k; if(n.k<KCAL_FLOOR) lowK++; }
+    if(n.p>0){ pDays++; pSum+=n.p; if(n.p>=PROTEIN_TARGET) p90++; }
   });
   const avgK = kcalDays?Math.round(kcalSum/kcalDays):0;
+  const avgP = pDays?Math.round(pSum/pDays):0;
   const inProgress = (wkView===weekStart(todayStr()));
   const elapsed = inProgress ? days.filter(x=>x<=todayStr()).length : 7;
   document.getElementById("wkBody").innerHTML=
@@ -1598,11 +1612,13 @@ function renderWeek(){
     `<div class="wk-cell"><div class="n">${meals}</div><div class="l">三餐齊</div></div>`+
     `<div class="wk-cell"><div class="n">${veg}</div><div class="l">蔬菜達標</div></div>`+
     `<div class="wk-cell"><div class="n">${water}</div><div class="l">喝水達標</div></div>`+
-    `<div class="wk-cell"><div class="n">${sleep}</div><div class="l">早睡天數</div></div>`+
-    `<div class="wk-cell"><div class="n">${mic}</div><div class="l">微運動次數</div></div>`+
+    `<div class="wk-cell"><div class="n">${steps}</div><div class="l">步數達標</div></div>`+
+    `<div class="wk-cell"><div class="n">${sleep}</div><div class="l">睡滿 7 小時</div></div>`+
     `</div>`+
-    `<div class="wk-titles">${weekTitles({ex,veg,water,sleep,meals,mic,pts}).map(t=>`<span class="wk-title">${t}</span>`).join("")||'<span class="nempty">這週還在進行中</span>'}</div>`+
-    `<div class="wk-note">本週成長值 ${pts.toFixed(1)} 點${avgK?`　｜　有記錄的日子平均 ${avgK} kcal`:""}<br>${inProgress?`本週還在進行中（已過 ${elapsed} 天），週日會給完整結算。`:weekComment({ex,veg,water,sleep,meals,mic})}</div>`;
+    `<div class="wk-titles">${weekTitles({ex,veg,water,sleep,steps,meals,mic,pts}).map(t=>`<span class="wk-title">${t}</span>`).join("")||'<span class="nempty">這週還在進行中</span>'}</div>`+
+    `<div class="wk-note">本週成長值 ${pts.toFixed(1)} 點　｜　微運動 ${mic} 次`+
+    (kcalDays?`<br>飲食：平均 ${avgK} kcal、蛋白質 ${avgP}g（達 90g ${p90} 天${lowK?`、低於 1,250 有 ${lowK} 天`:""}）`:"")+
+    `<br>${inProgress?`本週還在進行中（已過 ${elapsed} 天），週日會給完整結算。`:weekComment({ex,veg,water,sleep,steps,meals,mic,avgP,lowK})}</div>`;
 }
 function weekTitles(w){
   const t=[];
@@ -1611,20 +1627,25 @@ function weekTitles(w){
   if(w.meals>=6) t.push("🍱 三餐記錄王");
   if(w.veg>=5) t.push("🥬 青菜大戶");
   if(w.water>=5) t.push("💧 水壺不離身");
-  if(w.sleep>=5) t.push("🌙 早睡仙人");
+  if(w.sleep>=5) t.push("🌙 睡得夠");
   if(w.mic>=30) t.push("🪑 隨手就動");
+  if(w.steps>=5) t.push("🚶 走得夠");
   if(w.pts>=35) t.push("🌿 小杞長很快");
   return t;
 }
 function weekComment(w){
+  // 吃太少優先於其他任何一項
+  if(w.lowK>=3) return "這週有 "+w.lowK+" 天吃不到 1,250 kcal，這比其他任何一項都值得先修。一把堅果、蛋白飲改牛奶泡就補得回來。";
+  if(w.avgP && w.avgP<80) return "這週蛋白質平均 "+w.avgP+"g，離 90 還有一段。早餐蛋白飲用牛奶泡、午餐多一份毛豆或起司，這兩個動作就夠了。";
   const weak=[];
-  if(w.water<4) weak.push("喝水");
+  if(w.steps<4) weak.push("步數");
   if(w.veg<4) weak.push("蔬菜");
-  if(w.sleep<4) weak.push("早睡");
+  if(w.water<4) weak.push("喝水");
   if(w.meals<4) weak.push("三餐記錄");
+  if(w.sleep<4) weak.push("睡眠");
   if(w.ex<4) weak.push("運動");
-  if(!weak.length) return "六項都穩，這週不用調整任何東西。";
-  return "這週比較鬆的是「"+weak.join("、")+"」。挑一項下週補起來就好，不用全部一起改。";
+  if(!weak.length) return "各項都穩，這週不用調整任何東西。";
+  return "這週最值得補的一項是「"+weak[0]+"」。只挑這一項就好，其他先不用管。";
 }
 
 // ============ 今日藥籤 ============
