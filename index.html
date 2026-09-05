@@ -420,8 +420,8 @@ const START_DEFAULT="2026-07-20"; // 運動重啟日
 // ---------- state ----------
 let S = load();
 function load(){
-  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; if(!r.plants)r.plants=[]; if(!r.omen)r.omen=null; if(!r.customFoods)r.customFoods=[]; return r; } }catch(e){}
-  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[], plants:[], omen:null, customFoods:[] };
+  try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.logs){ if(!r.focus)r.focus="橢圓機（邊看劇）"; if(!r.bodyFat)r.bodyFat=[]; if(!r.plants)r.plants=[]; if(!r.omen)r.omen=null; if(!r.customFoods)r.customFoods=[]; if(!r.nuliStart)r.nuliStart="2026-08-23"; return r; } }catch(e){}
+  return { petName:"小杞", start:START_DEFAULT, focus:"橢圓機（邊看劇）", logs:{}, bodyFat:[], plants:[], omen:null, customFoods:[], nuliStart:"2026-08-23" };
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ toast("儲存失敗，可能是隱私模式"); } }
 
@@ -707,31 +707,31 @@ const EATOUT=[
 ];
 const PLAN={
  1:[
-  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
-  {ex:"橢圓機 20 分（邊看劇）", dn:EATOUT[1]},
-  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
-  {ex:"橢圓機 20 分", dn:EATOUT[3]},
-  {ex:"Nuli 徒手 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
-  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
-  {ex:"休息 或 散步", dn:EATOUT[6]},
+  {ex:"橢圓機 20 分（邊看劇）", dn:EATOUT[0]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[1]},
+  {ex:"橢圓機 20 分", dn:EATOUT[2]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[3]},
+  {ex:"橢圓機 20 分", dn:EATOUT[4]},
+  {ex:"休息 或 散步", dn:EATOUT[5]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[6]},
  ],
  2:[
-  {ex:"Nuli 徒手 10 分（下放數 3 秒）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
-  {ex:"橢圓機 20 分（阻力調高一格）", dn:EATOUT[1]},
-  {ex:"Nuli 徒手 10 分（每下加停頓 2 秒）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
-  {ex:"橢圓機 20 分", dn:EATOUT[3]},
-  {ex:"Nuli 徒手 10 分（能跳級就跳級）＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
-  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
-  {ex:"休息 或 散步", dn:EATOUT[6]},
+  {ex:"橢圓機 20 分（邊看劇）", dn:EATOUT[0]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[1]},
+  {ex:"橢圓機 20 分（阻力調高一格）", dn:EATOUT[2]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[3]},
+  {ex:"橢圓機 20 分", dn:EATOUT[4]},
+  {ex:"休息 或 散步", dn:EATOUT[5]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[6]},
  ],
  3:[
-  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[0]},
-  {ex:"橢圓機 20 分（間歇：快 2 分＋慢 1 分）", dn:EATOUT[1]},
-  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[2]},
-  {ex:"橢圓機 20 分（間歇）", dn:EATOUT[3]},
-  {ex:"Nuli 進階／單邊動作 10 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[4]},
-  {ex:"橢圓機 20 分（輕鬆做）", dn:EATOUT[5]},
-  {ex:"休息 或 散步", dn:EATOUT[6]},
+  {ex:"橢圓機 20 分（邊看劇）", dn:EATOUT[0]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[1]},
+  {ex:"橢圓機 20 分（間歇：快 2 分＋慢 1 分）", dn:EATOUT[2]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[3]},
+  {ex:"橢圓機 20 分（間歇）", dn:EATOUT[4]},
+  {ex:"休息 或 散步", dn:EATOUT[5]},
+  {ex:"Nuli 整套 15–20 分＋橢圓機 20 分＋伸展 5 分", dn:EATOUT[6]},
  ],
 };
 function planFor(dateStr){
@@ -1133,23 +1133,42 @@ const HEADACHE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.75;
   '動作做到吃力時會頭痛，而且已確認不是憋氣造成的——這種情況要請醫師看過一次再繼續。<br>'+
   '在那之前：肌力降到<b>完全不吃力</b>的程度，做完還很輕鬆就停，不追最後那幾下；橢圓機照常做沒問題。<br>'+
   '<span style="color:var(--sub);">若出現突然的劇痛、想吐、視力改變、脖子僵硬、單側無力或講話不清楚，直接去急診。另外，一半日子吃不到 1,250 kcal 也會拉低頭痛的門檻，先把吃的補回來。</span></div>';
-const HOME_ROUTINE_HTML='<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
-  '<b>順序：先肌力，再有氧。</b>Nuli 做完再踩橢圓機，肌力那 10 分鐘的品質才不會被有氧吃掉。<br>'+
+function nuliCycle(){
+  const st=S.nuliStart||"2026-08-23";
+  const d=Math.floor((parse(todayStr())-parse(st))/86400000);
+  const wk=Math.max(1,Math.floor(d/7)+1);
+  const left=56-d;
+  return {st, wk:Math.min(wk,8), left, done:d>=56, raw:wk};
+}
+function homeRoutineHTML(){
+  const cyc=nuliCycle();
+  return '<div style="margin-top:6px;font-size:12px;line-height:1.7;background:var(--green-l);border-radius:12px;padding:8px 11px;">'+
+  '<b>順序：先肌力，再有氧。</b>肌力做完再踩橢圓機，肌力那段的品質才不會被有氧吃掉。<br>'+
   '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>進階的方式（等頭痛確認沒問題再用）</b><br>'+
-  '① Nuli 有分級就往上跳一級<br>'+
+  '① Nuli 有分級就往上跳一級（這一項等頭痛確認沒問題再用）<br>'+
   '② 下放的過程數 3 秒（離心放慢，最有效的一招）<br>'+
   '③ 最低點停 2 秒再起來<br>'+
   '④ 同樣動作改單邊做<br>'+
   '<span style="color:var(--sub);">原本的抓法是「最後 2–3 下有點吃力」，但那個吃力現在會引發頭痛，代表對現在的你太重。先退到「最後一下還能穩穩控制、也還能講話」，這不是退步。輕鬆做完 = 該進階了。</span></div>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>選動作的優先順序（8/14 分段數據）</b><br>'+
-  '身軀骨骼肌 18.0% 最弱、雙臂 24.3%，雙腳 36.1% 反而是最強的一段。<br>'+
-  '<b>優先練背、肩、核心和手臂；下肢維持就好，不用再加</b>——橢圓機每天已經在練腿了。<br>'+
-  '<span style="color:var(--sub);">身軀弱正是久坐八小時的結果，也是富貴包和圓肩的來源。</span></div>'+
-  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>沒開 Nuli 的備案（空手 10 分鐘）</b><br>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>8 週週期：第 '+cyc.wk+' 週'+(cyc.done?'（已跑完）':'／ 8，還剩 '+cyc.left+' 天')+'</b> '+
+  '<a id="editNuli" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改開始日</a><br>'+
+  (cyc.done
+    ? '這一輪跑完了。這時候再量一次體組成、看身軀那一格有沒有從 18.0% 往上，才有意義。然後再進下一個週期。<br>'
+    : 'Nuli 的週期是設計過的漸進，<b>中間不要換、不要拆</b>，跑完才看得出效果。<br>')+
+  '<span style="color:var(--sub);">下肢、上肢、核心三種課三天一輪，每堂 17–25 分，比例本來就是均的，不用擔心偏重。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>軀幹另外補，不動 Nuli</b><br>'+
+  '8/14 分段數據：身軀骨骼肌 18.0% 最弱、雙臂 24.3%，雙腳 36.1% 反而是最強的一段。<br>'+
+  '單槓死懸吊、死蟲式、W 收肩、收下巴——兩三分鐘就做完，不用另外排時間。<br>'+
+  '<span style="color:var(--sub);">微運動裡的「挺背收下巴」、「聳肩繞肩」、「縮小腹」也算。身軀弱正是久坐八小時的結果，也是富貴包和圓肩的來源。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>時間已經夠了，不用再拉長</b><br>'+
+  '7 月底每次約 6 分鐘，8/23 之後已經是 17–25 分鐘。這個長度夠了；而且這段爬升跟頭痛出現的時間點對得上，看醫師時值得提。<br>'+
+  '<span style="color:var(--sub);">一週三次、每次 15–20 分、隔一天做——日二四這個排法間隔剛好，不用改。</span></div>'+
+  '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>Nuli 不方便時的空手備案</b><br>'+
   '① 死蟲式 每邊 ×8　② W 收肩 ×12　③ 收下巴 ×10（各停 5 秒）<br>'+
   '④ 撐體（跪姿也行）30 秒 ×2　⑤ 橋式 ×15　⑥ 椅子起立坐下 ×10<br>'+
   '<span style="color:var(--sub);">①～④ 顧核心、肩胛和頸椎，是現在最該補的；⑤⑥ 維持下肢就好。</span></div>'+
   '<div style="margin-top:7px;border-top:1px dashed #cdd9c0;padding-top:6px;"><b>🧗 單槓</b>：死懸吊 20–30 秒，一天 2–3 次，經過就吊。開肩、放鬆脊椎。</div></div>';
+}
 function renderPlan(){
   const pl=planFor(viewDate);
   document.getElementById("phaseTag").textContent="第 "+pl.wi.week+" 週";
@@ -1157,7 +1176,7 @@ function renderPlan(){
   const isEatOut = pl.dn.indexOf("｜")>=0 && pl.dn.indexOf("自由吃")<0;
   document.getElementById("planBody").innerHTML=
     `<div class="plan-row"><div class="k">🎯 主打</div><div class="v"><b>${S.focus}</b> <a id="editFocus" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改</a><br><span style="font-size:11.5px;color:var(--sub);">先養成「每天踩上去」的習慣，時間長短其次</span></div></div>`+
-    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HEADACHE_HTML+HOME_ROUTINE_HTML:""}</div></div>`+
+    `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HEADACHE_HTML+homeRoutineHTML():""}</div></div>`+
     `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯＋堅果一小把<br><span style="font-size:11.5px;color:var(--sub);">用牛奶泡更好，蛋白質多 8g、熱量多約 100</span></div></div>`+
     `<div class="plan-row"><div class="k">午餐</div><div class="v">蛋白質＋毛豆＋蔬菜＋一份油脂<br><span style="font-size:11.5px;color:var(--sub);">A 茶葉蛋 2＋毛豆＋小番茄＋堅果　｜　B 滷豆干 4＋毛豆＋生菜盒＋起司　｜　C 希臘優格＋茶葉蛋 2＋剩菜青菜＋堅果</span></div></div>`+
     `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}`+
@@ -1166,6 +1185,12 @@ function renderPlan(){
     `<div class="plan-row"><div class="k">步數</div><div class="v">目標 <b>6,000 步</b>——每小時起身走 2 分鐘，上班日 8 次就補上 1,600 步。<br><span style="font-size:11.5px;color:var(--sub);">手錶半年日均 3,825 步，低於 5,000 算久坐。這也是你每日總消耗比一般推算低一截的原因，赤字因此很小。舊目標 10,000 步半年只達成 5 天，已經改掉。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">現在的優先順序：① 頭痛看醫師、肌力先降強度　② 吃回 1,350、蛋白質拉到 90g　③ 白天多走<br><span style="font-size:11.5px;color:var(--sub);">有氧已經 92% 執行率，不用再加。還有：衣服變鬆、大腿圍 40 天少 3cm——這些都是真的，只是體重計看不到。</span></div></div>`;
   const ef=document.getElementById("editFocus");
   if(ef) ef.onclick=()=>{ const n=prompt("主打習慣（想先養成的那一項運動）：",S.focus); if(n&&n.trim()){ S.focus=n.trim().slice(0,14); save(); renderCheck(); renderPlan(); } };
+  const en=document.getElementById("editNuli");
+  if(en) en.onclick=()=>{
+    const n=prompt("這個 8 週週期是哪天開始的？（YYYY-MM-DD）",S.nuliStart||"2026-08-23");
+    if(n && /^\d{4}-\d{2}-\d{2}$/.test(n.trim())){ S.nuliStart=n.trim(); save(); renderPlan(); toast("週期開始日已更新"); }
+    else if(n) toast("日期格式要像 2026-08-23");
+  };
 }
 
 // ---------- 身體數據追蹤 ----------
@@ -1312,7 +1337,7 @@ document.getElementById("importFile").onchange=(e)=>{
       const d=JSON.parse(r.result);
       if(!d||!d.logs){ toast("這不是本草養成的備份檔"); return; }
       if(!confirm("要用備份覆蓋目前資料嗎？（建議先匯出目前的以防萬一）")) return;
-      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）"; if(!S.bodyFat)S.bodyFat=[]; if(!S.plants)S.plants=[]; if(!S.customFoods)S.customFoods=[]; rebuildFoodIndex();
+      S=d; if(!S.focus)S.focus="橢圓機（邊看劇）"; if(!S.bodyFat)S.bodyFat=[]; if(!S.plants)S.plants=[]; if(!S.customFoods)S.customFoods=[]; if(!S.nuliStart)S.nuliStart="2026-08-23"; rebuildFoodIndex();
       save(); viewDate=todayStr(); renderAll(); toast("備份已還原 🌿");
     }catch(err){ toast("讀取失敗，檔案可能損壞"); }
   };
