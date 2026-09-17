@@ -2,7 +2,9 @@
 // 收前端傳來的照片（base64），交給 Gemini 估算品項、熱量與蛋白質，回傳 JSON。
 // 需要在 Vercel 專案設定環境變數：GEMINI_API_KEY
 
-const MODEL = "gemini-3.6-flash"; // 2026-09 Google 回報 2.5-flash 已停用，改用此版；若再改名只需改這一行
+// 依序嘗試：第一個太忙（503）或限流（429）就換下一個。都是免費額度內可用的模型。
+// 若 Google 改名，只需改這個清單。
+const MODELS = ["gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash"];
 
 const PROMPT = `你是營養師。這是一位台灣使用者的一餐照片。
 請辨識食物品項，估算每項的份量（公克）、熱量（kcal）與蛋白質（g），並加總。
@@ -25,7 +27,6 @@ export default async function handler(req, res) {
   const { image, mimeType = "image/jpeg" } = req.body || {};
   if (!image) return res.status(400).json({ error: "沒有收到圖片" });
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${key}`;
   const body = {
     contents: [{
       parts: [
@@ -37,23 +38,26 @@ export default async function handler(req, res) {
   };
 
   try {
-    // Google 回「太忙」(503) 或「限流」(429) 時自動重試，最多 3 次
-    let r, data;
-    for (let attempt = 1; attempt <= 3; attempt++) {
+    let r = null, data = null, usedModel = "";
+    for (const model of MODELS) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
       r = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
       data = await r.json();
-      if (r.ok || (r.status !== 503 && r.status !== 429) || attempt === 3) break;
-      await new Promise(ok => setTimeout(ok, 2000 * attempt));
+      usedModel = model;
+      if (r.ok) break;
+      // 太忙或限流 → 換下一個模型；其他錯誤（key 錯、格式錯）直接回報
+      if (r.status !== 503 && r.status !== 429) break;
     }
-    if (!r.ok) return res.status(502).json({ error: data.error?.message || "Gemini 回應錯誤" });
+    if (!r.ok) return res.status(502).json({ error: (data.error?.message || "Gemini 回應錯誤") + `（${usedModel}）` });
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
     const clean = text.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean);
+    parsed.model = usedModel;
     return res.status(200).json(parsed);
   } catch (e) {
     return res.status(500).json({ error: "解析失敗：" + e.message });
