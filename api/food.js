@@ -37,12 +37,18 @@ export default async function handler(req, res) {
   };
 
   try {
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    const data = await r.json();
+    // Google 回「太忙」(503) 或「限流」(429) 時自動重試，最多 3 次
+    let r, data;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      r = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      data = await r.json();
+      if (r.ok || (r.status !== 503 && r.status !== 429) || attempt === 3) break;
+      await new Promise(ok => setTimeout(ok, 2000 * attempt));
+    }
     if (!r.ok) return res.status(502).json({ error: data.error?.message || "Gemini 回應錯誤" });
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
