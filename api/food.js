@@ -2,7 +2,7 @@
 // 收前端傳來的照片（base64），交給 Gemini 估算品項、熱量與蛋白質，回傳 JSON。
 // 需要在 Vercel 專案設定環境變數：GEMINI_API_KEY
 
-const MODEL = "gemini-2.5-flash"; // 若 Google 改版名稱，只需改這一行
+const MODEL = "gemini-3.6-flash"; // 2026-09 Google 回報 2.5-flash 已停用，改用此版；若再改名只需改這一行
 
 const PROMPT = `你是營養師。這是一位台灣使用者的一餐照片。
 請辨識食物品項，估算每項的份量（公克）、熱量（kcal）與蛋白質（g），並加總。
