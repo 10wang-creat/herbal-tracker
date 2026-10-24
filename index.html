@@ -348,7 +348,7 @@
     </div>
     <div id="myFoods"></div>
     <div id="nutPicker"></div>
-    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">數值為每份概估，實際依品牌與份量而定。目標：蛋白質 ≥ 90g；熱量 1350–1600 kcal。基礎代謝 1,284，長期低於這條線身體會拿肌肉當燃料——熱量太低反而卡住。<br><b>8/29 盤點前 40 天：</b>平均 1,226 kcal（其中 20 天低於 1,250）、蛋白質 69g。三個動作就能同時補齊：早餐蛋白飲改用牛奶泡（+8g、+130 kcal）、午餐固定加一份毛豆或起司（+13g）、晚餐一定要有豆腐或蛋。</div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">拍照估算誤差約 ±20–30%，看趨勢不看單餐。目標：蛋白質 ≥ 95g；熱量 1,250–1,350 kcal（不餓的日子最低 1,100，晚餐至少蛋白飲＋一顆蛋）。<br><b>10 月重排：</b>三個月只掉不到 1 kg 脂肪，是赤字太小——晚餐外食被低估、步數只有 5,000。現在晚餐自己吃不外食、7 點前吃完；步數目標 7,500。</div>
   </div>
 
   <!-- 今日參考 -->
@@ -448,13 +448,13 @@ let calMonth = (function(){const d=new Date();return {y:d.getFullYear(),m:d.getM
 // ---------- check items ----------
 const ITEMS=[
   {k:"exercise", t:"運動", h:"依今日參考（見下方）", pt:3, key:true},
-  {k:"breakfast",t:"早餐", h:"起床喝一杯，加點堅果更好", pt:1, meal:true, def:"蛋白飲 1 杯＋堅果一小把"},
-  {k:"lunch",    t:"午餐", h:"帶去公司免加熱：蛋白質＋毛豆＋菜＋油脂", pt:1, meal:true, def:"茶葉蛋 2 顆＋毛豆 1 碗＋小番茄＋堅果"},
-  {k:"dinner",   t:"晚餐", h:"外食也算，點對就好（下方有點法）", pt:1, meal:true, def:null},
+  {k:"breakfast",t:"早餐", h:"起床先喝，不漏", pt:1, meal:true, def:"蛋白飲 1 杯"},
+  {k:"lunch",    t:"午餐", h:"帶去公司免加熱，拍一張就好", pt:1, meal:true, def:"茶葉蛋 3 顆＋毛豆 1 碗＋滷豆干 3 片"},
+  {k:"dinner",   t:"晚餐", h:"7 點前吃完；不餓也至少蛋白飲＋一顆蛋", pt:1, meal:true, def:"蛋白飲 1 杯＋嫩豆腐拌芝麻醬＋青菜"},
   {k:"veg",      t:"蔬菜 2 份", h:"外食最容易缺的一項，多夾一樣青菜就算", pt:1},
   {k:"water",    t:"喝水 1500ml＋", h:"不含含糖飲料", pt:1},
   {k:"snack",    t:"點心", h:"嘴饞時，選無糖", pt:0.5, meal:true, def:"100% 黑巧克力 1–2 片 / 希臘優格"},
-  {k:"steps",    t:"步數 6,000＋", h:"手錶日均 3,825，這是目前最容易拿分的一項", pt:1},
+  {k:"steps",    t:"步數 7,500＋", h:"每小時起身走 2 分鐘＋午餐後走 10 分鐘", pt:1},
   {k:"sleep",    t:"睡滿 7 小時", h:"手錶顯示你平均 7 小時 21 分——重點是睡夠，不是幾點睡", pt:1},
 ];
 function escAttr(s){ return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
@@ -545,15 +545,15 @@ function allFoods(){ return (S.customFoods||[]).concat(FOODS); }
 // 熱量區間：下限貼著基礎代謝（8/29 量測 1,284），理想 1350–1600
 // 8/29 盤點 40 天：平均只有 1,226 kcal、其中 20 天低於 1,250，蛋白質平均 69g。
 // 現在的問題是吃太少、不是吃太多——所以下限比上限重要。
-const PROTEIN_TARGET=90, KCAL_FLOOR=1250, KCAL_LOW=1350, KCAL_HIGH=1600;
+const PROTEIN_TARGET=95, KCAL_FLOOR=1100, KCAL_LOW=1250, KCAL_HIGH=1350; // 10 月重排：目標 1,250–1,350；不餓版最低 1,100
 const MEAL_KEYS=["breakfast","lunch","dinner","snack"];
 const MEAL_NAME={breakfast:"早餐",lunch:"午餐",dinner:"晚餐",snack:"點心"};
 // 每餐典型參考（帶入今日參考用）
 function planMealItems(meal){
-  if(meal==="breakfast") return {"乳清蛋白飲":1,"綜合堅果":1};
-  if(meal==="lunch")     return {"雞蛋 / 茶葉蛋":2,"毛豆":1,"小番茄":1,"綜合堅果":1};
-  if(meal==="dinner")    return {"小火鍋":1,"燙青菜(外食)":1,"嫩豆腐":1};
-  if(meal==="snack")     return {"100% 黑巧克力":1};
+  if(meal==="breakfast") return {"乳清蛋白飲":1};
+  if(meal==="lunch")     return {"雞蛋 / 茶葉蛋":3,"毛豆":1,"滷豆干":3};
+  if(meal==="dinner")    return {"乳清蛋白飲":1,"嫩豆腐":1,"芝麻醬 / 花生醬":1,"燙青菜(外食)":1};
+  if(meal==="snack")     return {"希臘優格(無糖)":1};
   return {};
 }
 // 別名比對用：長別名優先
@@ -648,6 +648,8 @@ function detectIntoMeal(meal){
 function mealNut(dateStr, meal){
   const f=getMealItems(dateStr,meal); let p=0,k=0;
   for(const n in f){ const d=FOOD_BY_NAME[n]; if(d){ p+=d.p*f[n]; k+=d.k*f[n]; } }
+  // 拍照／手填的合計數字（不經食材清單）
+  const nn=(S.logs[dateStr]&&S.logs[dateStr][meal+"_nut"]); if(nn){ p+=+nn.p||0; k+=+nn.k||0; }
   return {p:Math.round(p*10)/10, k:Math.round(k)};
 }
 function computeNut(dateStr){
@@ -873,7 +875,7 @@ function renderCheck(){
     const el=document.createElement("div");
     el.className="item"+(on?" on":"")+(it.key?" key":"")+(it.meal?" mealrow":"");
     if(it.meal){
-      const def = it.k==="dinner" ? pl.dn : it.def;
+      const def = it.def;
       const val = log[it.k+"_txt"]!=null ? log[it.k+"_txt"] : (on?def:"");
       const mn = mealNut(viewDate, it.k);
       const items = getMealItems(viewDate, it.k);
@@ -881,26 +883,22 @@ function renderCheck(){
       const nutBadge = (mn.p||mn.k) ? `<span class="mnut">${mn.p}g · ${mn.k}kcal</span>` : "";
       // 已選食材小標籤
       const picked = itemNames.map(n=>`<span class="mtag" data-mdel="${escAttr(it.k)}|${escAttr(n)}">${n} ×${items[n]} ✕</span>`).join("");
-      // 展開的食材選單
+      // 手動填數字（拍照不方便時）
+      const nn=log[it.k+"_nut"]||null;
       const isOpen = !!openMeals[it.k];
       let picker="";
       if(isOpen){
-        picker=`<div class="msearch"><input class="mq" placeholder="搜尋食材…" value="${escAttr(mealSearch[it.k]||"")}">`+
-          `<button class="mbtn" data-cfopen="${escAttr(it.k)}">${cfOpen===it.k?"收起":"＋ 自訂"}</button></div>`+
-          (cfOpen===it.k?cfForm(it.k):"")+
-          `<div class="mpick">`+allFoods().map(x=>{
-            const has=items[x.n]?" has":"";
-            const cu=x.c==="自訂"?" cust":"";
-            return `<button class="chip mfood${has}${cu}" data-madd="${escAttr(it.k)}|${escAttr(x.n)}" data-fn="${escAttr(x.n)}" data-fa="${escAttr((x.a||[]).join(" "))}">${x.n}${items[x.n]?" ·"+items[x.n]:""}</button>`;
-          }).join("")+`</div>`;
+        picker=`<div class="cfbox"><div class="cft">✏️ 直接填這一餐的數字</div>`+
+          `<div class="cfr"><input class="mnk" type="number" inputmode="numeric" placeholder="熱量 kcal" value="${nn&&nn.k?nn.k:""}">`+
+          `<input class="mnp" type="number" step="0.1" inputmode="decimal" placeholder="蛋白質 g" value="${nn&&nn.p?nn.p:""}"></div>`+
+          `<div class="cfh">照表吃：早餐 120 / 25　午餐 450 / 45　點心 100 / 10　晚餐 400 / 44（不餓版 200 / 32）</div></div>`;
       }
       el.innerHTML=`<div class="mhead"><div class="box">${on?"✓":""}</div>`+
         `<div class="txt"><div class="t">${it.t} ${nutBadge}</div>`+
         `<input class="mealtxt" placeholder="${escAttr(def)}" value="${escAttr(val)}"></div><div class="pt">+${it.pt}</div></div>`+
         (picked?`<div class="mtags">${picked}</div>`:"")+
-        `<div class="mbtns"><button class="mbtn" data-mtoggle="${escAttr(it.k)}">${isOpen?"收合":"＋ 加食材算營養"}</button>`+
-        `<button class="mbtn" data-mdetect="${escAttr(it.k)}">🔍 從文字偵測</button>`+
-        `<button class="mbtn" data-mphoto="${escAttr(it.k)}">${photoBusy===it.k?"⏳ 辨識中…":"📷 拍照算營養"}</button></div>`+
+        `<div class="mbtns"><button class="mbtn" data-mphoto="${escAttr(it.k)}" style="border-color:var(--green);color:var(--green-d);font-weight:600;">${photoBusy===it.k?"⏳ 辨識中…":"📷 拍照記錄"}</button>`+
+        `<button class="mbtn" data-mtoggle="${escAttr(it.k)}">${isOpen?"收合":"✏️ 填數字"}</button></div>`+
         (photoDraft&&photoDraft.meal===it.k?photoBox():"")+
         picker;
       // 事件
@@ -963,7 +961,18 @@ function renderCheck(){
         qi.oninput=filt;
         filt();
       }
-      el.querySelector("[data-mdetect]").onclick=()=>detectIntoMeal(it.k);
+      const mnk=el.querySelector(".mnk"), mnp=el.querySelector(".mnp");
+      if(mnk&&mnp){
+        [mnk,mnp].forEach(f=>{ f.onclick=e=>e.stopPropagation(); f.oninput=()=>{
+          if(!S.logs[viewDate]) S.logs[viewDate]={};
+          const k=parseFloat(mnk.value), p=parseFloat(mnp.value);
+          if(isNaN(k)&&isNaN(p)) delete S.logs[viewDate][it.k+"_nut"];
+          else { S.logs[viewDate][it.k+"_nut"]={k:isNaN(k)?0:Math.round(k), p:isNaN(p)?0:Math.round(p*10)/10}; S.logs[viewDate][it.k]=true; }
+          save(); renderNutrition(); renderPet(); renderCal();
+          const b=el.querySelector(".mnut"); const mn2=mealNut(viewDate,it.k);
+          if(b) b.textContent=mn2.p+"g · "+mn2.k+"kcal";
+        }; });
+      }
       el.querySelector("[data-mphoto]").onclick=()=>startPhoto(it.k);
       if(photoDraft&&photoDraft.meal===it.k){
         el.querySelectorAll(".pfrow").forEach((row,i)=>{
@@ -1082,7 +1091,7 @@ function photoBox(){
     (rows||'<div class="cfh">沒辨識到食物，可以取消重拍</div>')+
     `<div class="cftot">合計 <span class="pftk">${tk}</span> kcal · 蛋白質 <span class="pftp">${tp}</span>g<small>${escAttr(d.note||"照片估算誤差通常 ±20–30%，油和醬料看不出來，寧可往上抓")}</small></div>`+
     `<div class="cfr" style="margin-top:8px;"><button class="btn" data-pfsave="1" style="flex:1;">確認加入這一餐</button><button class="btn ghost" data-pfcancel="1">取消</button></div>`+
-    `<div class="cfh">確認後，清單裡沒有的品項會自動存成自訂食材，下次直接點就有。</div></div>`;
+    `<div class="cfh">確認後只存這一餐的合計熱量、蛋白質和品項名稱，不會新增食材清單。</div></div>`;
 }
 function photoTotal(el){
   const d=photoDraft; if(!d) return;
@@ -1121,7 +1130,6 @@ function startPhoto(meal){
       if(data.error) throw new Error(data.error);
       const items=(data.items||[]).map(x=>({name:String(x.name||"").slice(0,16), grams:+x.grams||0, kcal:+x.kcal||0, protein:+x.protein||0}));
       photoDraft={meal, items, note:data.note||""};
-      openMeals[meal]=true;
       toast(items.length?"辨識到 "+items.length+" 項，確認一下數字":"沒辨識到食物");
     }catch(e){ toast("辨識失敗："+e.message); }
     photoBusy=""; renderCheck();
@@ -1133,22 +1141,17 @@ function photoConfirm(){
   const items=d.items.filter(x=>(x.name||"").trim());
   if(!items.length){ toast("沒有可加入的品項"); photoDraft=null; renderCheck(); return; }
   if(!S.logs[viewDate]) S.logs[viewDate]={};
-  const key=d.meal+"_items"; if(!S.logs[viewDate][key]) S.logs[viewDate][key]={};
-  const f=S.logs[viewDate][key];
-  let added=0;
-  items.forEach(x=>{
-    const n=x.name.trim();
-    if(!FOOD_BY_NAME[n]){
-      S.customFoods.push({n, u:(x.grams?Math.round(x.grams)+"g":"1 份"), p:Math.round((x.protein||0)*10)/10, k:Math.round(x.kcal||0), c:"自訂", a:[n]});
-      added++;
-    }
-    f[n]=(f[n]||0)+1;
-  });
-  if(added) rebuildFoodIndex();
-  S.logs[viewDate][d.meal]=true;
+  const L=S.logs[viewDate];
+  const tk=Math.round(items.reduce((a,b)=>a+(+b.kcal||0),0));
+  const tp=Math.round(items.reduce((a,b)=>a+(+b.protein||0),0)*10)/10;
+  const old=L[d.meal+"_nut"]||{k:0,p:0};
+  L[d.meal+"_nut"]={k:Math.round((+old.k||0)+tk), p:Math.round(((+old.p||0)+tp)*10)/10};
+  const names=items.map(x=>x.name.trim()).join("、");
+  L[d.meal+"_txt"]=(L[d.meal+"_txt"]||"").trim() ? L[d.meal+"_txt"]+"、"+names : names;
+  L[d.meal]=true;
   photoDraft=null;
   save(); renderCheck(); renderNutrition(); renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs();
-  toast("已加入 "+items.length+" 項"+(added?"，"+added+" 項存成自訂食材":"")+" 📷");
+  toast("已記錄 "+tk+" kcal · 蛋白質 "+tp+"g 📷");
 }
 
 function saveCustomFood(el, mealKey){
@@ -1203,32 +1206,34 @@ function renderNutrition(){
   const pPct=Math.min(100,Math.round(p/PROTEIN_TARGET*100));
   const kPct=Math.min(100,Math.round(k/KCAL_HIGH*100));
   const pNote = p>=PROTEIN_TARGET ? '<span class="nut-note ok">達標！蛋白質很夠 💪</span>'
-              : p>=74 ? '<span class="nut-note ok">接近目標，再一份就到 90g</span>'
-              : '<span class="nut-note warn">蛋白質偏低——這是現在最大的缺口（40 天平均 69g，只有 5 天達 90）。骨骼肌長不上去就是卡在這裡</span>';
+              : p>=80 ? '<span class="nut-note ok">接近目標，再一顆蛋或半杯蛋白飲就到</span>'
+              : '<span class="nut-note warn">蛋白質偏低——晚餐那杯蛋白飲喝了嗎？兩杯蛋白飲就是 50g</span>';
   let kNote;
-  if(k===0) kNote='<span class="nut-note">還沒加食材，點下面加加看</span>';
-  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">低於基礎代謝 1,284——這是你最常踩到的一格（40 天裡有 20 天）。一把堅果、一片起司，或把蛋白飲改用牛奶泡，就補上了</span>';
-  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">稍低，再補一份油脂到 1350 以上，瘦得比較穩</span>';
-  else if(k<=KCAL_HIGH) kNote='<span class="nut-note ok">在理想區間（1350–1600），這樣剛好</span>';
+  if(k===0) kNote='<span class="nut-note">還沒記錄，每一餐拍一張就好</span>';
+  else if(k<KCAL_FLOOR) kNote='<span class="nut-note warn">今天吃得太少。不餓也至少蛋白飲＋一顆蛋，整晚不吃是唯一不行的事</span>';
+  else if(k<KCAL_LOW) kNote='<span class="nut-note warn">在不餓版的範圍，可以；餓的話晚餐加一顆蛋或一把花生到 1,250</span>';
+  else if(k<=KCAL_HIGH) kNote='<span class="nut-note ok">在目標區間（1,250–1,350），這樣剛好</span>';
   else kNote='<span class="nut-note ok">今天吃得比較多，沒關係。明天照常就好——不用補償、不用少吃回來</span>';
   document.getElementById("nutBars").innerHTML=
     `<div class="nbar p"><div class="lab"><span>蛋白質</span><span><b>${p}</b> / ${PROTEIN_TARGET} g</span></div><div class="track"><i style="width:${Math.max(2,pPct)}%"></i></div>${pNote}</div>`+
     `<div class="nbar k"><div class="lab"><span>熱量</span><span><b>${k}</b> kcal</span></div><div class="track"><i style="width:${Math.max(2,kPct)}%"></i></div>${kNote}</div>`;
   // 各餐分項（自動來自今日打卡的餐點食材）
   const list=document.getElementById("nutList");
-  const anyItem = MEAL_KEYS.some(m=>Object.keys(getMealItems(viewDate,m)).length>0);
+  const hasNut=m=>{ const mn=mealNut(viewDate,m); return mn.k>0||mn.p>0; };
+  const anyItem = MEAL_KEYS.some(hasNut);
   if(!anyItem){
-    list.innerHTML='<div class="nempty">在上面「今日打卡」的每一餐點「＋ 加食材」或「🔍 從文字偵測」，這裡就會自動算出蛋白質和熱量。或按下面「帶入今日參考」。</div>';
+    list.innerHTML='<div class="nempty">每一餐按「📷 拍照記錄」，確認數字後這裡會自動加總。照表吃的日子直接按下面「帶入今日參考」。</div>';
   } else {
     list.innerHTML=MEAL_KEYS.map(m=>{
+      if(!hasNut(m)) return "";
       const items=getMealItems(viewDate,m); const ns=Object.keys(items);
-      if(!ns.length) return "";
       const mn=mealNut(viewDate,m);
-      const detail=ns.map(n=>n+(items[n]>1?"×"+items[n]:"")).join("、");
+      const txt=(S.logs[viewDate]&&S.logs[viewDate][m+"_txt"])||"";
+      const detail=ns.length?ns.map(n=>n+(items[n]>1?"×"+items[n]:"")).join("、"):(txt||"📷");
       return `<div class="nrow"><div class="nm"><b>${MEAL_NAME[m]}</b> <small>${detail}</small></div><div class="stp"><span class="q" style="color:var(--green-d);">${mn.p}g</span><span class="q" style="color:var(--goji);">${mn.k}k</span></div></div>`;
     }).join("");
   }
-  renderMyFoods();
+  document.getElementById("myFoods").innerHTML=""; // 自訂食材清單已停用，改拍照記錄
 }
 
 function toggleMeal(k, def){
@@ -1290,12 +1295,10 @@ function renderPlan(){
   document.getElementById("planBody").innerHTML=
     `<div class="plan-row"><div class="k">🎯 主打</div><div class="v"><b>${S.focus}</b> <a id="editFocus" style="color:var(--sub);font-size:11px;cursor:pointer;text-decoration:underline dotted;">改</a><br><span style="font-size:11.5px;color:var(--sub);">先養成「每天踩上去」的習慣，時間長短其次</span></div></div>`+
     `<div class="plan-row"><div class="k">週${pl.wdName} 運動</div><div class="v">${pl.ex}${pl.ex.indexOf("Nuli")>=0?HEADACHE_HTML+homeRoutineHTML():""}</div></div>`+
-    `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯＋堅果一小把<br><span style="font-size:11.5px;color:var(--sub);">用牛奶泡更好，蛋白質多 8g、熱量多約 100</span></div></div>`+
-    `<div class="plan-row"><div class="k">午餐</div><div class="v">蛋白質＋毛豆＋蔬菜＋一份油脂<br><span style="font-size:11.5px;color:var(--sub);">A 茶葉蛋 2＋毛豆＋小番茄＋堅果　｜　B 滷豆干 4＋毛豆＋生菜盒＋起司　｜　C 希臘優格＋茶葉蛋 2＋剩菜青菜＋堅果</span></div></div>`+
-    `<div class="plan-row"><div class="k">晚餐</div><div class="v">${pl.dn}`+
-      (isEatOut?`<div class="tellhim">📱 <b>傳給老公就好：</b>「${pl.dn.split("｜")[1]}」</div>`:"")+
-    `</div></div>`+
-    `<div class="plan-row"><div class="k">步數</div><div class="v">目標 <b>6,000 步</b>——每小時起身走 2 分鐘，上班日 8 次就補上 1,600 步。<br><span style="font-size:11.5px;color:var(--sub);">手錶半年日均 3,825 步，低於 5,000 算久坐。這也是你每日總消耗比一般推算低一截的原因，赤字因此很小。舊目標 10,000 步半年只達成 5 天，已經改掉。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">現在的優先順序：① 頭痛看醫師、肌力先降強度　② 吃回 1,350、蛋白質拉到 90g　③ 白天多走<br><span style="font-size:11.5px;color:var(--sub);">有氧已經 92% 執行率，不用再加。還有：衣服變鬆、大腿圍 40 天少 3cm——這些都是真的，只是體重計看不到。</span></div></div>`;
+    `<div class="plan-row"><div class="k">早餐</div><div class="v">蛋白飲 1 杯（水泡）<br><span style="font-size:11.5px;color:var(--sub);">一天兩杯的第一杯，起床就喝</span></div></div>`+
+    `<div class="plan-row"><div class="k">午餐</div><div class="v">茶葉蛋 3＋毛豆 1 碗＋滷豆干 3 片<br><span style="font-size:11.5px;color:var(--sub);">約 450 kcal、蛋白質 45g。輪替：蛋 ↔ 嫩豆腐、豆干 ↔ 豆皮</span></div></div>`+
+    `<div class="plan-row"><div class="k">晚餐</div><div class="v">蛋白飲 1 杯＋嫩豆腐拌芝麻醬 1 匙＋微波青菜，7 點前吃完<br><span style="font-size:11.5px;color:var(--sub);">不餓：蛋白飲＋一顆蛋就好，整晚不吃是唯一不行的事。餓：加一顆蛋或一把花生。偶爾跟老公一起外食：${pl.dn}</span></div></div>`+
+    `<div class="plan-row"><div class="k">步數</div><div class="v">目標 <b>7,500 步</b>——每小時起身走 2 分鐘（上班日 8 次約 1,600 步）＋午餐後走 10 分鐘（約 1,000 步）。<br><span style="font-size:11.5px;color:var(--sub);">日均 5,000 起步，多 2,500 步約 +100 kcal，等於多踩 12 分鐘橢圓機但不吃恢復空間。10,000 那個目標已經拿掉。</span></div></div>`+`<div class="plan-row"><div class="k">提醒</div><div class="v">現在的優先順序：① 兩杯蛋白飲、晚餐 7 點前吃完　② 步數 7,500　③ 肌力維持不加量（頭痛未看診前照舊降強度）<br><span style="font-size:11.5px;color:var(--sub);">有氧不用再加。12 週目標：體重 57–58、體脂 31–32%、腰圍 80 以下。姿勢改善比脂肪快，腰線 2–3 週就看得出來。</span></div></div>`;
   const ef=document.getElementById("editFocus");
   if(ef) ef.onclick=()=>{ const n=prompt("主打習慣（想先養成的那一項運動）：",S.focus); if(n&&n.trim()){ S.focus=n.trim().slice(0,14); save(); renderCheck(); renderPlan(); } };
   const en=document.getElementById("editNuli");
@@ -1400,11 +1403,11 @@ document.getElementById("prevDay").onclick=()=>{ const d=parse(viewDate);d.setDa
 document.getElementById("nextDay").onclick=()=>{ const d=parse(viewDate);d.setDate(d.getDate()+1); if(fmt(d)<=todayStr()){viewDate=fmt(d);renderCheck();renderPlan();renderMicro();renderNutrition();} };
 document.getElementById("fillPlan").onclick=()=>{
   if(!S.logs[viewDate])S.logs[viewDate]={};
-  MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]=Object.assign({},planMealItems(m)); S.logs[viewDate][m]=true; });
+  MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]=Object.assign({},planMealItems(m)); delete S.logs[viewDate][m+"_nut"]; S.logs[viewDate][m]=true; });
   save(); renderCheck(); renderNutrition(); renderPet(); renderCal(); toast("已帶入今日參考，實際吃什麼再自己加減 🍱");
 };
 document.getElementById("clearFoods").onclick=()=>{
-  if(S.logs[viewDate]) MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]={}; });
+  if(S.logs[viewDate]) MEAL_KEYS.forEach(m=>{ S.logs[viewDate][m+"_items"]={}; delete S.logs[viewDate][m+"_nut"]; });
   save(); renderCheck(); renderNutrition(); renderPet(); renderCal();
 };
 document.getElementById("noteBox").addEventListener("input",e=>{ if(!S.logs[viewDate])S.logs[viewDate]={}; S.logs[viewDate].note=e.target.value; save(); });
@@ -1756,7 +1759,7 @@ function renderWeek(){
     `</div>`+
     `<div class="wk-titles">${weekTitles({ex,veg,water,sleep,steps,meals,mic,pts}).map(t=>`<span class="wk-title">${t}</span>`).join("")||'<span class="nempty">這週還在進行中</span>'}</div>`+
     `<div class="wk-note">本週成長值 ${pts.toFixed(1)} 點　｜　微運動 ${mic} 次`+
-    (kcalDays?`<br>飲食：平均 ${avgK} kcal、蛋白質 ${avgP}g（達 90g ${p90} 天${lowK?`、低於 1,250 有 ${lowK} 天`:""}）`:"")+
+    (kcalDays?`<br>飲食：平均 ${avgK} kcal、蛋白質 ${avgP}g（達 95g ${p90} 天${lowK?`、低於 1,100 有 ${lowK} 天`:""}）`:"")+
     `<br>${inProgress?`本週還在進行中（已過 ${elapsed} 天），週日會給完整結算。`:weekComment({ex,veg,water,sleep,steps,meals,mic,avgP,lowK})}</div>`;
 }
 function weekTitles(w){
@@ -1774,8 +1777,8 @@ function weekTitles(w){
 }
 function weekComment(w){
   // 吃太少優先於其他任何一項
-  if(w.lowK>=3) return "這週有 "+w.lowK+" 天吃不到 1,250 kcal，這比其他任何一項都值得先修。一把堅果、蛋白飲改牛奶泡就補得回來。";
-  if(w.avgP && w.avgP<80) return "這週蛋白質平均 "+w.avgP+"g，離 90 還有一段。早餐蛋白飲用牛奶泡、午餐多一份毛豆或起司，這兩個動作就夠了。";
+  if(w.lowK>=3) return "這週有 "+w.lowK+" 天吃不到 1,100 kcal，這比其他任何一項都值得先修。不餓的晚上也要蛋白飲＋一顆蛋。";
+  if(w.avgP && w.avgP<85) return "這週蛋白質平均 "+w.avgP+"g，離 95 還有一段。先確認晚餐那杯蛋白飲有沒有天天喝，那一杯就是 25g。";
   const weak=[];
   if(w.steps<4) weak.push("步數");
   if(w.veg<4) weak.push("蔬菜");
