@@ -242,6 +242,34 @@
   .sowbox .st{font-size:12.5px; font-weight:600; color:var(--green-d);}
   .sowbox .sh{font-size:11.5px; color:var(--sub); margin-top:2px;}
   .sowrow{margin-top:8px;}
+  /* 花架場景：節氣換景、訪客 */
+  .pet-card > *{position:relative; z-index:1;}
+  .pet-card .g-lv, .pet-card .g-tools{position:absolute; z-index:3;}
+  .pet-card .scene{position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .scene i{position:absolute; top:-24px; font-style:normal; font-size:15px; opacity:.5; animation:drift 12s linear infinite;}
+  .scene.twinkle i{top:auto; animation:twinkle 3.6s ease-in-out infinite; font-size:12px;}
+  @keyframes drift{0%{transform:translate(0,0) rotate(0deg);} 100%{transform:translate(26px,330px) rotate(200deg);}}
+  @keyframes twinkle{0%,100%{opacity:.12; transform:scale(.8);} 50%{opacity:.7; transform:scale(1.15);}}
+  .pet-card .sky{position:absolute; z-index:3; top:15px; left:50%; transform:translateX(-50%); font-size:12px; color:var(--sub); white-space:nowrap;}
+  .pet-card .visitor{position:absolute; z-index:4; left:calc(50% + 58px); top:168px; width:48px; height:48px; border:none; background:transparent; font-size:30px; line-height:1; cursor:pointer; padding:0; animation:bob 2.6s ease-in-out infinite;}
+  .visitor.new::after{content:""; position:absolute; top:4px; right:2px; width:9px; height:9px; border-radius:50%; background:var(--goji); border:1.5px solid #fff;}
+  @keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);}}
+  @media (prefers-reduced-motion: reduce){ .scene i, .pet-card .visitor{animation:none;} .scene:not(.twinkle) i{top:18px;} }
+  /* 藥櫃與湯方 */
+  .inv{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;}
+  .inv .iv{font-size:12.5px; background:var(--green-l); color:var(--green-d); border-radius:20px; padding:4px 11px; font-weight:600;}
+  .rcp{border:1.5px solid var(--line); border-radius:14px; padding:11px 12px; margin:8px 0; background:#fff;}
+  .rcp.ready{border-color:var(--goji); background:#FFFBF7;}
+  .rcp.done{background:#FBF9F3;}
+  .rcp .rn{font-size:14.5px; font-weight:700; display:flex; align-items:center; gap:6px;}
+  .rcp .rn small{font-size:12px; font-weight:400; color:var(--sub); margin-left:auto;}
+  .rcp .need{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 2px;}
+  .rcp .rs{font-size:12.5px; line-height:1.7; margin-top:8px; color:var(--ink);}
+  .rcp .rt{font-size:12px; color:var(--sub); margin-top:6px;}
+  .rcp .btn{margin-top:9px; width:100%;}
+  .chip.lack{border-style:dashed; color:var(--sub);}
+  .omen .oq{font-size:12.5px; margin-top:9px; padding-top:9px; border-top:1px dashed var(--line); line-height:1.7;}
+  .omen .oq b{color:var(--goji);}
   /* 分頁 */
   .page{display:none;} .page.on{display:block;}
   .nav{position:fixed; bottom:0; left:0; right:0; margin:0 auto; max-width:520px; background:rgba(255,255,255,.96); backdrop-filter:blur(8px); border-top:1px solid var(--line); display:flex; gap:6px; z-index:40; padding:6px 10px calc(8px + env(safe-area-inset-bottom));}
@@ -267,7 +295,10 @@
 
 <!-- ===== 藥圃 ===== -->
 <section class="page" id="page-garden">
-  <div class="card pet-card">
+  <div class="card pet-card" id="petCard">
+    <div class="scene" id="scene"></div>
+    <span class="sky" id="sky"></span>
+    <button class="visitor" id="visitor" style="display:none;" aria-label="訪客"></button>
     <span class="g-lv" id="gardenTag"></span>
     <div class="g-tools"><button id="renameBtn">改名</button><button id="removePlantBtn" style="display:none;">移除</button></div>
     <div class="pet-stage-name" id="stageName">種子</div>
@@ -276,6 +307,7 @@
     <div class="growbar"><i id="growFill" style="width:0%"></i></div>
     <div class="grow-meta" id="growMeta"></div>
     <div><span class="pet-msg" id="petMsg"></span></div>
+    <div id="harvBox" style="margin-top:10px; min-height:20px;"></div>
     <div class="shelf"><div class="shelf-in" id="gardenBody"></div></div>
     <div class="shelf-wood"></div>
     <div id="gardenAdd"></div>
@@ -286,17 +318,25 @@
     </div>
   </div>
 
+  <!-- 今日藥籤 -->
+  <div class="card">
+    <h2>今日藥籤 <span class="tag">每天一張 · 附一個小任務</span></h2>
+    <div id="omenBody"></div>
+  </div>
+
+  <!-- 藥櫃與湯方 -->
+  <div class="card">
+    <h2>藥櫃與湯方 <span class="tag" id="kitTag"></span></h2>
+    <div id="invBody"></div>
+    <div id="kitBody"></div>
+    <div class="bf-legend" style="text-align:left; margin-top:10px; line-height:1.5;">這是認識藥材搭配的小遊戲，內容是典籍記載和家常做法，不是用藥建議。實際要喝請先問中醫師。</div>
+  </div>
+
   <!-- 節氣任務 -->
   <div class="card">
     <h2>節氣任務 <span class="tag" id="termTag"></span></h2>
     <div id="termBody"></div>
     <div class="chips" id="termBadges" style="margin-top:10px;"></div>
-  </div>
-
-  <!-- 今日藥籤 -->
-  <div class="card">
-    <h2>今日藥籤 <span class="tag">每天一張</span></h2>
-    <div id="omenBody"></div>
   </div>
 
   <!-- 藥櫃圖鑑 -->
@@ -521,6 +561,9 @@ function normalize(r){
   if(!r.plants) r.plants=[];
   if(!r.omen) r.omen=null;
   if(!r.nuliStart) r.nuliStart=CFG.nuliStart;
+  if(!r.inv) r.inv={};       // 藥櫃庫存：藥材→份數
+  if(!r.harv) r.harv={};     // 每一株上次採收到哪一週
+  if(!r.cooked) r.cooked={}; // 熬過的湯方→次數
   return r;
 }
 let S = load();
@@ -595,7 +638,7 @@ let photoDraft=null; // 拍照辨識結果（等使用者確認）：{date, meal
 let photoBusy="";    // 正在辨識中的餐別
 let lastMicro="";    // 剛點的微運動（用來顯示做法和「按錯了」）
 let sowOpen=false;
-function refreshLogViews(){ renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); }
+function refreshLogViews(){ renderPet(); renderCal(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); renderOmen(); }
 function getMicro(dateStr){ const l=S.logs[dateStr]; return (l&&l.micro)||{}; }
 function tapMicro(k){
   if(!S.logs[viewDate]) S.logs[viewDate]={};
@@ -807,7 +850,7 @@ function renderPet(){
       fill=Math.round((p-cur)/(nxt-cur)*100);
       meta=`成長值 ${p.toFixed(1)} ／ 下一階段 ${nxt}（還差 ${(nxt-p).toFixed(1)}）`;
     }
-    document.getElementById("petMsg").textContent=petMessage(si,streak,gap);
+    document.getElementById("petMsg").textContent=visitorMsg||petMessage(si,streak,gap);
     rm.style.display="none";
   } else {
     const pl=S.plants[selPlant], h=HERB_BY[pl.herb]||HERBS[0];
@@ -822,11 +865,12 @@ function renderPet(){
       fill=Math.round((v-cur)/(nxt-cur)*100);
       meta=`成長值 ${v} ／ 下一階段 ${nxt}（還差 ${(nxt-v).toFixed(1)}）`;
     }
-    document.getElementById("petMsg").textContent=plantMessage(pl,v,si);
+    document.getElementById("petMsg").textContent=visitorMsg||plantMessage(pl,v,si);
     rm.style.display="";
   }
   document.getElementById("growFill").style.width=Math.max(4,Math.min(100,fill))+"%";
   document.getElementById("growMeta").textContent=meta;
+  renderHarvest(); renderScene();
 }
 
 function renderCheck(){
@@ -1517,7 +1561,7 @@ function renderGarden(){
   const mini=(svg)=>svg.replace('width="180" height="180"','width="54" height="54"');
   // 小杞
   const p0=totalPoints(), s0=stageIndex(p0);
-  let html=`<div class="pot${selPlant<0?" on":""}" data-sel="-1">${s0>=STAGES.length-1?'<span class="ripe">🍒</span>':""}${mini(petSVG(s0))}`+
+  let html=`<div class="pot${selPlant<0?" on":""}" data-sel="-1">${s0>=STAGES.length-1?`<span class="ripe">${pendingHarvest(-1).n>0?"🧺":"🍒"}</span>`:""}${mini(petSVG(s0))}`+
     `<div class="pl">${esc(S.petName)}</div><div class="ps2">${STAGES[s0].name}</div>`+
     `<div class="pbar"><i style="width:${s0>=STAGES.length-1?100:Math.round((p0-STAGES[s0].min)/(STAGES[s0+1].min-STAGES[s0].min)*100)}%"></i></div></div>`;
   // 其他株
@@ -1525,7 +1569,7 @@ function renderGarden(){
     const h=HERB_BY[pl.herb]||HERBS[0];
     const v=plantGrow(pl), si=stage2(v);
     const pct = si>=STAGES2.length-1 ? 100 : Math.round((v-STAGES2[si].min)/(STAGES2[si+1].min-STAGES2[si].min)*100);
-    return `<div class="pot${selPlant===i?" on":""}" data-sel="${i}">${si>=STAGES2.length-1?'<span class="ripe">🍒</span>':""}${mini(petSVG(si,h.col,h.flo))}`+
+    return `<div class="pot${selPlant===i?" on":""}" data-sel="${i}">${si>=STAGES2.length-1?`<span class="ripe">${pendingHarvest(i).n>0?"🧺":"🍒"}</span>`:""}${mini(petSVG(si,h.col,h.flo))}`+
       `<div class="pl">${esc(pl.name||h.n)}</div><div class="ps2">${AXIS_BY[pl.axis].label}・${STAGES2[si].name}</div>`+
       `<div class="pbar"><i style="width:${Math.max(3,pct)}%"></i></div></div>`;
   }).join("");
@@ -1748,19 +1792,231 @@ const OMENS=[
  ["黑豆","入腎，煮前乾鍋炒香再煮，味道差很多。"],
  ["山楂","消食化積，但空腹吃容易胃不舒服。"],
 ];
+// 每張藥籤附一個當日小任務，完成就收下一份那味藥材（對應只是遊戲安排，跟藥性無關）
+const OMEN_QUEST={
+  "枸杞":"steps","山藥":"meals3","紅棗":"meals3","黃耆":"exercise","當歸":"exercise","茯苓":"water",
+  "薏苡仁":"water","芡實":"veg","蓮子":"sleep","百合":"sleep","麥冬":"water","陳皮":"meals3",
+  "生薑":"exercise","肉桂":"steps","菊花":"water","決明子":"sleep","杜仲":"exercise","玉竹":"veg",
+  "蓮藕":"veg","白木耳":"veg","桂圓":"sleep","甘草":"micro","黑豆":"steps","山楂":"steps",
+};
+const QUESTS={
+  exercise:{t:"運動打卡",       ok:l=>!!l.exercise},
+  water:   {t:"喝水達標",       ok:l=>!!l.water},
+  veg:     {t:"蔬菜 2 份",      ok:l=>!!l.veg},
+  sleep:   {t:"睡滿 7 小時",    ok:l=>!!l.sleep},
+  steps:   {t:"步數達標",       ok:l=>!!l.steps},
+  meals3:  {t:"三餐都有記錄",   ok:l=>!!(l.breakfast&&l.lunch&&l.dinner)},
+  micro:   {t:"微運動 3 次",    ok:l=>{ const m=l.micro||{}; let c=0; for(const k in m) c+=m[k]; return c>=3; }},
+};
+function addInv(n,c){ S.inv[n]=(S.inv[n]||0)+c; if(S.inv[n]<=0) delete S.inv[n]; }
+function omenQuest(){ const o=OMENS[S.omen.i%OMENS.length]; return {herb:o[0], note:o[1], q:QUESTS[OMEN_QUEST[o[0]]||"exercise"]}; }
 function renderOmen(){
   const body=document.getElementById("omenBody");
   const today=todayStr();
+  // 前一張的任務其實有做到、只是沒回來收：補收
+  if(S.omen && S.omen.d<today && !S.omen.got){
+    const oq=omenQuest();
+    if(oq.q.ok(S.logs[S.omen.d]||{})){ addInv(oq.herb,1); S.omen.got=true; save(); renderKitchen(); toast("上一張藥籤的任務有完成，補收一份"+oq.herb+" 🎴",3000); }
+  }
   if(S.omen && S.omen.d===today){
-    const o=OMENS[S.omen.i%OMENS.length];
-    body.innerHTML=`<div class="omen"><div class="oh">今日藥籤</div><div class="on2">${o[0]}</div><div class="ow">${o[1]}</div></div>`;
+    const oq=omenQuest();
+    const done=oq.q.ok(S.logs[today]||{});
+    const tail = S.omen.got ? `<span style="color:var(--green-d);">✓ 已收下一份${oq.herb}</span>`
+               : done ? `<button class="btn goji" id="omenTake" style="margin-top:8px;">收下一份${oq.herb}</button>`
+               : `<span style="color:var(--sub);">還沒完成，做到了回來收</span>`;
+    body.innerHTML=`<div class="omen"><div class="oh">今日藥籤</div><div class="on2">${oq.herb}</div><div class="ow">${oq.note}</div>`+
+      `<div class="oq">今日小任務：<b>${oq.q.t}</b><br>${tail}</div></div>`;
+    const tk=document.getElementById("omenTake");
+    if(tk) tk.onclick=()=>{ addInv(oq.herb,1); S.omen.got=true; save(); renderOmen(); renderKitchen(); toast("收下一份"+oq.herb+"，放進藥櫃了"); };
   } else {
-    body.innerHTML=`<div class="omen"><div class="oh">還沒抽</div><div class="ow" style="margin:6px 0 9px;">每天一張，抽到什麼算什麼 🎴</div><button class="btn goji" id="omenDraw">抽一張</button></div>`;
+    body.innerHTML=`<div class="omen"><div class="oh">還沒抽</div><div class="ow" style="margin:6px 0 9px;">每天一張，抽到什麼算什麼 🎴<br><span class="psub">每張附一個小任務，做到就能收下那味藥材</span></div><button class="btn goji" id="omenDraw">抽一張</button></div>`;
     document.getElementById("omenDraw").onclick=()=>{
       S.omen={d:today, i:Math.floor(Math.random()*OMENS.length)};
       save(); renderOmen(); toast("抽到「"+OMENS[S.omen.i][0]+"」");
     };
   }
+}
+
+// ============ 採收：結果的植株每週收一次 ============
+function addDays(ds,n){ const d=parse(ds); d.setDate(d.getDate()+n); return fmt(d); }
+function plantKey(i){ return i<0 ? "main" : "p:"+S.plants[i].herb+":"+S.plants[i].planted; }
+function plantHerb(i){ return i<0 ? "枸杞" : S.plants[i].herb; }
+function isMature(i){ return i<0 ? stageIndex(totalPoints())>=STAGES.length-1 : stage2(plantGrow(S.plants[i]))>=STAGES2.length-1; }
+// 這一天算不算有照顧到：主株看整天點數（4 點以上），其他株看它綁的那個習慣
+function plantDayHit(i,L){ if(!L) return false; return i<0 ? dayPoints(L)>=4 : AXIS_BY[S.plants[i].axis].val(L)>0; }
+function weekHits(i,ws){ let c=0; for(let k=0;k<7;k++){ if(plantDayHit(i,S.logs[addDays(ws,k)])) c++; } return c; }
+function yieldOf(days){ return days>=6?3 : days>=4?2 : days>=2?1 : 0; }
+function pendingHarvest(i){
+  if(!isMature(i)) return {n:0};
+  const cur=weekStart(todayStr()), last=addDays(cur,-7);
+  let from=addDays(cur,-28);                       // 最多往回補收四週
+  const done=S.harv[plantKey(i)]; if(done && addDays(done,7)>from) from=addDays(done,7);
+  if(i>=0){ const p=weekStart(S.plants[i].planted); if(p>from) from=p; }
+  let n=0;
+  for(let w=from; w<cur; w=addDays(w,7)) n+=yieldOf(weekHits(i,w));
+  return {n, last};
+}
+function renderHarvest(){
+  const box=document.getElementById("harvBox"), herb=plantHerb(selPlant);
+  if(!isMature(selPlant)){ box.innerHTML='<span class="psub">長到結果之後，每週一可以採收一次。</span>'; return; }
+  const ph=pendingHarvest(selPlant);
+  if(ph.n>0){
+    box.innerHTML=`<button class="btn goji" id="harvBtn">🧺 採收 ${ph.n} 份${herb}</button>`;
+    document.getElementById("harvBtn").onclick=()=>{
+      addInv(herb,ph.n); S.harv[plantKey(selPlant)]=ph.last;
+      save(); renderPet(); renderGarden(); renderKitchen();
+      toast("採收了 "+ph.n+" 份"+herb+"，放進藥櫃了 🧺",3000);
+    };
+  } else {
+    const hits=weekHits(selPlant,weekStart(todayStr()));
+    box.innerHTML=`<span class="psub">本週已照顧 ${hits} 天，下週一可收 ${yieldOf(hits)} 份${herb}<br>`+
+      `${selPlant<0?"當天 4 點以上":"有做到「"+AXIS_BY[S.plants[selPlant].axis].label+"」"}算一天；2 天 1 份、4 天 2 份、6 天 3 份</span>`;
+  }
+}
+
+// ============ 湯方 ============
+// s＝熬好之後解鎖的小故事。只寫出處、典故和廚房裡的做法，不寫療效。
+const RECIPES=[
+  {n:"四神湯", need:["茯苓","芡實","蓮子","山藥"],
+   s:"台灣小吃攤上最熟悉的一碗。相傳原本叫「四臣湯」，台語的「臣」和「神」同音，叫著叫著就成了四神。攤子上常再加一把薏仁，配豬肚或排骨一起燉。"},
+  {n:"當歸補血湯", need:["黃耆","當歸"],
+   s:"出自金元時期李東垣的《內外傷辨惑論》。名字叫補血，方子裡卻是黃耆用得多、當歸用得少，原方的比例是五比一。"},
+  {n:"杞菊茶", need:["枸杞","菊花"],
+   s:"枸杞配菊花是很老的搭配，清代《醫級》裡的杞菊地黃丸，就是在六味地黃丸上加了這兩味。泡茶時菊花別用滾水久燜，香氣才留得住。"},
+  {n:"百合蓮子銀耳湯", need:["百合","蓮子","白木耳"],
+   s:"家常甜湯。白木耳要先泡開、撕成小朵，燉到出膠湯才會稠；乾百合最後再下，煮太久會化掉。"},
+  {n:"薑棗茶", need:["生薑","紅棗"],
+   s:"生薑和大棗一起出現，在《傷寒論》的方子裡非常常見，桂枝湯就同時用了這兩味。家裡煮成一壺茶，是最簡單的版本。"},
+  {n:"桂圓紅棗茶", need:["桂圓","紅棗"],
+   s:"冬天最常見的一壺。紅棗剪開或去核再煮，味道才出得來；桂圓本身很甜，通常不用另外加糖。"},
+  {n:"山藥薏仁芡實粥", need:["山藥","薏苡仁","芡實"],
+   s:"三樣都是可以當食材的藥材，一起煮成粥是很普遍的家常做法。薏仁和芡實都硬，記得先泡過再下鍋。"},
+  {n:"玉竹麥冬湯", need:["玉竹","麥冬"],
+   s:"這兩味常常一起出現，清代吳鞠通《溫病條辨》的沙參麥冬湯裡就同時有它們。燉湯甜潤、不搶味。"},
+  {n:"山楂陳皮飲", need:["山楂","陳皮"],
+   s:"酸酸甜甜的家常茶飲。山楂很酸，空腹喝容易胃不舒服，一般都放在飯後。"},
+  {n:"決明子菊花茶", need:["決明子","菊花"],
+   s:"辦公室裡常見的一壺。決明子要用炒過的，生的幾乎泡不出味道。"},
+  {n:"杜仲黑豆湯", need:["杜仲","黑豆"],
+   s:"民間常見的燉湯搭配，多半和排骨一起燉。黑豆先乾鍋炒到皮裂開再下鍋，湯色和香氣都會好很多。"},
+  {n:"蓮藕紅棗湯", need:["蓮藕","紅棗"],
+   s:"家常甜湯。蓮藕挑粉藕、切厚一點，小火慢慢燉到筷子一戳就過，口感才會鬆綿。"},
+  {n:"菊花甘草茶", need:["菊花","甘草"],
+   s:"家常茶飲。甘草的甜味很明顯，兩三片就夠，放多了整壺都是它的味道。"},
+];
+const TRADE_COST=2; // 跟藥行換一份缺的藥材，要幾份枸杞
+let kitAll=false;
+function renderKitchen(){
+  const inv=S.inv, names=Object.keys(inv).filter(n=>inv[n]>0);
+  document.getElementById("invBody").innerHTML = names.length
+    ? '<div class="inv">'+names.map(n=>`<span class="iv">${esc(n)} ×${inv[n]}</span>`).join("")+'</div>'
+    : '<div class="nempty" style="margin-bottom:8px;">藥櫃還是空的。結果的植株每週可以採收，抽藥籤、做到當天的小任務也會拿到一份。</div>';
+  const doneN=RECIPES.filter(r=>S.cooked[r.n]).length;
+  document.getElementById("kitTag").textContent="已解鎖 "+doneN+" / "+RECIPES.length;
+  const info=RECIPES.map(r=>{ const lack=r.need.filter(n=>!(inv[n]>0)); return {r, lack, done:!!S.cooked[r.n]}; });
+  // 排序：現在可以熬的 → 還沒熬過的 → 手上已有比較多材料的
+  info.sort((a,b)=>(a.lack.length?1:0)-(b.lack.length?1:0) || (a.done?1:0)-(b.done?1:0) || (b.r.need.length-b.lack.length)-(a.r.need.length-a.lack.length) || a.lack.length-b.lack.length);
+  const show=kitAll?info:info.slice(0,4);
+  document.getElementById("kitBody").innerHTML=show.map(x=>{
+    const r=x.r, ready=!x.lack.length;
+    return `<div class="rcp${ready?" ready":""}${x.done?" done":""}"><div class="rn">${x.done?"🍲":"🫙"} ${r.n}${x.done?`<small>熬過 ${S.cooked[r.n]} 次</small>`:""}</div>`+
+      `<div class="need">`+r.need.map(n=>inv[n]>0
+        ? `<span class="chip has">${n} ✓</span>`
+        : `<button class="chip lack" data-trade="${escAttr(n)}">${n}　缺</button>`).join("")+`</div>`+
+      (x.done?`<div class="rs">${r.s}</div>`:`<div class="rt">${ready?"材料齊了，熬好會解鎖這一帖的小故事。":"缺的藥材可以等藥籤、等訪客，或點一下用 "+TRADE_COST+" 份枸杞跟藥行換。"}</div>`)+
+      (ready?`<button class="btn goji" data-cook="${escAttr(r.n)}">${x.done?"再熬一鍋":"熬一鍋"}</button>`:"")+`</div>`;
+  }).join("")+
+  (info.length>4?`<div style="text-align:center;"><a class="lnk" id="kitMore">${kitAll?"只看前 4 帖":"看全部 "+info.length+" 帖湯方"}</a></div>`:"");
+  const more=document.getElementById("kitMore"); if(more) more.onclick=()=>{ kitAll=!kitAll; renderKitchen(); };
+  document.querySelectorAll("#kitBody [data-trade]").forEach(b=>b.onclick=()=>{
+    const n=b.getAttribute("data-trade"), have=S.inv["枸杞"]||0;
+    if(n==="枸杞"){ toast("枸杞換不到，要靠小杞每週收成",3000); return; }
+    if(have<TRADE_COST){ toast("跟藥行換一份要 "+TRADE_COST+" 份枸杞，現在有 "+have+" 份",3000); return; }
+    if(!confirm("用 "+TRADE_COST+" 份枸杞，跟藥行換 1 份"+n+"？")) return;
+    addInv("枸杞",-TRADE_COST); addInv(n,1); save(); renderKitchen(); toast("換到一份"+n);
+  });
+  document.querySelectorAll("#kitBody [data-cook]").forEach(b=>b.onclick=()=>{
+    const r=RECIPES.find(x=>x.n===b.getAttribute("data-cook")); if(!r) return;
+    if(r.need.some(n=>!(S.inv[n]>0))) return;
+    const first=!S.cooked[r.n];
+    r.need.forEach(n=>addInv(n,-1));
+    S.cooked[r.n]=(S.cooked[r.n]||0)+1;
+    save(); renderKitchen();
+    toast(first?"熬好了「"+r.n+"」，解鎖它的小故事 🍲":"又熬了一鍋「"+r.n+"」 🍲",3000);
+  });
+}
+
+// ============ 節氣換景 ============
+function season(){
+  const t=TERMS[currentTermIdx(todayStr())][0];
+  if("立春雨水驚蟄春分清明穀雨".indexOf(t)>=0) return "spring";
+  if("立夏小滿芒種夏至小暑大暑".indexOf(t)>=0) return "summer";
+  if("立秋處暑白露秋分寒露霜降".indexOf(t)>=0) return "autumn";
+  return "winter";
+}
+const SCENES={
+  spring:{bg:"linear-gradient(180deg,#F8E8EE 0%,#FFFFFF 60%)", p:"🌸"},
+  summer:{bg:"linear-gradient(180deg,#E2F2DC 0%,#FFFFFF 60%)", p:"✨", twinkle:true},
+  autumn:{bg:"linear-gradient(180deg,#F7E9D3 0%,#FFFFFF 60%)", p:"🍂"},
+  winter:{bg:"linear-gradient(180deg,#E3EDF4 0%,#FFFFFF 60%)", p:"❄️"},
+};
+const NIGHT_BG="linear-gradient(180deg,#D9DEEC 0%,#FFFFFF 62%)";
+let sceneKey="";
+function renderScene(){
+  const h=new Date().getHours(), night=(h>=19||h<5), se=season(), term=TERMS[currentTermIdx(todayStr())][0];
+  const key=se+"|"+night+"|"+term;
+  if(key!==sceneKey){
+    sceneKey=key;
+    const sc=SCENES[se];
+    document.getElementById("petCard").style.background = night?NIGHT_BG:sc.bg;
+    document.getElementById("sky").textContent=(night?"🌙 ":h<10?"🌤 ":"☀️ ")+term;
+    const el=document.getElementById("scene");
+    el.className="scene"+(sc.twinkle?" twinkle":"");
+    const xs=[6,22,41,63,80,93], ys=[12,44,26,58,18,38];
+    el.innerHTML=xs.map((x,i)=>`<i style="left:${x}%;${sc.twinkle?"top:"+ys[i]+"%;":""}animation-delay:-${(i*2.3).toFixed(1)}s;animation-duration:${sc.twinkle?3+i*0.5:10+i*1.7}s;">${sc.p}</i>`).join("");
+  }
+  renderVisitor();
+}
+
+// ============ 訪客：前一天有好好照顧，隔天偶爾有人來 ============
+const VISITORS=[
+  {e:"🐈", s:"spring summer autumn winter", lines:["貓在花盆邊繞了一圈，挑了有太陽的那一角躺下。","牠聞了聞葉子，沒有咬，算是給面子。","貓打了個呵欠，看起來打算待一陣子。"]},
+  {e:"🐦", s:"spring summer autumn winter", lines:["麻雀停在架子上，歪著頭看你。","牠啄了兩下土，跳到隔壁那盆去了。","麻雀抖了抖羽毛，好像很滿意這個位置。"]},
+  {e:"🐝", s:"spring summer", lines:["蜜蜂來巡了一圈。花開得好，牠才會來。","牠在花上停了很久，嗡嗡地忙著。"]},
+  {e:"🦋", s:"spring summer autumn", lines:["蝴蝶停了一下，翅膀慢慢開合。","牠繞著花架飛了兩圈才走。"]},
+  {e:"🐌", s:"spring summer autumn", lines:["蝸牛慢慢爬過花盆邊。慢慢來，比較快。","牠今天的進度是半個花盆，牠覺得很可以。"]},
+  {e:"👵", s:"spring summer autumn winter", gift:true, lines:["隔壁阿嬤路過，說你這幾盆顧得不錯。","阿嬤說：「天天顧一點，比一次顧很多有用。」","阿嬤看了看土，點點頭，沒說什麼就走了。"]},
+];
+let visitorMsg="", visitorTaps=0;
+function hashStr(str){ let h=7; for(let i=0;i<str.length;i++) h=(h*31+str.charCodeAt(i))>>>0; return h; }
+function todayVisitor(){
+  const t=todayStr();
+  if(dayPoints(S.logs[addDays(t,-1)])<4) return null;      // 昨天有 4 點以上才會有訪客
+  const h=hashStr(t+"|visitor");
+  if(h%5>=3) return null;                                   // 大約五天來三天
+  const se=season(), pool=VISITORS.filter(v=>v.s.indexOf(se)>=0);
+  const v=pool[(h>>>3)%pool.length];
+  const herbs=[]; RECIPES.forEach(r=>r.need.forEach(n=>{ if(n!=="枸杞" && herbs.indexOf(n)<0) herbs.push(n); }));
+  const gift=(v.gift || (h>>>7)%3===0) ? herbs[(h>>>11)%herbs.length] : null;
+  return {v, gift};
+}
+function renderVisitor(){
+  const btn=document.getElementById("visitor"), tv=todayVisitor();
+  if(!tv){ btn.style.display="none"; return; }
+  const met=!!(S.visit && S.visit.d===todayStr());
+  btn.style.display=""; btn.textContent=tv.v.e;
+  btn.className="visitor"+(met?"":" new");
+  btn.onclick=()=>{
+    const first=!(S.visit && S.visit.d===todayStr());
+    let msg=tv.v.lines[visitorTaps++%tv.v.lines.length];
+    if(first){
+      S.visit={d:todayStr()};
+      if(tv.gift){ addInv(tv.gift,1); msg+=(tv.v.gift?"臨走前塞了一份"+tv.gift+"給你。":"牠走開之後，盆邊多了一份"+tv.gift+"。"); renderKitchen(); }
+      save();
+    }
+    visitorMsg=tv.v.e+" "+msg;
+    renderPet();
+  };
 }
 
 // ============ 週結算按鈕 ============
@@ -1778,7 +2034,7 @@ function showTab(t){
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showTab(b.getAttribute("data-tab")));
 (function(){ let t="garden"; try{ t=localStorage.getItem(KEY+"_tab")||"garden"; }catch(e){} if(!document.getElementById("page-"+t)) t="garden"; showTab(t); })();
 
-function renderAll(){ renderPet(); renderCheck(); renderPlan(); renderMicro(); renderNutrition(); renderBF(); renderOmen(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); renderCal(); renderBackup(); }
+function renderAll(){ renderPet(); renderCheck(); renderPlan(); renderMicro(); renderNutrition(); renderBF(); renderOmen(); renderWeek(); renderTerm(); renderGarden(); renderHerbs(); renderCal(); renderBackup(); renderKitchen(); }
 renderAll();
 
 // ============ 跨日：頁面掛著過了午夜，回來時自動換到新的一天 ============
@@ -1791,14 +2047,14 @@ function checkNewDay(){
   if(wkView===weekStart(prev)) wkView=weekStart(now);
   const pd=parse(prev), nd=parse(now);
   if(calMonth.y===pd.getFullYear() && calMonth.m===pd.getMonth()) calMonth={y:nd.getFullYear(), m:nd.getMonth()};
-  lastMicro="";
+  lastMicro=""; visitorMsg=""; visitorTaps=0;
   renderAll();
   if(wasToday) toast("新的一天，已經切到今天 🌱",3000);
 }
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden) checkNewDay(); });
 window.addEventListener("focus",checkNewDay);
 window.addEventListener("pageshow",checkNewDay);
-setInterval(checkNewDay,60000);
+setInterval(()=>{ checkNewDay(); renderScene(); },60000);
 
 // ============ 離線可開（PWA）============
 if("serviceWorker" in navigator && /^https?:$/.test(location.protocol)){
