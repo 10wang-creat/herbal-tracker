@@ -1008,10 +1008,10 @@ function photoBox(){
     `<button class="px" aria-label="刪掉這一項">✕</button></div>`).join("");
   const tk=Math.round(d.items.reduce((a,b)=>a+(+b.kcal||0),0));
   const tp=Math.round(d.items.reduce((a,b)=>a+(+b.protein||0),0)*10)/10;
-  return `<div class="cfbox"><div class="cft">📷 辨識結果，確認後才會存</div>`+
+  return `<div class="cfbox"><div class="cft">${d.source==="label"?"📷 已讀取照片上標示的數字，確認後才會存":"📷 辨識結果（估算），確認後才會存"}</div>`+
     `<div class="pfhead"><span style="flex:1;text-align:left;">品項</span><span style="width:52px;">公克</span><span style="width:52px;">kcal</span><span style="width:52px;">蛋白質</span><span style="width:34px;"></span></div>`+
     (rows||'<div class="cfh">沒辨識到食物，可以取消重拍</div>')+
-    `<div class="cftot">合計 <span class="pftk">${tk}</span> kcal · 蛋白質 <span class="pftp">${tp}</span>g<small>${esc(d.note||"照片估算誤差通常 ±20–30%，油和醬料看不出來，寧可往上抓")}</small></div>`+
+    `<div class="cftot">合計 <span class="pftk">${tk}</span> kcal · 蛋白質 <span class="pftp">${tp}</span>g<small>${esc(d.note||(d.source==="label"?"數字來自照片上的標示，吃的份量不同再自己改":"照片估算誤差通常 ±20–30%，油和醬料看不出來，寧可往上抓"))}</small></div>`+
     `<div class="cfr" style="margin-top:8px;"><button class="btn" data-pfsave="1" style="flex:1;">確認加入這一餐</button><button class="btn ghost" data-pfcancel="1">取消</button></div>`+
     `<div class="cfh">確認後只存這一餐的合計熱量、蛋白質和品項名稱。</div></div>`;
 }
@@ -1026,7 +1026,7 @@ function compressImage(file){
   return new Promise((resolve,reject)=>{
     const img=new Image();
     img.onload=()=>{
-      const max=1024, s=Math.min(1, max/Math.max(img.width,img.height));
+      const max=1280, s=Math.min(1, max/Math.max(img.width,img.height));
       const c=document.createElement("canvas");
       c.width=Math.round(img.width*s); c.height=Math.round(img.height*s);
       c.getContext("2d").drawImage(img,0,0,c.width,c.height);
@@ -1041,12 +1041,12 @@ const FOOD_API="https://herbal-tracker-sigma.vercel.app/api/food"; // Vercel 只
 async function callFoodApi(image){
   if(navigator.onLine===false) throw new Error("現在沒有網路，連上再拍");
   const ctl=new AbortController();
-  const timer=setTimeout(()=>ctl.abort(),45000);
+  const timer=setTimeout(()=>ctl.abort(),35000);
   let r;
   try{
     r=await fetch(FOOD_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image}),signal:ctl.signal});
   }catch(e){
-    throw new Error(e&&e.name==="AbortError" ? "等了 45 秒沒有回應，請再拍一次" : "連不上辨識服務，檢查網路後再試");
+    throw new Error(e&&e.name==="AbortError" ? "等了 35 秒沒有回應，請再拍一次" : "連不上辨識服務，檢查網路後再試");
   }finally{ clearTimeout(timer); }
   let data=null;
   try{ data=await r.json(); }catch(e){}
@@ -1073,7 +1073,7 @@ function startPhoto(meal){
       catch(e){ throw new Error("這張照片讀不出來，換一張或直接用相機拍"); }
       const data=await callFoodApi(image);
       const items=(data.items||[]).map(x=>({name:String(x.name||"").slice(0,16), grams:+x.grams||0, kcal:+x.kcal||0, protein:+x.protein||0}));
-      photoDraft={date, meal, items, note:data.note||""};
+      photoDraft={date, meal, items, note:data.note||"", source:data.source||""};
       toast(items.length?"辨識到 "+items.length+" 項，確認一下數字":"沒辨識到食物，可以取消重拍",3000);
     }catch(e){ toast("沒辨識成功："+e.message+"。也可以按「✏️ 填數字」先記。",5000); }
     photoBusy=""; renderCheck();
