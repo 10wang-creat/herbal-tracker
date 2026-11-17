@@ -5,7 +5,12 @@
 // 依序嘗試：最快的 flash-lite 排第一（讀標示上的數字綽綽有餘），
 // 太忙（503）、限流（429）、逾時或回傳讀不懂時才換下一個。都是免費額度內可用的模型。
 // 若 Google 改名，只需改這個清單。
-const MODELS = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.5-flash"];
+// think＝該模型支援的最低思考等級（3.8-flash 最低只到 low）。
+const MODELS = [
+  { id: "gemini-3.5-flash-lite", think: "minimal" },
+  { id: "gemini-3.8-flash", think: "low" },
+  { id: "gemini-3.6-flash", think: "minimal" }
+];
 
 // 只有這些網址上的頁面可以呼叫（避免別人拿這支 API 用掉 Gemini 額度）。
 // app 搬家或多一個網址時：改這裡，或在 Vercel 環境變數 ALLOWED_ORIGINS 加上（多個用逗號分隔）。
@@ -50,12 +55,12 @@ const SCHEMA = {
 };
 
 // 先用「快」的設定（幾乎不思考＋固定格式）；若該模型不接受這些參數（400），退回最基本的設定再試一次
-const CONFIG_FAST = {
+const configFast = (think) => ({
   responseMimeType: "application/json",
   responseSchema: SCHEMA,
   temperature: 0.1,
-  thinkingConfig: { thinkingLevel: "minimal" }
-};
+  thinkingConfig: { thinkingLevel: think }
+});
 const CONFIG_PLAIN = { responseMimeType: "application/json", temperature: 0.1 };
 
 function originAllowed(req) {
@@ -118,11 +123,11 @@ export default async function handler(req, res) {
   const RETRYABLE = [404, 422, 429, 503, 504]; // 這些狀況換下一個模型還有機會成功
   let last = { status: 0, data: null }, usedModel = "", parsed = null;
 
-  for (const model of MODELS) {
+  for (const { id: model, think } of MODELS) {
     const left = TOTAL_BUDGET_MS - (Date.now() - started);
     if (left < 3000) break;
     usedModel = model;
-    last = await askGemini(model, key, parts, CONFIG_FAST, Math.min(MODEL_TIMEOUT_MS, left));
+    last = await askGemini(model, key, parts, configFast(think), Math.min(MODEL_TIMEOUT_MS, left));
     if (last.status === 400) {
       // 這個模型不吃快速設定的參數 → 用基本設定再試一次
       const left2 = TOTAL_BUDGET_MS - (Date.now() - started);
